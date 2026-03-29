@@ -1,32 +1,72 @@
-[![Build Status](https://travis-ci.org/kekru/struktogrammeditor.svg?branch=master)](https://travis-ci.org/kekru/struktogrammeditor)  
-# Struktogrammeditor
-Visual editor to create nassi-shneiderman diagrams.
+# Struktogramm Studio
 
-This is an old school project of mine. It is one of my first personal java projects and I implemented it in 2010/2011.  
-That's why the code is like a beginner's code and it is written in german.  
-I decided to publish it, because there are some change requests, mostly from teachers, and I don't find time to implement them.
+[![Maven-Build](https://github.com/code4teaching/struktogrammeditor-studio/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/struktogrammeditor-studio/actions)
 
-## Contribution  
-Feel free to contribute to this project via PullRequests.  
-Please write new code and git commit messages in english. Texts, that are shown in the UI, should still be german.  
-Automatic tests would be awesome.
+Visueller Editor zur Erstellung von **Nassi-Shneiderman-Diagrammen** (Struktogrammen).  
+Benutzeroberfläche und Bedienung sind **deutsch**.
 
-## Generate runnable jar  
-Clone or download this repo and open a terminal.  
-In Windows Powershell run  
-```bash
+Dieses Repository ist ein **Fork** von [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) und enthält u. a. Anpassungen für **moderne Java-Versionen**, ein **aktualisiertes Erscheinungsbild** sowie den Produktnamen **Struktogramm Studio**.  
+Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011); Lizenz: **MIT** (siehe [LICENSE](LICENSE)).
+
+## Was in dieser Variante geändert wurde (Auszug)
+
+- **Java 17** als Zielversion (mit JDK 17 oder neuer bauen und starten)
+- **FlatLaf** – modernes Hell-/Dunkel-Design („Modern · hell / dunkel“ in den Einstellungen)
+- **JDOM2** statt JDOM 1, **kein** veraltetes AppleJavaExtensions mehr; macOS-Integration über Standard-APIs
+- **Motif-Look** entfällt (in aktuellen JDKs entfernt); Ersatz über **Metal** sowie FlatLaf
+- Ausgabe-JAR: **`struktogrammeditor-studio-1.0.0.jar`** (eine ausführbare Datei inklusive Abhängigkeiten)
+
+## Voraussetzungen
+
+- [JDK 17](https://adoptium.net/) oder höher
+- Internet nicht zwingend nötig, sobald Maven die Abhängigkeiten einmal geladen hat
+
+## Laufähige JAR-Datei erzeugen
+
+Repository klonen, im Projektordner ein Terminal öffnen.
+
+**Windows (PowerShell):**
+
+```powershell
 .\mvnw.cmd clean package
 ```
 
-In Linux or Mac terminal run  
+**Linux oder macOS:**
+
 ```bash
 chmod +x mvnw
 ./mvnw clean package
 ```
 
-When finished a file `target/struktogrammeditor-1.7.2-SNAPSHOT-jar-with-dependencies.jar` is generated.  
-When you have Java installed locally, then you can run it by double click   
-or run `java -jar struktogrammeditor-1.7.2-SNAPSHOT-jar-with-dependencies.jar` in the terminal.   
+Die erzeugte Datei liegt unter:
 
-## Download via Jitpack
-Download of the latest runnable jar of master branch [struktogrammeditor.jar](https://jitpack.io/com/github/kekru/struktogrammeditor/master-SNAPSHOT/struktogrammeditor-master-SNAPSHOT-jar-with-dependencies.jar), [Buildlog](https://jitpack.io/com/github/kekru/struktogrammeditor/master-SNAPSHOT/build.log)  
+```text
+target/struktogrammeditor-studio-1.0.0.jar
+```
+
+## Programm starten
+
+```bash
+java -jar target/struktogrammeditor-studio-1.0.0.jar
+```
+
+Doppelklick auf die JAR-Datei funktioniert auf vielen Systemen ebenfalls, sofern `.jar` mit Java verknüpft ist.
+
+## Originalprojekt und Upstream
+
+- **Original:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)  
+- Upstream in Git: `git remote add upstream https://github.com/kekru/struktogrammeditor.git` (falls noch nicht gesetzt), dann z. B.  
+  `git fetch upstream` und `git merge upstream/master`
+
+## Mitwirkung
+
+Verbesserungen und Fehlerbeschreibungen sind willkommen (Issues oder Pull Requests in **diesem** Fork).  
+Technische Commits und Code-Kommentare können Englisch sein; **sichtbare Texte in der Anwendung** sollten **deutsch** bleiben – analog zur Vorgabe im Original.
+
+## Lizenz
+
+**MIT** – siehe [LICENSE](LICENSE). Urheberrecht am ursprünglichen Code: Kevin Krummenauer (im LICENSE genannt).
+
+## Weiterführender Hinweis (Original)
+
+Website zum ursprünglichen Projekt: [whiledo.de – Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor)
