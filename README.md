@@ -38,17 +38,6 @@ Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft is
 Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
 [github.com/code4teaching/struktogrammeditor-studio/releases](https://github.com/code4teaching/struktogrammeditor-studio/releases)
 
-### Einmalig für Lehrkräfte: erste Datei für Schüler bereitstellen
-
-Der automatische Anhang der JAR passiert per **GitHub-Aktion**, sobald Sie eine **Release** veröffentlichen:
-
-1. Auf GitHub im Projekt **„Releases“** (rechte Seitenleiste oder Tab) öffnen.
-2. **„Create a new release“** / Neue Version anlegen, z. B. **Tag** `v1.0.0`, kurze Beschreibung, auf **„Publish release“** klicken.
-3. Nach wenigen Minuten erscheinen unter der Release die Dateien **`struktogramm-studio.jar`** (fester Name für den Link oben) und die versionierte JAR.  
-   Falls nichts erscheint: Tab **„Actions“** prüfen, ob der Lauf erfolgreich war.
-
-*(Ohne veröffentlichte Release ist der Direktlink oben noch leer – einmal eine Version veröffentlichen genügt.)*
-
 ## Voraussetzungen
 
 - [JDK 17](https://adoptium.net/) oder neuer (zum **Ausführen** der JAR; zum **Selbstbauen** siehe unten)
