@@ -1,8 +1,12 @@
 package de.kekru.struktogrammeditor.view;
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JViewport;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -16,9 +20,10 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    //private boolean stateChangedFreigegeben;
 
    public StrTabbedPane(Controlling controlling){
-      super();
+      super(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
       this.controlling = controlling;
-      
+      setBorder(BorderFactory.createEmptyBorder(6, 4, 4, 4));
+
       addChangeListener(this);
       addKeyListener(controlling);
    }
@@ -36,7 +41,16 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    
    public Struktogramm struktogrammHinzufuegen(){
       Struktogramm str = new Struktogramm(this);
-      add("Unbenannt", new JScrollPane(str));
+      JScrollPane scroll = new JScrollPane(str);
+      Color bc = UIManager.getColor("Component.borderColor");
+      if (bc == null) {
+         bc = UIManager.getColor("controlShadow");
+      }
+      if (bc == null) {
+         bc = Color.LIGHT_GRAY;
+      }
+      scroll.setBorder(BorderFactory.createLineBorder(bc, 1, true));
+      add("Unbenannt", scroll);
       //stateChangedFreigegeben = false; //changeListener kurz deaktivieren...
       setSelectedIndex(getTabCount() -1); //...weil es sonst in graphicsInitialisieren Probleme gibt
       //stateChangedFreigegeben = true;

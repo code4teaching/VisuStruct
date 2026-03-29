@@ -20,6 +20,9 @@ import de.kekru.struktogrammeditor.view.EinstellungsDialog;
 
 public class GlobalSettings implements Konstanten{
 
+	/** Anzeigename in Titelleiste, Dock und Infodialog (unabhängig vom ursprünglichen Projektautor). */
+	public static final String APP_DISPLAY_NAME = "Struktogramm Studio";
+
 	public static final int updateNummer = 8;
 	public static String versionsString = "";
 	public static String guiTitel = "";
@@ -37,7 +40,8 @@ public class GlobalSettings implements Konstanten{
 		{"A","I","S","F","W","D","E","B","M","Leeres Element"}
 	};
 	private static int beschriftungsStilAktuell = 1;
-	private static int lookAndFeelAktuell = 0;
+	/** Standard: FlatLaf Hell („Struktogramm Studio“-Erscheinungsbild). */
+	private static int lookAndFeelAktuell = 4;
 
 	private static String zuletztGenutzterSpeicherpfad = "";
 	private static String zuletztGenutzterPfadFuerBild = "";
@@ -95,7 +99,9 @@ public class GlobalSettings implements Konstanten{
 			s = pr.getProperty("version");
 			if(s != null){
 				versionsString = s;
-				guiTitel = "Struktogrammeditor "+versionsString;
+				guiTitel = APP_DISPLAY_NAME + " " + versionsString;
+			} else {
+				guiTitel = APP_DISPLAY_NAME;
 			}
 
 			s = pr.getProperty("revision");
@@ -226,6 +232,9 @@ public class GlobalSettings implements Konstanten{
 			s = pr.getProperty("lookandfeel");
 			if(s != null){
 				lookAndFeelAktuell = Integer.parseInt(s);
+				if (lookAndFeelAktuell < lookAndFeelOSStandard || lookAndFeelAktuell > lookAndFeelFlatDark) {
+					lookAndFeelAktuell = lookAndFeelFlatLight;
+				}
 			}
 			
 			s = pr.getProperty("useantialiasing");
@@ -277,7 +286,7 @@ public class GlobalSettings implements Konstanten{
 		try {
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(einstellungsDateiPfad)));
 
-			properties.store(out, "Struktogrammeditor Properties");			
+			properties.store(out, APP_DISPLAY_NAME + " Properties");			
 			out.close();
 
 		} catch (FileNotFoundException e) {

@@ -15,6 +15,7 @@ public enum XActionCommands {
 	
 	beschriftungsStilJava, beschriftungsStilFormal, beschriftungsStilKeineBeschriftungen,
 	
-	lookAndFeelOSStandard, lookAndFeelSwingStandard, lookAndFeelNimbus, lookAndFeelMotif, struktogrammbeschreibungHinzufuegen
+	lookAndFeelOSStandard, lookAndFeelSwingStandard, lookAndFeelNimbus, lookAndFeelMotif,
+	lookAndFeelFlatLight, lookAndFeelFlatDark, struktogrammbeschreibungHinzufuegen
 	
 }

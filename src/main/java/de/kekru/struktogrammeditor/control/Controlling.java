@@ -22,8 +22,13 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
+import de.kekru.struktogrammeditor.view.UiTheme;
 
 import de.kekru.struktogrammeditor.other.Helpers;
 import de.kekru.struktogrammeditor.other.XActionCommands;
@@ -77,12 +82,34 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				}
 				break;
 
+			case lookAndFeelFlatLight:
+				try {
+					UIManager.setLookAndFeel(new FlatLightLaf());
+				} catch (UnsupportedLookAndFeelException e) {
+					e.printStackTrace();
+				}
+				break;
+
+			case lookAndFeelFlatDark:
+				try {
+					UIManager.setLookAndFeel(new FlatDarkLaf());
+				} catch (UnsupportedLookAndFeelException e) {
+					e.printStackTrace();
+				}
+				break;
+
 			case lookAndFeelNimbus:
 				lookAndFeel = new NimbusLookAndFeel();
 				break;
 
-			case lookAndFeelMotif: lookAndFeel = new MotifLookAndFeel();
-			break;
+			case lookAndFeelSwingStandard:
+				lookAndFeel = new MetalLookAndFeel();
+				break;
+
+			case lookAndFeelMotif:
+				// Motif-LAF ist ab Java 21 entfernt; Metal ist der naheliegende klassische Ersatz.
+				lookAndFeel = new MetalLookAndFeel();
+				break;
 			}
 
 			if(lookAndFeel != null){
@@ -93,6 +120,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				}
 			}
 
+			UiTheme.applyAfterLookAndFeel();
 
 			if(getOS() == Betriebssysteme.Mac){
 				new MacHandler(this);
@@ -336,6 +364,14 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		case lookAndFeelMotif:
 			changeLookAndFeel(lookAndFeelMotif);
 			break;
+
+		case lookAndFeelFlatLight:
+			changeLookAndFeel(lookAndFeelFlatLight);
+			break;
+
+		case lookAndFeelFlatDark:
+			changeLookAndFeel(lookAndFeelFlatDark);
+			break;
 			
 		case struktogrammbeschreibungHinzufuegen:
 			addStruktogrammbeschriftung();
@@ -392,7 +428,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		}
 
 		JOptionPane.showMessageDialog(gui,
-				"Struktogrammeditor "+GlobalSettings.versionsString+separator+
+				GlobalSettings.APP_DISPLAY_NAME+" "+GlobalSettings.versionsString+separator+
 				"Kevin Krummenauer - 2011-2012"+separator+
 				"Informatik Projekt Stufe 13.2, AMG Beckum, Februar/März 2011"+separator+				
 				separator+
@@ -402,7 +438,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				//datumsfolge+separator+
 				separator+
 				"This product includes software developed by the JDOM Project (http://www.jdom.org/).",
-				"Information - Struktogrammeditor "+GlobalSettings.versionsString, JOptionPane.INFORMATION_MESSAGE);
+				"Information - "+GlobalSettings.APP_DISPLAY_NAME+" "+GlobalSettings.versionsString, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 

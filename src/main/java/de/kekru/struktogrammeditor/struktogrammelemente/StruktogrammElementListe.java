@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import de.kekru.struktogrammeditor.other.JTextAreaEasy;
 

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -16,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import de.kekru.struktogrammeditor.control.Controlling;
@@ -23,13 +25,7 @@ import de.kekru.struktogrammeditor.control.GlobalSettings;
 import de.kekru.struktogrammeditor.control.Konstanten;
 import de.kekru.struktogrammeditor.other.XActionCommands;
 
-/**
- *
- * Struktogrammeditor
- *
- * @version 1.0 vom 27.03.2011
- * @author Kevin Krummenauer
- */
+/** Hauptfenster von Struktogramm Studio (basiert auf Struktogrammeditor). */
 
 public class GUI extends JFrame implements Konstanten{
 
@@ -43,8 +39,8 @@ public class GUI extends JFrame implements Konstanten{
 
 		super(GlobalSettings.guiTitel);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		int frameWidth = 1016;
-		int frameHeight = 522;
+		int frameWidth = 1120;
+		int frameHeight = 640;
 		setSize(frameWidth, frameHeight);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (d.width - getSize().width) / 2;
@@ -71,8 +67,15 @@ public class GUI extends JFrame implements Konstanten{
 		//auswahlPanel.setBounds(0,0,200,500);
 		//add(auswahlPanel);
 
-		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(auswahlPanel), tabbedpane);
+		JScrollPane paletteScroll = new JScrollPane(auswahlPanel);
+		paletteScroll.setBorder(BorderFactory.createEmptyBorder());
+		paletteScroll.getViewport().setBackground(UIManager.getColor("Panel.background"));
+		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paletteScroll, tabbedpane);
 		splitpane.setOneTouchExpandable(true);
+		splitpane.setDividerLocation(272);
+		splitpane.setDividerSize(5);
+		splitpane.setContinuousLayout(true);
+		splitpane.setBorder(BorderFactory.createEmptyBorder());
 		add(splitpane, BorderLayout.CENTER);
 
 		//Struktogramm str = neuesStruktogramm();
@@ -148,7 +151,23 @@ public class GUI extends JFrame implements Konstanten{
 				{
 					ButtonGroup group = new ButtonGroup();
 
-					JRadioButtonMenuItem radioMenuitem = new JRadioButtonMenuItem("Betriebssystem Standard");
+					JRadioButtonMenuItem radioMenuitem = new JRadioButtonMenuItem("Modern · hell");
+					radioMenuitem.addActionListener(controlling);
+					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelFlatLight.toString());
+					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelFlatLight);
+					group.add(radioMenuitem);
+					menu2.add(radioMenuitem);
+
+					radioMenuitem = new JRadioButtonMenuItem("Modern · dunkel");
+					radioMenuitem.addActionListener(controlling);
+					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelFlatDark.toString());
+					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelFlatDark);
+					group.add(radioMenuitem);
+					menu2.add(radioMenuitem);
+
+					menu2.add(new JSeparator());
+
+					radioMenuitem = new JRadioButtonMenuItem("Betriebssystem Standard");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelOSStandard.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelOSStandard);
@@ -169,7 +188,7 @@ public class GUI extends JFrame implements Konstanten{
 					group.add(radioMenuitem);
 					menu2.add(radioMenuitem);
 					
-					radioMenuitem = new JRadioButtonMenuItem("Motif");
+					radioMenuitem = new JRadioButtonMenuItem("Metal (früher Motif)");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelMotif.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelMotif);

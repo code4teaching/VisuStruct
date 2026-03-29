@@ -4,12 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.kekru.struktogrammeditor</groupId>
 	<artifactId>struktogrammeditor</artifactId>
-	<version>1.7.3-SNAPSHOT</version>
-	<name>Struktogrammeditor</name>
+	<version>1.0.0</version>
+	<name>Struktogramm Studio</name>
 
 	<properties>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	</properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>17</maven.compiler.release>
+	</properties>
 
 	<scm>
 		<url>https://github.com/kekru/struktogrammeditor</url>
@@ -20,17 +21,19 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>1.1.3</version>
+			<artifactId>jdom2</artifactId>
+			<version>2.0.6.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.apple</groupId>
-			<artifactId>AppleJavaExtensions</artifactId>
-			<version>1.5</version>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>3.5.1</version>
 		</dependency>
 	</dependencies>
 
 	<build>
+		<!-- Ausgabe: struktogrammeditor-studio-${project.version}.jar (Fat-JAR mit Abhängigkeiten) -->
+		<finalName>struktogrammeditor-studio-${project.version}</finalName>
 		<plugins>
 		    <plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -48,7 +51,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.1</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -71,15 +74,15 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<release>${maven.compiler.release}</release>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
 				<extensions>false</extensions>
 				<executions>
 					<execution>
@@ -89,6 +92,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
 							<archive>
 								<manifest>
 									<mainClass>
@@ -105,13 +109,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>imagej</id>
-			<name>imagej</name>
-			<url>http://maven.imagej.net/content/repositories/public/</url>
-		</repository>
-	</repositories>
 
 </project>

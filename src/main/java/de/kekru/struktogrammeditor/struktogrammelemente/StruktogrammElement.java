@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import de.kekru.struktogrammeditor.control.Struktogramm;
 import de.kekru.struktogrammeditor.control.XMLLeser;

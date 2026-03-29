@@ -1,4 +1,5 @@
 package de.kekru.struktogrammeditor.view;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -21,10 +22,12 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
-import org.jdom.Document;
+import org.jdom2.Document;
 
 import de.kekru.struktogrammeditor.control.Controlling;
 import de.kekru.struktogrammeditor.control.GlobalSettings;
@@ -84,7 +87,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		muelleimer = new JLabel();
 		muelleimerIstAuf = true;   //erst true setzen...
 		muelleimerAuf(!muelleimerIstAuf); //dann mit ! einfuegen, weil in der Methode überprüft wird, ob er Parameter != muelleimerIstAuf ist
-		muelleimer.setFont(new Font("monospaced", Font.PLAIN, 15));
+		muelleimer.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		muelleimer.setText("Wegschmeißen");
 		add(muelleimer, c);
 
@@ -96,7 +99,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		kopierFeld = new JLabel();
 		kopierFeldIstAuf = true;
 		kopierFeldAuf(!kopierFeldIstAuf);
-		kopierFeld.setFont(new Font("monospaced", Font.PLAIN, 15));
+		kopierFeld.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		kopierFeld.setText("Kopie");
 		add(kopierFeld, c);
 
