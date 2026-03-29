@@ -19,12 +19,42 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
 - Gebaute Datei: **`struktogrammeditor-studio-1.0.0.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
 
+## Fertiges Programm herunterladen (ohne selbst zu bauen)
+
+**Für den Unterricht:** Schülerinnen und Schüler brauchen **kein Maven** – nur **Java 17** (oder neuer) zum Starten.
+
+**Direkter Download der neuesten veröffentlichten Version** (fest Dateiname, immer die aktuelle Release):
+
+**[➜ struktogramm-studio.jar herunterladen](https://github.com/code4teaching/struktogrammeditor-studio/releases/latest/download/struktogramm-studio.jar)**
+
+Danach z. B. im Ordner, in dem die Datei liegt:
+
+```bash
+java -jar struktogramm-studio.jar
+```
+
+Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft ist.
+
+Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
+[github.com/code4teaching/struktogrammeditor-studio/releases](https://github.com/code4teaching/struktogrammeditor-studio/releases)
+
+### Einmalig für Lehrkräfte: erste Datei für Schüler bereitstellen
+
+Der automatische Anhang der JAR passiert per **GitHub-Aktion**, sobald Sie eine **Release** veröffentlichen:
+
+1. Auf GitHub im Projekt **„Releases“** (rechte Seitenleiste oder Tab) öffnen.
+2. **„Create a new release“** / Neue Version anlegen, z. B. **Tag** `v1.0.0`, kurze Beschreibung, auf **„Publish release“** klicken.
+3. Nach wenigen Minuten erscheinen unter der Release die Dateien **`struktogramm-studio.jar`** (fester Name für den Link oben) und die versionierte JAR.  
+   Falls nichts erscheint: Tab **„Actions“** prüfen, ob der Lauf erfolgreich war.
+
+*(Ohne veröffentlichte Release ist der Direktlink oben noch leer – einmal eine Version veröffentlichen genügt.)*
+
 ## Voraussetzungen
 
-- [JDK 17](https://adoptium.net/) oder neuer
-- **Internet:** nur beim ersten Bauen nötig, damit das Werkzeug **Maven** die Bibliotheken herunterladen kann (danach kann es offline weitergehen, wenn der Rechner die Daten schon gespeichert hat)
+- [JDK 17](https://adoptium.net/) oder neuer (zum **Ausführen** der JAR; zum **Selbstbauen** siehe unten)
+- **Nur beim Selbstbauen:** Internet beim ersten Mal, damit **Maven** die Bibliotheken laden kann
 
-## Lauffähige Programmdatei (JAR) erzeugen
+## Lauffähige Programmdatei (JAR) selbst erzeugen
 
 Das Projekt herunterladen oder klonen und im Projektordner ein Terminal öffnen.
 

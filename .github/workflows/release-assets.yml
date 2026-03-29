@@ -1,0 +1,41 @@
+# Wenn Sie unter GitHub „Releases“ eine neue Version veröffentlichen, wird die JAR gebaut und an diese Release angehängt.
+name: Release – JAR erstellen und anhängen
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  attach-jar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: mvnw ausführbar machen
+        run: chmod +x mvnw
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: maven
+
+      - name: JAR bauen
+        run: ./mvnw -B clean package -DskipTests
+
+      - name: Zweite Datei mit festem Namen (stabil für Download-Link „neueste Version“)
+        run: |
+          set -e
+          jar=$(ls target/struktogrammeditor-studio-*.jar | head -1)
+          cp "$jar" struktogramm-studio.jar
+
+      - name: An die veröffentlichte Release anhängen
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/struktogrammeditor-studio-*.jar
+            struktogramm-studio.jar
