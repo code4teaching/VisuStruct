@@ -17,7 +17,7 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 - **FlatLaf** mit Farben wie auf **[VisuStruct](https://visustruct.de)** (hell: `style.css`, dunkel: Layout-Farben aus `styles.css`), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
 - **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
-- Gebaute Datei: **`struktogrammeditor-studio-1.0.0.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
+- Gebaute Datei: **`struktogrammeditor-studio-1.0.1.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
 
 ## Fertiges Programm herunterladen (ohne selbst zu bauen)
 
@@ -63,13 +63,13 @@ chmod +x mvnw
 Die fertige Datei befindet sich hier:
 
 ```text
-target/struktogrammeditor-studio-1.0.0.jar
+target/struktogrammeditor-studio-1.0.1.jar
 ```
 
 ## Programm starten
 
 ```bash
-java -jar target/struktogrammeditor-studio-1.0.0.jar
+java -jar target/struktogrammeditor-studio-1.0.1.jar
 ```
 
 Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.
