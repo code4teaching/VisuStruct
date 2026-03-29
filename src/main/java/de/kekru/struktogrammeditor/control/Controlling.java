@@ -420,25 +420,28 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 
 	public void showInfo(){
-		final String separator = System.getProperty("line.separator");
+		final String br = System.getProperty("line.separator");
+		final String projektUrl = "https://github.com/code4teaching/struktogrammeditor-studio";
+		final String webUrl = "https://www.sebastiao.org/";
+		final String originalUrl = "https://github.com/kekru/struktogrammeditor";
 
-		String datumsfolge = "";
-		for(String s : GlobalSettings.updateDaten){
-			datumsfolge += s + separator;
-		}
+		String msg = GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + br + br
+				+ "Holger Sebastiao" + br
+				+ "Ludwig-Geißler-Schule, Hanau" + br
+				+ "Projekt (GitHub): " + projektUrl + br
+				+ "Web: " + webUrl + br + br
+				+ "---" + br
+				+ "Basis und Dank" + br + br
+				+ "Dieses Programm fußt auf dem Struktogrammeditor von Kevin Krummenauer" + br
+				+ "(Schulprojekt 2010–2012, Informatik Stufe 13.2, AMG Beckum)." + br
+				+ "Vielen Dank für die Veröffentlichung unter der MIT-Lizenz." + br
+				+ "Original auf GitHub: " + originalUrl + br + br
+				+ "Git-Hash: " + GlobalSettings.buildInfoGitHash + br
+				+ "Build-Zeit: " + GlobalSettings.buildInfoBuildTime;
 
-		JOptionPane.showMessageDialog(gui,
-				GlobalSettings.APP_DISPLAY_NAME+" "+GlobalSettings.versionsString+separator+
-				"Kevin Krummenauer - 2011-2012"+separator+
-				"Informatik Projekt Stufe 13.2, AMG Beckum, Februar/März 2011"+separator+				
-				separator+
-				"Git Hash: " + GlobalSettings.buildInfoGitHash +separator+
-				"Build-Zeit: " + GlobalSettings.buildInfoBuildTime +separator+
-				//"Updates:"+separator+
-				//datumsfolge+separator+
-				separator+
-				"This product includes software developed by the JDOM Project (http://www.jdom.org/).",
-				"Information - "+GlobalSettings.APP_DISPLAY_NAME+" "+GlobalSettings.versionsString, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(gui, msg,
+				"Information – " + GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString,
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 
