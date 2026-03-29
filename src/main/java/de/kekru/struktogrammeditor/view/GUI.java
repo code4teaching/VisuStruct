@@ -20,6 +20,9 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.SystemInfo;
+
 import de.kekru.struktogrammeditor.control.Controlling;
 import de.kekru.struktogrammeditor.control.GlobalSettings;
 import de.kekru.struktogrammeditor.control.Konstanten;
@@ -39,8 +42,8 @@ public class GUI extends JFrame implements Konstanten{
 
 		super(GlobalSettings.guiTitel);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		int frameWidth = 1120;
-		int frameHeight = 640;
+		int frameWidth = 1180;
+		int frameHeight = 700;
 		setSize(frameWidth, frameHeight);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (d.width - getSize().width) / 2;
@@ -72,7 +75,7 @@ public class GUI extends JFrame implements Konstanten{
 		paletteScroll.getViewport().setBackground(UIManager.getColor("Panel.background"));
 		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paletteScroll, tabbedpane);
 		splitpane.setOneTouchExpandable(true);
-		splitpane.setDividerLocation(272);
+		splitpane.setDividerLocation(288);
 		splitpane.setDividerSize(5);
 		splitpane.setContinuousLayout(true);
 		splitpane.setBorder(BorderFactory.createEmptyBorder());
@@ -225,7 +228,10 @@ public class GUI extends JFrame implements Konstanten{
 		}
 		setJMenuBar(menubar);
 
-
+		if (UIManager.getLookAndFeel() instanceof FlatLaf && SystemInfo.isMacOS) {
+			getRootPane().putClientProperty("apple.awt.fullWindowContent", true);
+			getRootPane().putClientProperty("apple.awt.transparentTitleBar", true);
+		}
 
 		addWindowListener(controlling);
 

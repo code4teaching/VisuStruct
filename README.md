@@ -14,7 +14,7 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 ## Änderungen in dieser Version (Auszug)
 
 - **Java 17** als Zielversion (mit JDK 17 oder höher bauen und ausführen)
-- **FlatLaf** – modernes Erscheinungsbild, Hell- und Dunkeldesign (unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“)
+- **FlatLaf** mit den Themen **GitHub** (hell) und **GitHub Dark** (dunkel), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
 - **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
 - Gebaute Datei: **`struktogrammeditor-studio-1.0.0.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)

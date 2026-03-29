@@ -22,7 +22,7 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    public StrTabbedPane(Controlling controlling){
       super(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
       this.controlling = controlling;
-      setBorder(BorderFactory.createEmptyBorder(6, 4, 4, 4));
+      setBorder(BorderFactory.createEmptyBorder(8, 6, 10, 10));
 
       addChangeListener(this);
       addKeyListener(controlling);

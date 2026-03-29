@@ -53,18 +53,26 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		this.controlling = controlling;
 
 		setLayout(new GridBagLayout());
-		
-		
-		GridBagConstraints c = new GridBagConstraints();			
+		setOpaque(true);
+		setBackground(UIManager.getColor("Panel.background"));
+		Color sep = UIManager.getColor("Separator.foreground");
+		if (sep == null) {
+			sep = new Color(0xD1, 0xD5, 0xDB);
+		}
+		setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createMatteBorder(0, 0, 0, 1, sep),
+				BorderFactory.createEmptyBorder(18, 18, 18, 20)));
+
+		GridBagConstraints c = new GridBagConstraints();
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.weightx = 1;
-		c.weighty = 1;
+		c.weighty = 0;
 		c.ipadx = 1;
 		c.ipady = 1;
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.fill = GridBagConstraints.NONE;
-		c.insets = new Insets(0,0,4,0);
+		c.insets = new Insets(2, 0, 8, 0);
 
 
 		c.gridx = 0;
