@@ -54,7 +54,8 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 
 		setLayout(new GridBagLayout());
 		setOpaque(true);
-		setBackground(UIManager.getColor("Panel.background"));
+		Color pal = UIManager.getColor(VisuStructTheme.KEY_PALETTE_BACKGROUND);
+		setBackground(pal != null ? pal : UIManager.getColor("Panel.background"));
 		Color sep = UIManager.getColor("Separator.foreground");
 		if (sep == null) {
 			sep = new Color(0xD1, 0xD5, 0xDB);

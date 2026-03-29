@@ -6,9 +6,11 @@ import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 
-/** Zusätzliche UI-Defaults; wirkt vor allem mit FlatLaf. */
+/** Globale UI-Defaults; bei Flat Light/Dunkel zusätzlich VisuStruct-Farben (visustruct.de). */
 public final class UiTheme {
 
 	private UiTheme() {
@@ -18,9 +20,18 @@ public final class UiTheme {
 		UIManager.put("ScrollPane.smoothScrolling", Boolean.TRUE);
 
 		if (UIManager.getLookAndFeel() instanceof FlatLaf) {
-			FontUIResource uiFont = new FontUIResource(Font.SANS_SERIF, Font.PLAIN, 13);
-			UIManager.put("defaultFont", uiFont);
-			// Leicht größere, klarere Komponenten
+			String os = System.getProperty("os.name", "").toLowerCase();
+			Font uiFont = os.contains("win")
+					? new Font("Segoe UI", Font.PLAIN, 13)
+					: new Font(Font.SANS_SERIF, Font.PLAIN, 13);
+			UIManager.put("defaultFont", new FontUIResource(uiFont));
+
+			if (UIManager.getLookAndFeel() instanceof FlatLightLaf) {
+				VisuStructTheme.applyLightPalette();
+			} else if (UIManager.getLookAndFeel() instanceof FlatDarkLaf) {
+				VisuStructTheme.applyDarkPalette();
+			}
+
 			UIManager.put("Component.arc", Integer.valueOf(8));
 			UIManager.put("Button.arc", Integer.valueOf(10));
 			UIManager.put("TextComponent.arc", Integer.valueOf(8));

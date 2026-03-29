@@ -72,7 +72,8 @@ public class GUI extends JFrame implements Konstanten{
 
 		JScrollPane paletteScroll = new JScrollPane(auswahlPanel);
 		paletteScroll.setBorder(BorderFactory.createEmptyBorder());
-		paletteScroll.getViewport().setBackground(UIManager.getColor("Panel.background"));
+		java.awt.Color vp = UIManager.getColor(VisuStructTheme.KEY_PALETTE_BACKGROUND);
+		paletteScroll.getViewport().setBackground(vp != null ? vp : UIManager.getColor("Panel.background"));
 		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paletteScroll, tabbedpane);
 		splitpane.setOneTouchExpandable(true);
 		splitpane.setDividerLocation(288);

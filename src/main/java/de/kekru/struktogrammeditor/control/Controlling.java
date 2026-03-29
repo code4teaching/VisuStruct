@@ -22,8 +22,8 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -84,7 +84,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 			case lookAndFeelFlatLight:
 				try {
-					UIManager.setLookAndFeel(new FlatGitHubIJTheme());
+					UIManager.setLookAndFeel(new FlatLightLaf());
 				} catch (UnsupportedLookAndFeelException e) {
 					e.printStackTrace();
 				}
@@ -92,7 +92,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 			case lookAndFeelFlatDark:
 				try {
-					UIManager.setLookAndFeel(new FlatGitHubDarkIJTheme());
+					UIManager.setLookAndFeel(new FlatDarkLaf());
 				} catch (UnsupportedLookAndFeelException e) {
 					e.printStackTrace();
 				}
