@@ -71,25 +71,25 @@ public class CodeErzeuger extends JDialog {
 		delphiButton.setText("Pascal Code");
 		cp.add(delphiButton);
 		checkboxKommentare.setBounds(16, 216, 329, 17);
-		checkboxKommentare.setText("Struktogramminhalt als Kommentare ausgeben");
+		checkboxKommentare.setText("Emit structure chart text as comments");
 		checkboxKommentare.setSelected(GlobalSettings.isCodeErzeugerAlsKommentar());
 		cp.add(checkboxKommentare);
 		jLabel1.setBounds(16, 296, 323, 16);
-		jLabel1.setText("Erste Zeile soll wie viele Stellen weit eingerückt sein?");
+		jLabel1.setText("Indentation of the first line (spaces):");
 		jLabel1.setFont(new Font("MS Sans Serif", Font.PLAIN, 13));
 		cp.add(jLabel1);
 		numberfieldEinrueckung.setBounds(344, 296, 49, 24);
 		numberfieldEinrueckung.setText(""+GlobalSettings.getCodeErzeugerEinrueckungGesamt());
 		cp.add(numberfieldEinrueckung);
 		jLabel2.setBounds(16, 328, 244, 16);
-		jLabel2.setText("Anzahl der Leerzeichen pro Einrückung:");
+		jLabel2.setText("Spaces per indentation level:");
 		jLabel2.setFont(new Font("MS Sans Serif", Font.PLAIN, 13));
 		cp.add(jLabel2);
 		numberfieldZeichenzahl.setBounds(344, 328, 49, 24);
 		numberfieldZeichenzahl.setText(""+GlobalSettings.getCodeErzeugerEinrueckungProStufe());
 		cp.add(numberfieldZeichenzahl);
 		buttonCodeErzeugen.setBounds(16, 368, 147, 25);
-		buttonCodeErzeugen.setText("Code erzeugen");
+		buttonCodeErzeugen.setText("Generate");
 		buttonCodeErzeugen.setMargin(new Insets(2, 2, 2, 2));
 		buttonCodeErzeugen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -98,7 +98,7 @@ public class CodeErzeuger extends JDialog {
 		});
 		cp.add(buttonCodeErzeugen);
 		buttonSchliessen.setBounds(296, 368, 91, 25);
-		buttonSchliessen.setText("Schließen");
+		buttonSchliessen.setText("Close");
 		buttonSchliessen.setMargin(new Insets(2, 2, 2, 2));
 		buttonSchliessen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -178,7 +178,7 @@ public class CodeErzeuger extends JDialog {
 			GlobalSettings.setCodeErzeugerAlsKommentar(alsKommentar);
 			GlobalSettings.saveSettings();
 		}else{
-			JOptionPane.showMessageDialog(null, "Bitte Ganzzahlen in die Textfelder eingeben", "Fehler", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please enter whole numbers in the fields.", "Invalid input", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

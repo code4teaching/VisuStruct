@@ -29,7 +29,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -132,7 +131,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		aktuellerSpeicherpfad = "";
 
 		liste = new StruktogrammElementListe(null);//StruktogrammElementListe erzeugen, ohne Graphics-Kontext, dieser wird erst in graphicsInitialisieren() gesetzt, weil das noch nicht fertig erzeugte Struktogramm noch keinen Graphics-Kontext hat
-		liste.setzeBeschreibung("hauptliste");
+		liste.setzeBeschreibung("mainlist");
 
 		rueckgaengigListeInitialisieren();
 
@@ -496,7 +495,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	//EingabeDialog für das ausgewählte StruktogrammElement anzeigen und Text zurückgeben, andere im EingabeDialog gemachten Angaben, werden von ihm selbst durchgeführt
 	public String[] eingabeBox(StruktogrammElement tmp){
 
-		EingabeDialog dialog = new EingabeDialog(tabbedpane.gibGUI(),"Inhalt ändern",true, tmp);
+		EingabeDialog dialog = new EingabeDialog(tabbedpane.gibGUI(),"Edit Content",true, tmp);
 		return dialog.gibTextArray(); //wenn Abbrechen gedrückt wurde, wird null zurückgegeben
 	}
 
@@ -714,14 +713,13 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	public void elementLoeschen(StruktogrammElement zuLoeschen, boolean vorherFragen){
 		String frage;
 
-		if ((zuLoeschen instanceof Schleife) || (zuLoeschen instanceof Fallauswahl)){//Schleifen, Fallauswahl und Verzweigung (Verzweigung ist eine Fallauswahl) haben Unterelemente, also angepasste Frage stellen
-			frage = "Dieses Element und dessen Unterelemente entfernen?";
+		if ((zuLoeschen instanceof Schleife) || (zuLoeschen instanceof Fallauswahl)){
+			frage = "Remove this block and all nested blocks?";
 		}else{
-			frage = "Dieses Element entfernen?";
+			frage = "Remove this block?";
 		}
 
-		//Zunächst nachfragen, ob wirklich gelöscht werden soll
-		if (!vorherFragen || JOptionPane.showConfirmDialog(null, frage, "Löschen", JOptionPane.YES_NO_OPTION) == 0){//0 heißt ja, 1 heißt nein wurde gedrückt
+		if (!vorherFragen || JOptionPane.showConfirmDialog(null, frage, "Delete", JOptionPane.YES_NO_OPTION) == 0){
 
 			StruktogrammElementListe tmp = liste.gibListeDieDasElementHat(zuLoeschen); //Liste, die das zu löschende Element hat wird gesucht
 			if (tmp != null){
@@ -761,7 +759,31 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 
 	private String extrahiereExtension(String pfad){//http://www.roseindia.net/java/string-examples/java-display-file.shtml
-		return pfad.substring(pfad.lastIndexOf(".")+1);//Substring ab dem Zeichen nach dem letzten Punkt bis zum Ende
+		int dot = pfad.lastIndexOf('.');
+		if (dot < 0 || dot >= pfad.length() - 1) {
+			return "";
+		}
+		return pfad.substring(dot + 1);
+	}
+
+	/** Für {@link ImageIO#write}; JPEG-Endung als {@code jpg}. */
+	private static String imageFormatFuerImageIO(String pfad) {
+		int dot = pfad.lastIndexOf('.');
+		if (dot < 0 || dot >= pfad.length() - 1) {
+			return "png";
+		}
+		String ext = pfad.substring(dot + 1).toLowerCase();
+		switch (ext) {
+		case "jpeg":
+		case "jpg":
+			return "jpg";
+		case "png":
+		case "gif":
+		case "bmp":
+			return ext;
+		default:
+			return "png";
+		}
 	}
 
 	
@@ -771,29 +793,44 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		return bild.getSubimage(mitRand ? 0 : randLinks, mitRand ? 0 : randOben, liste.gibBreite() + (mitRand ? 2*randLinks : 1), liste.gibHoehe() + (mitRand ? 2*randOben : 1)); //es wird der Teil des BufferedImage extrahiert, auf dem das Struktogramm ist mit ein paar Pixeln Rand an allen Seiten
 	}
 
-	//das aktuelle Struktogramm soll als Bilddatei abgespeichert werden
-	public String alsBilddateiSpeichern(String voreingestellterPfad){//voreingestellterPfad ist der Pfad, bei dem der JFileChooser starten soll
+	//das aktuelle Struktogramm soll als Bilddatei abgespeichert werden (PNG zuerst, dann weitere Formate)
+	public String alsBilddateiSpeichern(String voreingestellterPfad){
+		return alsBilddateiSpeichernMitFiltern(voreingestellterPfad, new int[] { 7, 6, 5, 4, 3 });
+	}
 
-		String pfad = saveFileChooser(new int[] {4,5,6,7,3}, voreingestellterPfad);//ein Speicherpfad wird mit einen JFileChooser durch den User ausgewählt; new int[] {4,5,6,7,3} gibt an, dass dabei die Dateifilter 4,5,6,7 und 3 (in dieser Reihenfolge) genutzt werden sollen (siehe StrFileFilter)
+	/** Nur PNG — für die Schaltfläche „Export PNG“. */
+	public String alsBilddateiSpeichernNurPng(String voreingestellterPfad){
+		return alsBilddateiSpeichernMitFiltern(voreingestellterPfad, new int[] { 7 });
+	}
 
-		if(!pfad.equals("")){//pfad ist "", wenn der User auf Abbrechen geklickt hat
+	private String alsBilddateiSpeichernMitFiltern(String voreingestellterPfad, int[] bildFilterNummern){
 
-			BufferedImage ausgabeBild = generateImage(false);
+		String pfad = saveFileChooser(bildFilterNummern, voreingestellterPfad, true);
 
-			//ausgabeBild mit dem ausgewählten Pfad abspeichert
-			try{ //http://www.spotlight-wissen.de/archiv/message/476162.html
-				BufferedOutputStream oStream = new BufferedOutputStream(new FileOutputStream(new File(pfad)));
-				ImageIO.write(ausgabeBild, extrahiereExtension(pfad), oStream);
-				oStream.close();
-			}catch(IOException e1){
-
-			}catch(Exception e2){
-
-			}
-
+		if (pfad.equals("")){
+			return pfad;
 		}
 
-		return pfad; //zum späteren Speichern wird der Pfad zurückgeben an die GUI; beim erneuten Abspeichern eines Bildes, wird dann der Ordner in dem das aktuelle Bild ist, als Startordner für den JFileChooser verwendet
+		if (extrahiereExtension(pfad).isEmpty()){
+			pfad = pfad + ".png";
+		}
+
+		BufferedImage ausgabeBild = generateImage(false);
+		String fmt = imageFormatFuerImageIO(pfad);
+
+		try (FileOutputStream fos = new FileOutputStream(pfad)){
+			if (!ImageIO.write(ausgabeBild, fmt, fos)){
+				JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
+						"The image could not be written (format: " + fmt + ").",
+						"Export Image", JOptionPane.ERROR_MESSAGE);
+			}
+		}catch (IOException | RuntimeException ex){
+			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
+					"Error while saving:\n" + ex.getMessage(),
+					"Export Image", JOptionPane.ERROR_MESSAGE);
+		}
+
+		return pfad; //Ordner für den nächsten Dialog
 	}
 
 
@@ -844,7 +881,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
      hat er Abbrechen angeklickt, wird "" zurückgegeben*/
 	public static String oeffnenDialog(String voreingestellterOrdnerpfad, Component parentComponent){
 		JFileChooser chooser = new JFileChooser();
-		chooser.setFileFilter(new StrFileFilter(StrFileFilter.filterAlleSpeicherdateien));//StrFileFilter für .strk und .xml Dateien (siehe StrFileFilter)
+		chooser.setFileFilter(new StrFileFilter(StrFileFilter.filterAlleSpeicherdateien));
 
 		if(!voreingestellterOrdnerpfad.equals("")){
 			chooser.setCurrentDirectory(new File(voreingestellterOrdnerpfad));//Startordner setzen
@@ -898,13 +935,19 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 
 	//Speicherndialog wird aufgerufen, mit den angegebenen StrFileFilter-Nummern und dem angegebenen Ordnerpfad
-	private String saveFileChooser(int[] struktogrammFilterNummern, String voreingestellterPfad){
+	private String saveFileChooser(int[] struktogrammFilterNummern, String voreingestellterPfad, boolean bildExport){
 		JFileChooser chooser = new JFileChooser();
+
+		if (bildExport){
+			chooser.setAcceptAllFileFilterUsed(false);
+		}
 
 		for (int i=0; i < struktogrammFilterNummern.length; i++){
 			chooser.addChoosableFileFilter(new StrFileFilter(struktogrammFilterNummern[i]));//FileFilter hinzufügen
 		}
-
+		if (struktogrammFilterNummern.length > 0){
+			chooser.setFileFilter(new StrFileFilter(struktogrammFilterNummern[0]));//Standard: erster Filter (z. B. .strukstudio beim Speichern, PNG beim Bildexport)
+		}
 
 		if(!voreingestellterPfad.equals("")){
 			chooser.setCurrentDirectory(new File(voreingestellterPfad));//Startordner setzen
@@ -917,13 +960,15 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 			pfad = chooser.getSelectedFile().getAbsolutePath();
 
-			if(chooser.getFileFilter() instanceof StrFileFilter){//der erste Filter ist "Alle Dateien" und automatisch vorhanden und somit kein StrFileFilter, also erst prüfen, ob der vom User gewählte Filter ein StrFileFilter ist
-				pfad = ((StrFileFilter)chooser.getFileFilter()).erweiterungBeiBedarfAnhaengen(pfad);//Dateierweiterung bei Bedarf anhängen
+			if(chooser.getFileFilter() instanceof StrFileFilter){
+				pfad = ((StrFileFilter)chooser.getFileFilter()).erweiterungBeiBedarfAnhaengen(pfad);//Endung passend zum gewählten Dateityp
+			}else if (!bildExport){
+				pfad = StrFileFilter.haengeStrukstudioAnFallsKeineSpeicherendung(pfad);//„Alle Dateien“: .strukstudio, falls noch keine .strukstudio/.xml/.strk
 			}
 
 			if((new File(pfad)).exists()){ //wenn die ausgewählte Datei bereits existiert, erst nachfragen, ob diese überschrieben werden soll
-				Object[] options = {"Ja", "Nein"}; //http://download.oracle.com/javase/1.4.2/docs/api/javax/swing/JOptionPane.html
-				if (0 != JOptionPane.showOptionDialog(null, "Die Datei "+pfad+" existiert bereits. \n Wirklich überschreiben?", "Datei existiert", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
+				Object[] options = {"Yes", "No"};
+				if (0 != JOptionPane.showOptionDialog(null, "The file " + pfad + " already exists.\nOverwrite?", "File Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
 					pfad = ""; //es wurde nicht ja gedrückt
 				}
 			}
@@ -944,7 +989,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			pfad = voreingestellterPfad;//...sonst voreingestellterPfad (kommt von der GUI)
 		}
 
-		pfad = saveFileChooser(new int[] {1,2,0}, pfad);//Speicherdialog mit den StrFileFiltern 1,2 und 0
+		pfad = saveFileChooser(new int[] { StrFileFilter.filterStruktogrammStudio, 1, 2, StrFileFilter.filterAlleSpeicherdateien }, pfad, false);
 
 		if(!pfad.equals("")){//wenn nicht auf Abbrechen geklickt wurde...
 			setzeAktuellerSpeicherpfad(pfad);

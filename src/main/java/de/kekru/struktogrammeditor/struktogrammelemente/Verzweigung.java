@@ -9,8 +9,8 @@ import de.kekru.struktogrammeditor.view.CodeErzeuger;
 
 public class Verzweigung extends Fallauswahl { //erbt von Fallauswahl
    private boolean seitenSindVertauscht;
-   private static final String jaText = "Ja";
-   private static final String neinText = "Nein";
+   private static final String jaText = "true";
+   private static final String neinText = "false";
 
    public Verzweigung(Graphics2D g){
       super(g,2);

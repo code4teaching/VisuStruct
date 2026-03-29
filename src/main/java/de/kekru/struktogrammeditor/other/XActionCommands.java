@@ -6,14 +6,12 @@ public enum XActionCommands {
 	
 	rueckgaengig, widerrufen, ganzesStruktogrammKopieren, elementUnterDerMausKopieren, elementEinfuegen,
 	
-	letztesElementStrecken, startbeschriftungAendern, schriftartAendern,
+	letztesElementStrecken, schriftartAendern,
 	groesseAendernMitMausrad, zoomeinstellungen, vergroesserungenRuckgaengigMachen,
 	elementShortcutsVerwenden, kantenglaettungVerwenden,
 	
 	homepage, changelog, kontaktformular, hilfe, info,
 	sourceCode,
-	
-	beschriftungsStilJava, beschriftungsStilFormal, beschriftungsStilKeineBeschriftungen,
 	
 	lookAndFeelOSStandard, lookAndFeelSwingStandard, lookAndFeelNimbus, lookAndFeelMotif,
 	lookAndFeelFlatLight, lookAndFeelFlatDark, struktogrammbeschreibungHinzufuegen

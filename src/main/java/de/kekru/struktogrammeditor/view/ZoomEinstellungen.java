@@ -20,14 +20,14 @@ public class ZoomEinstellungen extends JDialog {
 	private JNumberField numberfieldX, numberfieldY;
 
 	public ZoomEinstellungen(GUI gui){
-		super(gui, "Zoom Einstellungen", true);
+		super(gui, "Zoom Settings", true);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);   
 		setSize(380, 220);	    
 		setLocationRelativeTo(gui);
 
 		setLayout(new BorderLayout(10,10));
 
-		add(new JLabel("<html><b>Wie viele Pixel soll das zu vergrößernde oder das zu verkleinernde Element pro Schritt in die jeweilige Richtung vergößert oder verkleinert werden?<b></html>;"), BorderLayout.NORTH);
+		add(new JLabel("<html><b>How many pixels should a block grow or shrink per step (horizontal and vertical)?</b></html>"), BorderLayout.NORTH);
 
 		JPanel panel;
 		JButton button;
@@ -35,10 +35,10 @@ public class ZoomEinstellungen extends JDialog {
 		panel = new JPanel();
 		{
 			panel.setLayout(new GridLayout(2,2));
-			panel.add(new JLabel("Waagerechte Größenänderung:"));
+			panel.add(new JLabel("Horizontal step (px):"));
 			panel.add(numberfieldX = new JNumberField());
 			numberfieldX.setInt(GlobalSettings.getXZoomProSchritt());
-			panel.add(new JLabel("Senkrechte Größenänderung:"));
+			panel.add(new JLabel("Vertical step (px):"));
 			panel.add(numberfieldY = new JNumberField());
 			numberfieldY.setInt(GlobalSettings.getYZoomProSchritt());
 		}
@@ -59,7 +59,7 @@ public class ZoomEinstellungen extends JDialog {
 			});
 
 
-			panel.add(button = new JButton("Abbrechen"));
+			panel.add(button = new JButton("Cancel"));
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

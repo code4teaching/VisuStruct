@@ -21,7 +21,7 @@ public class ColorDialog extends JDialog {
 	
 	private ColorDialog(Dialog owner){
 
-		super(owner, "Farbauswahl", true);
+		super(owner, "Choose Color", true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
@@ -38,7 +38,7 @@ public class ColorDialog extends JDialog {
 			});
 			panel.add(button);
 			
-			button = new JButton("Abbrechen");
+			button = new JButton("Cancel");
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -47,7 +47,7 @@ public class ColorDialog extends JDialog {
 			});
 			panel.add(button);
 			
-			button = new JButton("Schwarz");
+			button = new JButton("Black");
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -56,7 +56,7 @@ public class ColorDialog extends JDialog {
 			});
 			panel.add(button);
 			
-			button = new JButton("Weiß");
+			button = new JButton("White");
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

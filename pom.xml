@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.kekru.struktogrammeditor</groupId>
 	<artifactId>struktogrammeditor</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>Struktogramm Studio</name>
 
 	<properties>
@@ -34,43 +34,24 @@
 	<build>
 		<!-- Ausgabe: struktogrammeditor-studio-${project.version}.jar (Fat-JAR mit Abhängigkeiten) -->
 		<finalName>struktogrammeditor-studio-${project.version}</finalName>
+		<!-- Icons ungefiltert (binär); build.properties erhält ${project.version} -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>build.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>build.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
-		    <plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create-metadata</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.1</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<resources>          
-								<resource>
-									<directory>${basedir}/target/generated/build-metadata</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>              
-						</configuration>            
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

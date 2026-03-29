@@ -3,6 +3,9 @@ package de.kekru.struktogrammeditor.view;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 /**
  * Farben wie auf visustruct.de (CSS-Variablen aus {@code style.css} für Hell,
  * {@code styles.css} für Dunkel). Schlüssel {@code VisuStruct.paletteBackground}
@@ -62,15 +65,27 @@ public final class VisuStructTheme {
 		UIManager.put("Component.borderColor", c(border));
 
 		UIManager.put("Label.foreground", c(text));
-		UIManager.put("Button.foreground", c(text));
+		// FlatMacLightLaf: Default-Buttons u. a. mit contrast()-Schrift; unsere Overrides würden OK kaum lesbar machen.
+		if (!(UIManager.getLookAndFeel() instanceof FlatMacLightLaf)) {
+			UIManager.put("Button.foreground", c(text));
+			UIManager.put("Button.background", c(surface));
+			UIManager.put("Button.focusedBackground", c(tabHover));
+			UIManager.put("Button.default.background", c(accent));
+			UIManager.put("Button.default.foreground", c(surface));
+			int accentHover = 0x2563EB;
+			int accentPressed = 0x1D4ED8;
+			UIManager.put("Button.default.focusedBackground", c(accent));
+			UIManager.put("Button.default.hoverBackground", c(accentHover));
+			UIManager.put("Button.default.pressedBackground", c(accentPressed));
+		}
 		UIManager.put("TextField.background", c(surface));
 		UIManager.put("TextField.foreground", c(text));
 		UIManager.put("TextArea.background", c(surface));
 		UIManager.put("TextArea.foreground", c(text));
 		UIManager.put("TitledBorder.titleColor", c(muted));
 
-		UIManager.put("Button.default.background", c(accent));
-		UIManager.put("Button.default.foreground", c(surface));
+		UIManager.put("OptionPane.background", c(bg));
+		UIManager.put("OptionPane.messageForeground", c(text));
 	}
 
 	/** Dunkel: Farben aus dem Grid-Layout in {@code styles.css} (ältere Variante). */
@@ -114,14 +129,21 @@ public final class VisuStructTheme {
 		UIManager.put("Component.borderColor", c(border));
 
 		UIManager.put("Label.foreground", c(text));
-		UIManager.put("Button.foreground", c(text));
+		if (!(UIManager.getLookAndFeel() instanceof FlatMacDarkLaf)) {
+			UIManager.put("Button.foreground", c(text));
+			UIManager.put("Button.default.background", c(accent));
+			UIManager.put("Button.default.foreground", c(0xFFFFFF));
+			UIManager.put("Button.default.focusedBackground", c(accent));
+			UIManager.put("Button.default.hoverBackground", c(0xFF6B7D));
+			UIManager.put("Button.default.pressedBackground", c(0xD63850));
+		}
 		UIManager.put("TextField.background", c(deep));
 		UIManager.put("TextField.foreground", c(text));
 		UIManager.put("TextArea.background", c(deep));
 		UIManager.put("TextArea.foreground", c(text));
 		UIManager.put("TitledBorder.titleColor", c(muted));
 
-		UIManager.put("Button.default.background", c(accent));
-		UIManager.put("Button.default.foreground", c(0xFFFFFF));
+		UIManager.put("OptionPane.background", c(canvas));
+		UIManager.put("OptionPane.messageForeground", c(text));
 	}
 }

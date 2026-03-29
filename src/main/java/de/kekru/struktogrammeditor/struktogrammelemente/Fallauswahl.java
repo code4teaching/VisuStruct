@@ -33,7 +33,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 
 		yVerschiebungFuerTrennLinie = -20; //Trennlinie zwischen Vorletztem und Sonst-Fall geht 20 Pixel in den Kopfteil hinein
 
-		listen.get(listen.size() -1).setzeBeschreibung("Sonst");
+		listen.get(listen.size() -1).setzeBeschreibung("Else");
 
 		obererRandZusatz = 40; //der Kopfteil soll 40 Pixel plus die Höhe des Textes sein
 

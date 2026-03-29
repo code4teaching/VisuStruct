@@ -19,3 +19,9 @@ settings.json
 struktogrammeditor.properties
 
 .DS_Store
+
+# Lokale Build- und Verteilungsordner
+dist/
+
+# Abhängigkeitsordner irrtümlich im Projektroot (z. B. entpackte JARs)
+com/

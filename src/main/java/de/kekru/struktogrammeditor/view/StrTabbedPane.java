@@ -50,7 +50,7 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
          bc = Color.LIGHT_GRAY;
       }
       scroll.setBorder(BorderFactory.createLineBorder(bc, 1, true));
-      add("Unbenannt", scroll);
+      add("Untitled", scroll);
       //stateChangedFreigegeben = false; //changeListener kurz deaktivieren...
       setSelectedIndex(getTabCount() -1); //...weil es sonst in graphicsInitialisieren Probleme gibt
       //stateChangedFreigegeben = true;
@@ -83,7 +83,7 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    
    
    public void aktuellesStruktogrammschliessen(){
-      switch(JOptionPane.showConfirmDialog(controlling.getGUI(), "Vor dem Schließen aktuelles Struktogramm speichern?", "Vorher speichern?", JOptionPane.YES_NO_CANCEL_OPTION)){
+      switch(JOptionPane.showConfirmDialog(controlling.getGUI(), "Save the current diagram before closing?", "Save Before Close?", JOptionPane.YES_NO_CANCEL_OPTION)){
          case JOptionPane.YES_OPTION:
             controlling.speichern(false);
             remove(getSelectedIndex());

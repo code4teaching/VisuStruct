@@ -68,7 +68,7 @@ public class EingabeDialog extends JDialog {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
-		add(new JLabel("Inhalt des Kopfteils:"), c);
+		add(new JLabel("Header text:"), c);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -101,7 +101,7 @@ public class EingabeDialog extends JDialog {
 			c.gridx = 0;
 			c.gridy = 2;
 			c.weightx = 1;
-			add(new JLabel(element instanceof Verzweigung ? "Beschriftungen links und rechts:" : "Beschriftungen der Fälle:"), c);
+			add(new JLabel(element instanceof Verzweigung ? "Left and right branch labels:" : "Case labels:"), c);
 
 			c.gridx = 0;
 			c.gridy = 3;
@@ -119,7 +119,7 @@ public class EingabeDialog extends JDialog {
 			c.gridx = 2;
 			c.gridy = 4;
 			c.weightx = 100;
-			button = new JButton("Fallbeschriftung ändern");
+			button = new JButton("Rename selected case");
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -146,7 +146,7 @@ public class EingabeDialog extends JDialog {
 		c.gridx = 0;
 		c.gridy = 4;
 		c.weightx = 1;
-		button = new JButton("Schriftfarbe");
+		button = new JButton("Text color");
 		buttonSchriftfarbe = button;
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -160,7 +160,7 @@ public class EingabeDialog extends JDialog {
 		c.gridx = 1;
 		c.gridy = 4;
 		c.weightx = 100;
-		button = new JButton("Hintergrundfarbe");
+		button = new JButton("Fill color");
 		buttonHintergrundfarbe = button;
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -190,7 +190,7 @@ public class EingabeDialog extends JDialog {
 		c.gridx = 2;
 		c.gridy = 5;
 		c.weightx = 100;
-		button = new JButton("Abbrechen");
+		button = new JButton("Cancel");
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -253,7 +253,7 @@ public class EingabeDialog extends JDialog {
 	public void buttonFallname_ActionPerformed(ActionEvent evt) {
 		if(list.gibIndex() >= 0){
 
-			String fallname = JOptionPane.showInputDialog("Neuer Fallname",list.gibMarkiertenInhalt());//User nach neuen Fallnamen fragen
+			String fallname = JOptionPane.showInputDialog("New case label",list.gibMarkiertenInhalt());
 
 			if (fallname != null){
 				if (fallname.equals("")){
@@ -263,7 +263,7 @@ public class EingabeDialog extends JDialog {
 			}
 
 		}else{//es ist noch kein Fall in der JListEasy ausgewählt
-			JOptionPane.showMessageDialog(null, "Bitte eine Fallbeschreibung auswählen", "Auswählen", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please select a case label first.", "Selection required", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

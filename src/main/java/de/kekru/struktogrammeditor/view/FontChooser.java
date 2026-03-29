@@ -35,8 +35,8 @@ public class FontChooser extends JDialog {
 
 
 	// The names to appear in the "Style" menu
-	static final String[] styleNames = new String[] { "Normal", "Kursiv",
-		"Fett", "Fett und Kursiv" };
+	static final String[] styleNames = new String[] { "Plain", "Italic",
+		"Bold", "Bold Italic" };
 
 	// The style values that correspond to those names
 	static final Integer[] styleValues = new Integer[] {
@@ -49,7 +49,7 @@ public class FontChooser extends JDialog {
 
 	public FontChooser(Controlling controlling, boolean modal) {
 
-		super(controlling.getGUI(), "Schriftart ändern", modal);
+		super(controlling.getGUI(), "Change Font", modal);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);   
 		setSize(465, 120);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();    
@@ -104,7 +104,7 @@ public class FontChooser extends JDialog {
 
 
 			buttonAbbrechen.setBounds(115, 40, 91, 25);
-			buttonAbbrechen.setText("Abbrechen");
+			buttonAbbrechen.setText("Cancel");
 			buttonAbbrechen.setMargin(new Insets(2, 2, 2, 2));
 			buttonAbbrechen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
@@ -116,7 +116,7 @@ public class FontChooser extends JDialog {
 
 
 			buttonZuruecksetzen.setBounds(220, 40, 91, 25);
-			buttonZuruecksetzen.setText("Zurücksetzen");
+			buttonZuruecksetzen.setText("Reset");
 			buttonZuruecksetzen.setMargin(new Insets(2, 2, 2, 2));
 			buttonZuruecksetzen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {

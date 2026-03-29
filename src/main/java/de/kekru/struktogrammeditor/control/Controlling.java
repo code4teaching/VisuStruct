@@ -1,5 +1,7 @@
 package de.kekru.struktogrammeditor.control;
 
+import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -17,13 +19,19 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -33,8 +41,8 @@ import de.kekru.struktogrammeditor.view.UiTheme;
 import de.kekru.struktogrammeditor.other.Helpers;
 import de.kekru.struktogrammeditor.other.XActionCommands;
 import de.kekru.struktogrammeditor.struktogrammelemente.StruktogrammElement;
+import de.kekru.struktogrammeditor.view.AuswahlPanel;
 import de.kekru.struktogrammeditor.view.CodeErzeuger;
-import de.kekru.struktogrammeditor.view.EinstellungsDialog;
 import de.kekru.struktogrammeditor.view.FontChooser;
 import de.kekru.struktogrammeditor.view.GUI;
 import de.kekru.struktogrammeditor.view.ZoomEinstellungen;
@@ -84,7 +92,11 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 			case lookAndFeelFlatLight:
 				try {
-					UIManager.setLookAndFeel(new FlatLightLaf());
+					if (getOS() == Betriebssysteme.Mac) {
+						UIManager.setLookAndFeel(new FlatMacLightLaf());
+					} else {
+						UIManager.setLookAndFeel(new FlatLightLaf());
+					}
 				} catch (UnsupportedLookAndFeelException e) {
 					e.printStackTrace();
 				}
@@ -92,7 +104,11 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 			case lookAndFeelFlatDark:
 				try {
-					UIManager.setLookAndFeel(new FlatDarkLaf());
+					if (getOS() == Betriebssysteme.Mac) {
+						UIManager.setLookAndFeel(new FlatMacDarkLaf());
+					} else {
+						UIManager.setLookAndFeel(new FlatDarkLaf());
+					}
 				} catch (UnsupportedLookAndFeelException e) {
 					e.printStackTrace();
 				}
@@ -196,11 +212,28 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		titelleisteAktualisieren();
 	}
 
+
+	/** Für macOS (OpenFilesHandler): Struktogramm aus Pfad öffnen, sobald die GUI steht. */
+	public void oeffneStruktogrammDateiAusFinder(String pfad) {
+		if (pfad != null && new File(pfad).exists()) {
+			openStruktogramm(pfad);
+		}
+	}
+
 	public void bildSpeichern(){
 		Struktogramm str = gibAktuellesStruktogramm();
 
 		if(str != null){
 			GlobalSettings.setzeBildSpeicherpfad(str.alsBilddateiSpeichern(GlobalSettings.getZuletztGenutzterPfadFuerBild()));
+			GlobalSettings.saveSettings();
+		}
+	}
+
+	public void bildSpeichernNurPng(){
+		Struktogramm str = gibAktuellesStruktogramm();
+
+		if(str != null){
+			GlobalSettings.setzeBildSpeicherpfad(str.alsBilddateiSpeichernNurPng(GlobalSettings.getZuletztGenutzterPfadFuerBild()));
 			GlobalSettings.saveSettings();
 		}
 	}
@@ -250,7 +283,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			break;
 
 		case quellcodeErzeugen:
-			new CodeErzeuger(gui, "Quellcode erzeugen", true, gibAktuellesStruktogramm());
+			new CodeErzeuger(gui, "Generate Source Code", true, gibAktuellesStruktogramm());
 			break;
 
 		case struktogrammSchliessen:
@@ -283,10 +316,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 		case letztesElementStrecken:
 			letzteElementeStreckenGeklickt(e.getSource());
-			break;
-
-		case startbeschriftungAendern:
-			new EinstellungsDialog(gui,true);
 			break;
 
 		case schriftartAendern:
@@ -337,18 +366,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			showInfo();
 			break;
 
-		case beschriftungsStilJava:
-			changeBeschriftungsStil(beschriftungsStilJava);
-			break;
-
-		case beschriftungsStilFormal:
-			changeBeschriftungsStil(beschriftungsStilFormal);
-			break;
-
-		case beschriftungsStilKeineBeschriftungen:
-			changeBeschriftungsStil(beschriftungsStilKeineBeschriftungen);
-			break;
-
 		case lookAndFeelOSStandard:
 			changeLookAndFeel(lookAndFeelOSStandard);
 			break;
@@ -384,7 +401,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 	private void addStruktogrammbeschriftung() {
 		Struktogramm str = gibAktuellesStruktogramm();
-		String s = JOptionPane.showInputDialog("Beschriftung", str.getStruktogrammBeschreibung());
+		String s = JOptionPane.showInputDialog("Diagram caption", str.getStruktogrammBeschreibung());
 		if(s == null){
 			return;
 		}
@@ -405,43 +422,56 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 	}
 
 
-	private void changeLookAndFeel(int beschriftungsStilIndex){
-		GlobalSettings.setLookAndFeelAktuell(beschriftungsStilIndex);
+	private void changeLookAndFeel(int lookAndFeelIndex){
+		GlobalSettings.setLookAndFeelAktuell(lookAndFeelIndex);
 		GlobalSettings.saveSettings();
-		JOptionPane.showMessageDialog(gui, "Die Änderungen werden beim Neustart des Programms wirksam.", "Look And Feel Änderung", JOptionPane.INFORMATION_MESSAGE);
-	}
-
-
-	private void changeBeschriftungsStil(int beschriftungsStilIndex){
-		GlobalSettings.setBeschriftungsStilAktuell(beschriftungsStilIndex);
-		GlobalSettings.saveSettings();
-		gui.gibAuswahlPanel().aktualisiereBeschriftungen();
+		JOptionPane.showMessageDialog(gui, "Changes will take effect after you restart the application.", "Look and Feel", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 
 	public void showInfo(){
-		final String br = System.getProperty("line.separator");
 		final String projektUrl = "https://github.com/code4teaching/struktogrammeditor-studio";
 		final String webUrl = "https://www.sebastiao.org/";
 		final String originalUrl = "https://github.com/kekru/struktogrammeditor";
 
-		String msg = GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + br + br
-				+ "Holger Sebastiao" + br
-				+ "Ludwig-Geißler-Schule, Hanau" + br
-				+ "Projekt (GitHub): " + projektUrl + br
-				+ "Web: " + webUrl + br + br
-				+ "---" + br
-				+ "Basis und Dank" + br + br
-				+ "Dieses Programm fußt auf dem Struktogrammeditor von Kevin Krummenauer" + br
-				+ "(Schulprojekt 2010–2012, Informatik Stufe 13.2, AMG Beckum)." + br
-				+ "Vielen Dank für die Veröffentlichung unter der MIT-Lizenz." + br
-				+ "Original auf GitHub: " + originalUrl + br + br
-				+ "Git-Hash: " + GlobalSettings.buildInfoGitHash + br
-				+ "Build-Zeit: " + GlobalSettings.buildInfoBuildTime;
+		String html = "<html><body style=\"font-family:sans-serif;font-size:11pt;\">"
+				+ "<p style=\"margin-top:0;margin-bottom:10px;\"><b>"
+				+ GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + "</b></p>"
+				+ "<p style=\"margin-top:0;\">Holger Sebastiao<br/>"
+				+ "Ludwig-Geißler-Schule, Hanau<br/>"
+				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/struktogrammeditor-studio</a><br/>"
+				+ "Web: <a href=\"" + webUrl + "\">www.sebastiao.org</a></p>"
+				+ "<hr style=\"border:0;border-top:1px solid #ccc;\"/>"
+				+ "<p style=\"margin-bottom:6px;\"><b>Credits</b></p>"
+				+ "<p style=\"margin-top:0;\">This program is based on the structure chart editor by Kevin Krummenauer.<br/>"
+				+ "Original on GitHub: <a href=\"" + originalUrl + "\">kekru/struktogrammeditor</a></p>"
+				+ "</body></html>";
 
-		JOptionPane.showMessageDialog(gui, msg,
-				"Information – " + GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString,
-				JOptionPane.INFORMATION_MESSAGE);
+		JEditorPane pane = new JEditorPane("text/html", html);
+		pane.setEditable(false);
+		pane.setOpaque(false);
+		pane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+		pane.addHyperlinkListener(e -> {
+			if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED || e.getURL() == null) {
+				return;
+			}
+			if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				return;
+			}
+			try {
+				Desktop.getDesktop().browse(e.getURL().toURI());
+			} catch (Exception ignored) {
+				// ohne Browser keine Aktion
+			}
+		});
+
+		JScrollPane scroll = new JScrollPane(pane);
+		scroll.setBorder(null);
+		scroll.getViewport().setOpaque(false);
+		scroll.setPreferredSize(new Dimension(440, 260));
+
+		String title = "Information - " + GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString;
+		JOptionPane.showMessageDialog(gui, scroll, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 
@@ -491,8 +521,8 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 	public boolean programmBeendenGeklickt(){
 		if(gui.gibTabbedpane().einOderMehrereStruktogrammeNichtGespeichert()){                  
-			Object[] options = {"Ja", "Nein"}; //http://download.oracle.com/javase/1.4.2/docs/api/javax/swing/JOptionPane.html
-			if (0 == JOptionPane.showOptionDialog(gui, "Ein oder mehrere Struktogramme wurden noch nicht gespeichert.\nWirklich Beenden ohne zu speichern?", "Noch nicht gespeichert", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
+			Object[] options = {"Yes", "No"};
+			if (0 == JOptionPane.showOptionDialog(gui, "One or more diagrams have not been saved.\nExit without saving?", "Unsaved Changes", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
 
 				System.exit(0);
 				return true;

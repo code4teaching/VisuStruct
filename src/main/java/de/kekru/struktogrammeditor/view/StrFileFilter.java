@@ -8,6 +8,8 @@ import javax.swing.filechooser.FileFilter;
 public class StrFileFilter extends FileFilter {
 	private int filtertyp;
 	public static final int filterAlleSpeicherdateien = 0;
+	/** Standard-Erweiterung für Struktogramm Studio (Inhalt weiterhin XML). */
+	public static final int filterStruktogrammStudio = 8;
 	private static final int filterAlleBilddateien = 3;
 
 	public StrFileFilter(int filtertyp){
@@ -23,14 +25,15 @@ public class StrFileFilter extends FileFilter {
 	//Beschreibungen für die einzelnen Filtertypen
 	public String getDescription(){
 		switch(filtertyp){
-		case filterAlleSpeicherdateien: return "XML Dateien und strk Dateien";
-		case 1: return "strk Dateien";
-		case 2: return "XML Dateien";
-		case filterAlleBilddateien: return "Bilddateien";
-		case 4: return "BMP Dateien";
-		case 5: return "GIF Dateien";
-		case 6: return "JPG Dateien";
-		case 7: return "PNG Dateien";
+		case filterStruktogrammStudio: return "Struktogramm Studio (*.strukstudio)";
+		case filterAlleSpeicherdateien: return "All chart files (*.strukstudio, *.strk, *.xml)";
+		case 1: return "Legacy .strk";
+		case 2: return "XML (*.xml)";
+		case filterAlleBilddateien: return "Image files";
+		case 4: return "BMP images";
+		case 5: return "GIF images";
+		case 6: return "JPEG images";
+		case 7: return "PNG images";
 		default: return "";
 		}
 	}
@@ -38,7 +41,8 @@ public class StrFileFilter extends FileFilter {
 
 	private String gibAktuelleErweiterung(){//Dateierweiterung bei diesem Filter
 		switch(filtertyp){
-		case filterAlleSpeicherdateien: return ".strk";
+		case filterStruktogrammStudio: return ".strukstudio";
+		case filterAlleSpeicherdateien: return ".strukstudio";
 		case 1: return ".strk";
 		case 2: return ".xml";
 		case filterAlleBilddateien: return ".png";
@@ -66,10 +70,24 @@ public class StrFileFilter extends FileFilter {
 	}
 
 
+	/**
+	 * Wenn der Name noch keine der üblichen Struktogramm-Speicherendungen hat, wird {@code .strukstudio} angehängt
+	 * (z. B. wenn im Speichern-Dialog „Alle Dateien“ gewählt ist).
+	 */
+	public static String haengeStrukstudioAnFallsKeineSpeicherendung(String pfad){
+		String s = pfad.toLowerCase();
+		if (s.endsWith(".strukstudio") || s.endsWith(".xml") || s.endsWith(".strk")){
+			return pfad;
+		}
+		return pfad + ".strukstudio";
+	}
+
+
 	private boolean dateiAkzeptiert(String pfad){
 		pfad = pfad.toLowerCase();
 		switch(filtertyp){
-		case filterAlleSpeicherdateien: return pfad.endsWith(".xml") || pfad.endsWith(".strk"); //wenn der Filter "XML Dateien und strk Dateien" ist, werden .xml und .strk Dateien akzeptiert
+		case filterAlleSpeicherdateien:
+			return pfad.endsWith(".strukstudio") || pfad.endsWith(".xml") || pfad.endsWith(".strk");
 		case filterAlleBilddateien: return pfad.endsWith(".bmp") || pfad.endsWith(".gif") || pfad.endsWith(".jpg") || pfad.endsWith(".jpeg") || pfad.endsWith(".png"); //wenn der Filter "Bilddateien" ist, werden alle Bilddateien akzeptiert
 		default: return pfad.endsWith(gibAktuelleErweiterung()); //es werden nur die Dateien mit genau der ausgesuchten Endung akzeptiert
 		}

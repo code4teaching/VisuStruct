@@ -36,44 +36,44 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 		typ = Struktogramm.strElementZuTypnummer(element);
 
 		StrPopupUntermenue untermenue = unterMenueEinfuegen("Zoom");
-		untermenue.einfuegen("Größer",8,-1);
-		untermenue.einfuegen("Kleiner",9,-1);
+		untermenue.einfuegen("Larger",8,-1);
+		untermenue.einfuegen("Smaller",9,-1);
 		untermenue.add(new JSeparator());
-		untermenue.einfuegen("Breiter",10,-1);
-		untermenue.einfuegen("Schmaler",11,-1);
+		untermenue.einfuegen("Wider",10,-1);
+		untermenue.einfuegen("Narrower",11,-1);
 		untermenue.add(new JSeparator());
-		untermenue.einfuegen("Höher",12,-1);
-		untermenue.einfuegen("Weniger hoch",13,-1);
+		untermenue.einfuegen("Taller",12,-1);
+		untermenue.einfuegen("Shorter",13,-1);
 		add(new JSeparator());
 
-		einfuegen("Text ändern",0);//die Nummer ist die Id, welche fest legt, was beim Klick passieren soll (siehe actionPerformed(...))
-		einfuegen("Kopieren",7);
-		einfuegen("Löschen...",1);
+		einfuegen("Edit Text",0);
+		einfuegen("Copy",7);
+		einfuegen("Delete...",1);
 
 		switch(typ){
 		case Struktogramm.typVerzweigung: //Bei Verzweigung diesen Menüpunkt hinzufügen:
 			add(new JSeparator());
-			einfuegen("Ja- und Neinseite vertauschen",2);
+			einfuegen("Swap true and false branches",2);
 			break;
 
 		case Struktogramm.typFallauswahl: //Bei Fallauswahl diese Menüpunkte hinzufügen:
 			add(new JSeparator());
 
-			einfuegen("Neuen Fall einfügen",3);
+			einfuegen("Insert New Case",3);
 
 			String[] faelle = element.gibFaelle();
 
 			for (int i=0; i < faelle.length; i++){
 
-				untermenue = unterMenueEinfuegen("Fall: "+faelle[i]);//Untermenüs für jeden Fall
+				untermenue = unterMenueEinfuegen("Case: "+faelle[i]);
 
-				if (i > 0)//alle außer den Linkesten kann man nach links schieben
-					untermenue.einfuegen("Fall \""+faelle[i]+"\" nach links verschieben", 4, i);
+				if (i > 0)
+					untermenue.einfuegen("Move case \""+faelle[i]+"\" left", 4, i);
 
 
-				if (i < faelle.length -1){//Sonst-Fall kann man nicht löschen und nicht nach rechts verschieben
-					untermenue.einfuegen("Fall \""+faelle[i]+"\" nach rechts verschieben", 5, i);
-					untermenue.einfuegen("Fall \""+faelle[i]+"\" entfernen", 6, i);
+				if (i < faelle.length -1){
+					untermenue.einfuegen("Move case \""+faelle[i]+"\" right", 5, i);
+					untermenue.einfuegen("Remove case \""+faelle[i]+"\"", 6, i);
 				}
 
 			}
@@ -181,7 +181,7 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 			break;
 
 			case 6: String fallname = ((Fallauswahl)element).gibFaelle()[fallnummer]; //Spalte bzw. Fall löschen
-			if (JOptionPane.showConfirmDialog(null, "Den Fall \""+fallname+"\" mit dessen Unterelementen löschen?", "Fall entfernen", JOptionPane.YES_NO_OPTION) == 0){
+			if (JOptionPane.showConfirmDialog(null, "Delete case \""+fallname+"\" and all nested blocks?", "Remove Case", JOptionPane.YES_NO_OPTION) == 0){
 				((Fallauswahl)element).entferneSpalte(fallnummer);
 			}else{
 				mussSpeicherpunktSetzen = false;

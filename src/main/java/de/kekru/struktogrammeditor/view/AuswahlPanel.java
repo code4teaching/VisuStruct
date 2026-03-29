@@ -1,6 +1,7 @@
 package de.kekru.struktogrammeditor.view;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,16 +24,21 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import org.jdom2.Document;
 
 import de.kekru.struktogrammeditor.control.Controlling;
-import de.kekru.struktogrammeditor.control.GlobalSettings;
 import de.kekru.struktogrammeditor.control.Struktogramm;
-import de.kekru.struktogrammeditor.other.Helpers;
 
 
 public class AuswahlPanel extends JPanel implements DropTargetListener, DragGestureListener, DragSourceListener{
@@ -42,9 +48,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 	private DragSource dragSource;
 	//private DropTarget dropTarget;
 	private JLabel muelleimer;
-	private JLabel kopierFeld;
 	private boolean muelleimerIstAuf;
-	private boolean kopierFeldIstAuf;
 	private Controlling controlling;
 	private Document kopiertesStrElement;
 
@@ -62,7 +66,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		}
 		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createMatteBorder(0, 0, 0, 1, sep),
-				BorderFactory.createEmptyBorder(18, 18, 18, 20)));
+				BorderFactory.createEmptyBorder(8, 10, 8, 12)));
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridwidth = 1;
@@ -71,61 +75,101 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		c.weighty = 0;
 		c.ipadx = 1;
 		c.ipady = 1;
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.fill = GridBagConstraints.NONE;
-		c.insets = new Insets(2, 0, 8, 0);
+		c.anchor = GridBagConstraints.NORTH;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(1, 0, 3, 0);
 
 
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
 
-
-
-		for (int i = 0; i < panelElemente.length; i++){//Label für mit den einzelnen Elementen erzeugen
-			panelElemente[i] = new AuswahlPanelElement(i);
-			//panelElemente[i].setLocation(20,10+20*i);
+		dragSource = new DragSource();
+		for (int i = 0; i < panelElemente.length; i++) {
+			int typ = StruktogrammPalette.TYPEN_REIHENFOLGE[i];
+			panelElemente[i] = new AuswahlPanelElement(typ);
 			add(panelElemente[i], c);
+			dragSource.createDefaultDragGestureRecognizer(panelElemente[i], DnDConstants.ACTION_COPY_OR_MOVE, this);
 			c.gridy++;
 		}
 
-
-
-
-		//Mülleimer erzeugen
+		c.insets = new Insets(6, 0, 4, 0);
 		muelleimer = new JLabel();
-		muelleimerIstAuf = true;   //erst true setzen...
-		muelleimerAuf(!muelleimerIstAuf); //dann mit ! einfuegen, weil in der Methode überprüft wird, ob er Parameter != muelleimerIstAuf ist
-		muelleimer.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
-		muelleimer.setText("Wegschmeißen");
+		muelleimerIstAuf = true;
+		muelleimerAuf(!muelleimerIstAuf);
+		muelleimer.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		muelleimer.setHorizontalAlignment(SwingConstants.CENTER);
+		muelleimer.setToolTipText("Drop here to delete");
 		add(muelleimer, c);
 
 		c.gridy++;
-		c.weighty = 1000;
-		
-		//Kopier-Box erzeugen
+		c.insets = new Insets(1, 0, 3, 0);
+
+		JButton pngExport = paletteAktionsButton("Export PNG");
+		pngExport.addActionListener(e -> controlling.bildSpeichernNurPng());
+		add(pngExport, c);
+		c.gridy++;
+
+		JButton infoBtn = paletteIconButton('\u2139', "About Struktogramm Studio", "Information");
+		infoBtn.addActionListener(e -> controlling.showInfo());
+		JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
+		infoRow.setOpaque(false);
+		infoRow.add(infoBtn);
+		add(infoRow, c);
+		c.gridy++;
+
 		kopiertesStrElement = null;
-		kopierFeld = new JLabel();
-		kopierFeldIstAuf = true;
-		kopierFeldAuf(!kopierFeldIstAuf);
-		kopierFeld.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
-		kopierFeld.setText("Kopie");
-		add(kopierFeld, c);
 
-
-		//für Drag & Drop Aktionen vorbereiten
-		dragSource = new DragSource();
-		dragSource.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
+		c.weighty = 1000;
+		c.fill = GridBagConstraints.VERTICAL;
+		add(Box.createVerticalGlue(), c);
 
 		//dropTarget = 
 		new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,this, true, null);
 	}
 
+	private static JButton paletteAktionsButton(String text) {
+		JButton b = new JButton(text);
+		b.setFocusable(false);
+		b.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		PaletteButtonStyle.apply(b);
+		return b;
+	}
+
+	/** Schaltfläche nur mit Symbol; Erklärung über Tooltip und Screenreader über {@code accessibleName}. */
+	private static JButton paletteIconButton(char symbol, String tooltip, String accessibleName) {
+		JButton b = new JButton(String.valueOf(symbol));
+		b.setToolTipText(tooltip);
+		b.getAccessibleContext().setAccessibleName(accessibleName);
+		b.setFocusable(false);
+		b.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+		b.setMargin(new Insets(2, 6, 2, 6));
+		PaletteButtonStyle.apply(b);
+		return b;
+	}
+
 	
 	
 	public void aktualisiereBeschriftungen(){
-		for(int i=0; i < panelElemente.length; i++){
-			panelElemente[i].setText(GlobalSettings.getCurrentElementBeschriftungsstil()[i]);
+		for (AuswahlPanelElement el : panelElemente) {
+			el.aktualisiereBeschriftung();
+		}
+		for (Component ch : getComponents()){
+			if (ch instanceof JComponent){
+				((JComponent) ch).revalidate();
+			}
+		}
+		revalidate();
+		repaint();
+		JViewport vp = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, this);
+		if (vp != null){
+			vp.revalidate();
+			vp.repaint();
+		}
+		JScrollPane sc = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
+		if (sc != null){
+			sc.revalidate();
+			sc.repaint();
 		}
 	}
 
@@ -141,40 +185,17 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 
 
 	private void muelleimerAuf(boolean oeffnen){
-		if(muelleimerIstAuf != oeffnen){//damit nicht ständig das Icon neu geladen wird, kommt hier diese Sperre rein
-			String bildname;
-
+		if (muelleimerIstAuf != oeffnen){
 			if (oeffnen){
-				bildname = "muelleimer2.png";
 				muelleimerIstAuf = true;
 			}else{
-				bildname = "muelleimer1.png";
 				muelleimerIstAuf = false;
 			}
-
-			muelleimer.setIcon(Helpers.getIcon(AuswahlPanelElement.iconOrdner + bildname));
+			muelleimer.setIcon(new ModernTrashIcon(oeffnen));
 		}
 	}
 
 
-	private void kopierFeldAuf(boolean oeffnen){
-		if(kopierFeldIstAuf != oeffnen){//damit nicht ständig das Icon neu geladen wird, kommt hier diese Sperre rein
-			String bildname;
-
-			if (oeffnen){
-				bildname = "kopiebox2.png";
-				kopierFeldIstAuf = true;
-			}else{
-				bildname = "kopiebox1.png";
-				kopierFeldIstAuf = false;
-			}
-
-			kopierFeld.setIcon(Helpers.getIcon(AuswahlPanelElement.iconOrdner + bildname));
-		}
-	}
-	
-	
-	
 	public void kopiereGanzesStruktogramm(){
 		setzeKopiertesStrElement(controlling.gibAktuellesStruktogramm().xmlErstellen());
 	}
@@ -186,26 +207,17 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 	//http://www.java2s.com/Code/Java/Swing-JFC/MakingaComponentDraggable.htm
 	public void dragGestureRecognized(DragGestureEvent evt){//User hat angefangen ein Objekt zu ziehen
 
-		Point mausPos = bildschirmKoordZuLokalenKoord(evt.getDragOrigin());//Kordinaten der Maus auf dem AuswahlPanel
+		// Erkenner hängt an den Element-Kacheln (JButton).
+		Component quelle = evt.getComponent();
 
-		Object element = getComponentAt(mausPos);//Komponente ermitteln, über der die Maus ist
+		if (quelle instanceof AuswahlPanelElement){
 
-		if (element instanceof AuswahlPanelElement){//ist die Komponente ein AuswahlPanelElement (der User will ein neues StruktogrammElement einfügen)...
+			int typ = ((AuswahlPanelElement) quelle).gibTyp();
 
-			int typ = ((AuswahlPanelElement)element).gibTyp();//Typnummer für das entsprechende StruktogrammElement ermitteln
+			Transferable t = new StringSelection("n"+typ);
 
-
-			Transferable t = new StringSelection("n"+typ);//Drag-Daten setzen, n steht für neues Element, und typ ist der Typ des neuen Elementes
-
-			dragSource.startDrag(evt, DragSource.DefaultCopyDrop, t, this);//Drag wird ausgelöst
-
-		}else if((element == kopierFeld) && (kopiertesStrElement != null)){//ist die Komponente das kopierFeld und ist ein Document in kopiertesStrElement abgelegt...
-
-			Transferable t = new StringSelection("k");//Drag-Daten setzen, k für Element aus dem kopierFeld
-
-			dragSource.startDrag(evt, DragSource.DefaultCopyDrop, t, this);//Drag wird ausgelöst
+			dragSource.startDrag(evt, DragSource.DefaultCopyDrop, t, this);
 		}
-
 	}
 
 	public void dragEnter(DragSourceDragEvent evt){
@@ -225,7 +237,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 	}
 
 	public void dragDropEnd(DragSourceDropEvent evt){
-
+		PaletteButtonStyle.clearPressedArmedState(evt.getDragSourceContext().getComponent());
 	}
 
 
@@ -263,15 +275,10 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 					str.zeichne();
 					str.rueckgaengigPunktSetzen();
 
-				}else if(dropUeberComponent == kopierFeld){
-
-					//ein Element aus dem aktuellen Struktogramm wurde auf die Kopier-Box gezogen -> xml-Abbild generieren und behalten
-					setzeKopiertesStrElement(str.xmlErstellen(str.gibZwischenlagerElement()));
 				}
 			}
 
 			muelleimerAuf(false);
-			kopierFeldAuf(false);
 			event.dropComplete(true);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -281,7 +288,6 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 
 	public void dragExit(DropTargetEvent evt){
 		muelleimerAuf(false);
-		kopierFeldAuf(false);
 	}
 
 	public void dropActionChanged(DropTargetDragEvent evt){
@@ -296,7 +302,6 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		Component tmp = getComponentAt(bildschirmKoordZuLokalenKoord(evt.getLocation())); //Komponente ermitteln, die unter der Maus ist
 
 		muelleimerAuf(tmp == muelleimer); //wenn die Komponente unter der Maus das Mülleimer-Label ist, dann geöffneten Mülleimer zeigen, sonst den Geschlossenen
-		kopierFeldAuf(tmp == kopierFeld); //wie beim Mülleimer
 	}
 
 

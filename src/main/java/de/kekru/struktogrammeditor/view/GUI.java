@@ -19,10 +19,6 @@ import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.util.SystemInfo;
-
 import de.kekru.struktogrammeditor.control.Controlling;
 import de.kekru.struktogrammeditor.control.GlobalSettings;
 import de.kekru.struktogrammeditor.control.Konstanten;
@@ -87,82 +83,55 @@ public class GUI extends JFrame implements Konstanten{
 
 		menubar = new JMenuBar();
 		{
-			JMenu menu = createMenu("Datei", KeyEvent.VK_D);
+			JMenu menu = createMenu("File", KeyEvent.VK_F);
 			{
-				menu.add(createMenuItem("Neu", XActionCommands.neu, KeyEvent.VK_N, KeyEvent.VK_N));
-				menu.add(createMenuItem("Öffnen...", XActionCommands.oeffnen, KeyEvent.VK_F, KeyEvent.VK_O));
+				menu.add(createMenuItem("New", XActionCommands.neu, KeyEvent.VK_N, KeyEvent.VK_N));
+				menu.add(createMenuItem("Open...", XActionCommands.oeffnen, KeyEvent.VK_O, KeyEvent.VK_O));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Speichern", XActionCommands.speichern, KeyEvent.VK_S, KeyEvent.VK_S));
-				menu.add(createMenuItem("Speichern unter...", XActionCommands.speicherUnter, KeyEvent.VK_U));
+				menu.add(createMenuItem("Save", XActionCommands.speichern, KeyEvent.VK_S, KeyEvent.VK_S));
+				menu.add(createMenuItem("Save As...", XActionCommands.speicherUnter, KeyEvent.VK_A));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Als Bild speichern", XActionCommands.bildSpeichern, KeyEvent.VK_A));
-				menu.add(createMenuItem("Bild in Zwischenablage kopieren", XActionCommands.bildInZwischenAblage, KeyEvent.VK_Z, KeyEvent.VK_K));
+				menu.add(createMenuItem("Save as Image...", XActionCommands.bildSpeichern, KeyEvent.VK_I));
+				menu.add(createMenuItem("Copy Image to Clipboard", XActionCommands.bildInZwischenAblage, KeyEvent.VK_B, KeyEvent.VK_K));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Quellcode erzeugen", XActionCommands.quellcodeErzeugen, KeyEvent.VK_Q));
+				menu.add(createMenuItem("Generate Source Code...", XActionCommands.quellcodeErzeugen, KeyEvent.VK_G));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Struktogramm Schließen", XActionCommands.struktogrammSchliessen, KeyEvent.VK_K));
+				menu.add(createMenuItem("Close Diagram", XActionCommands.struktogrammSchliessen, KeyEvent.VK_C));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Programm beenden",	XActionCommands.programmBeenden, KeyEvent.VK_P));
+				menu.add(createMenuItem("Exit",	XActionCommands.programmBeenden, KeyEvent.VK_X));
 			}
 			menubar.add(menu);
 
-			menu = createMenu("Bearbeiten", KeyEvent.VK_B);
+			menu = createMenu("Edit", KeyEvent.VK_E);
 			{
-				menu.add(createMenuItem("Rückgängig", XActionCommands.rueckgaengig, KeyEvent.VK_R, KeyEvent.VK_Z));
-				menu.add(createMenuItem("Widerrufen", XActionCommands.widerrufen, KeyEvent.VK_W, KeyEvent.VK_Y));
+				menu.add(createMenuItem("Undo", XActionCommands.rueckgaengig, KeyEvent.VK_U, KeyEvent.VK_Z));
+				menu.add(createMenuItem("Redo", XActionCommands.widerrufen, KeyEvent.VK_R, KeyEvent.VK_Y));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Struktogrammname hinzufügen", XActionCommands.struktogrammbeschreibungHinzufuegen, KeyEvent.VK_S));
+				menu.add(createMenuItem("Set Diagram Caption...", XActionCommands.struktogrammbeschreibungHinzufuegen, KeyEvent.VK_T));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Ganzes Struktogramm kopieren", XActionCommands.ganzesStruktogrammKopieren, KeyEvent.VK_G));
-				menu.add(createMenuItem("Element unter der Maus kopieren", XActionCommands.elementUnterDerMausKopieren, KeyEvent.VK_K, KeyEvent.VK_C));
-				menu.add(createMenuItem("Kopiertes Element an Mausposition einfügen", XActionCommands.elementEinfuegen, KeyEvent.VK_E, KeyEvent.VK_V));
+				menu.add(createMenuItem("Copy Entire Diagram", XActionCommands.ganzesStruktogrammKopieren, KeyEvent.VK_Y));
+				menu.add(createMenuItem("Copy Element at Cursor", XActionCommands.elementUnterDerMausKopieren, KeyEvent.VK_E, KeyEvent.VK_C));
+				menu.add(createMenuItem("Paste Copied Element at Cursor", XActionCommands.elementEinfuegen, KeyEvent.VK_P, KeyEvent.VK_V));
 			}
 			menubar.add(menu);
 
-			menu = createMenu("Einstellungen", KeyEvent.VK_E);
-			{				
-				menu.add(createMenuItem("Jeweils letztes Element bei Bedarf strecken", XActionCommands.letztesElementStrecken, KeyEvent.VK_J, GlobalSettings.gibLetzteElementeStrecken()));
+			menu = createMenu("Settings", KeyEvent.VK_S);
+			{
+				menu.add(createMenuItem("Stretch last block when needed", XActionCommands.letztesElementStrecken, KeyEvent.VK_T, GlobalSettings.gibLetzteElementeStrecken()));
 				menu.add(new JSeparator());
 
-				JMenu menu2 = createMenu("Beschriftungsstil", KeyEvent.VK_B);
+				JMenu menu2 = createMenu("Look and Feel", KeyEvent.VK_L);
 				{
 					ButtonGroup group = new ButtonGroup();
 
-					JRadioButtonMenuItem radioMenuitem = new JRadioButtonMenuItem("Java-ähnlich");
-					radioMenuitem.addActionListener(controlling);
-					radioMenuitem.setActionCommand(XActionCommands.beschriftungsStilJava.toString());
-					radioMenuitem.setSelected(GlobalSettings.getBeschriftungsStilAktuell() == beschriftungsStilJava);
-					group.add(radioMenuitem);
-					menu2.add(radioMenuitem);
-
-					radioMenuitem = new JRadioButtonMenuItem("Allgemein");
-					radioMenuitem.addActionListener(controlling);
-					radioMenuitem.setActionCommand(XActionCommands.beschriftungsStilFormal.toString());
-					radioMenuitem.setSelected(GlobalSettings.getBeschriftungsStilAktuell() == beschriftungsStilFormal);
-					group.add(radioMenuitem);
-					menu2.add(radioMenuitem);
-
-					radioMenuitem = new JRadioButtonMenuItem("Element Shortcuts");
-					radioMenuitem.addActionListener(controlling);
-					radioMenuitem.setActionCommand(XActionCommands.beschriftungsStilKeineBeschriftungen.toString());
-					radioMenuitem.setSelected(GlobalSettings.getBeschriftungsStilAktuell() == beschriftungsStilKeineBeschriftungen);
-					group.add(radioMenuitem);
-					menu2.add(radioMenuitem);
-				}
-				menu.add(menu2);
-				
-				menu2 = createMenu("Look and Feel", KeyEvent.VK_L);
-				{
-					ButtonGroup group = new ButtonGroup();
-
-					JRadioButtonMenuItem radioMenuitem = new JRadioButtonMenuItem("Modern · hell");
+					JRadioButtonMenuItem radioMenuitem = new JRadioButtonMenuItem("Modern · light");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelFlatLight.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelFlatLight);
 					group.add(radioMenuitem);
 					menu2.add(radioMenuitem);
 
-					radioMenuitem = new JRadioButtonMenuItem("Modern · dunkel");
+					radioMenuitem = new JRadioButtonMenuItem("Modern · dark");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelFlatDark.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelFlatDark);
@@ -171,14 +140,14 @@ public class GUI extends JFrame implements Konstanten{
 
 					menu2.add(new JSeparator());
 
-					radioMenuitem = new JRadioButtonMenuItem("Betriebssystem Standard");
+					radioMenuitem = new JRadioButtonMenuItem("OS default");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelOSStandard.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelOSStandard);
 					group.add(radioMenuitem);
 					menu2.add(radioMenuitem);
 
-					radioMenuitem = new JRadioButtonMenuItem("Java Swing Standard");
+					radioMenuitem = new JRadioButtonMenuItem("Java Swing default");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelSwingStandard.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelSwingStandard);
@@ -192,7 +161,7 @@ public class GUI extends JFrame implements Konstanten{
 					group.add(radioMenuitem);
 					menu2.add(radioMenuitem);
 					
-					radioMenuitem = new JRadioButtonMenuItem("Metal (früher Motif)");
+					radioMenuitem = new JRadioButtonMenuItem("Metal (classic)");
 					radioMenuitem.addActionListener(controlling);
 					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelMotif.toString());
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelMotif);
@@ -201,38 +170,35 @@ public class GUI extends JFrame implements Konstanten{
 				}
 				menu.add(menu2);
 
-				menu.add(createMenuItem("Startbeschriftungen ändern...", XActionCommands.startbeschriftungAendern, KeyEvent.VK_S));
-				menu.add(createMenuItem("Schriftart ändern...", XActionCommands.schriftartAendern, KeyEvent.VK_F));
+				menu.add(createMenuItem("Change Font...", XActionCommands.schriftartAendern, KeyEvent.VK_F));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Größe von Elementen mit Mausrad ändern", XActionCommands.groesseAendernMitMausrad, KeyEvent.VK_G, GlobalSettings.isBeiMausradGroesseAendern()));
-				menu.add(createMenuItem("Zoomeinstellungen...", XActionCommands.zoomeinstellungen, KeyEvent.VK_Z));
-				menu.add(createMenuItem("Alle Vergrößerungen rückgängig machen", XActionCommands.vergroesserungenRuckgaengigMachen, KeyEvent.VK_A));
+				menu.add(createMenuItem("Resize blocks with mouse wheel", XActionCommands.groesseAendernMitMausrad, KeyEvent.VK_M, GlobalSettings.isBeiMausradGroesseAendern()));
+				menu.add(createMenuItem("Zoom Settings...", XActionCommands.zoomeinstellungen, KeyEvent.VK_Z));
+				menu.add(createMenuItem("Reset All Block Sizes", XActionCommands.vergroesserungenRuckgaengigMachen, KeyEvent.VK_R));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Shortcuts zum Elementeinfügen benutzen", XActionCommands.elementShortcutsVerwenden, KeyEvent.VK_C, GlobalSettings.isElementShortcutsVerwenden()));
+				menu.add(createMenuItem("Use keyboard shortcuts to insert blocks", XActionCommands.elementShortcutsVerwenden, KeyEvent.VK_K, GlobalSettings.isElementShortcutsVerwenden()));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Kantenglättung verwenden", XActionCommands.kantenglaettungVerwenden, KeyEvent.VK_K, GlobalSettings.isKantenglaettungVerwenden()));
+				menu.add(createMenuItem("Use antialiasing", XActionCommands.kantenglaettungVerwenden, KeyEvent.VK_N, GlobalSettings.isKantenglaettungVerwenden()));
 			}
 			menubar.add(menu);
 
-			menu = createMenu("Hilfe", KeyEvent.VK_H);
+			menu = createMenu("Help", KeyEvent.VK_H);
 			{
-				menu.add(createMenuItem("Homepage", XActionCommands.homepage, KeyEvent.VK_M));
+				menu.add(createMenuItem("Project Website", XActionCommands.homepage, KeyEvent.VK_W));
 				menu.add(createMenuItem("Changelog", XActionCommands.changelog, KeyEvent.VK_C));
-				menu.add(createMenuItem("Kontakt, Feedback, Verbesserungsvorschläge, Fehler melden", XActionCommands.kontaktformular, KeyEvent.VK_K));
+				menu.add(createMenuItem("Contact / Feedback / Report an Issue", XActionCommands.kontaktformular, KeyEvent.VK_F));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Hilfedatei", XActionCommands.hilfe, KeyEvent.VK_L));
+				menu.add(createMenuItem("Online Help", XActionCommands.hilfe, KeyEvent.VK_D));
 				menu.add(new JSeparator());
-				menu.add(createMenuItem("Info", XActionCommands.info, KeyEvent.VK_I));
-				menu.add(createMenuItem("Quellcode", XActionCommands.sourceCode, KeyEvent.VK_Q));
+				menu.add(createMenuItem("About", XActionCommands.info, KeyEvent.VK_A));
+				menu.add(createMenuItem("Original Editor Source (GitHub)", XActionCommands.sourceCode, KeyEvent.VK_O));
 			}
 			menubar.add(menu);
 		}
 		setJMenuBar(menubar);
 
-		if (UIManager.getLookAndFeel() instanceof FlatLaf && SystemInfo.isMacOS) {
-			getRootPane().putClientProperty("apple.awt.fullWindowContent", true);
-			getRootPane().putClientProperty("apple.awt.transparentTitleBar", true);
-		}
+		// Kein fullWindowContent / transparentTitleBar auf macOS: führt unter FlatLaf + aktuellem JDK
+		// oft zu grauem, nicht bedienbarem Client-Bereich (Fensterinhalt wird nicht korrekt gezeichnet).
 
 		addWindowListener(controlling);
 

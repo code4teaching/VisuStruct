@@ -29,6 +29,7 @@ public class MacHandler implements AboutHandler, QuitHandler {
 			if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
 				desktop.setQuitHandler(this);
 			}
+			// Dateien per Doppelklick: OpenFilesHandler wird in Main registriert (vor new Controlling).
 		}
 
 		if (Taskbar.isTaskbarSupported()) {
