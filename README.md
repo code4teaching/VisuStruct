@@ -23,7 +23,7 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 
 **Für den Unterricht:** Schülerinnen und Schüler brauchen **kein Maven** – nur **Java 17** (oder neuer) zum Starten.
 
-**Direkter Download der neuesten veröffentlichten Version** (fest Dateiname, immer die aktuelle Release):
+**Direkter Download der neuesten veröffentlichten Version** (fester Dateiname, immer die aktuelle Release):
 
 **[➜ struktogramm-studio.jar herunterladen](https://github.com/code4teaching/struktogrammeditor-studio/releases/latest/download/struktogramm-studio.jar)**
 
