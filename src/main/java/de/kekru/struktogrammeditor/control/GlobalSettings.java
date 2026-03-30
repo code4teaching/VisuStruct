@@ -1,6 +1,8 @@
 package de.kekru.struktogrammeditor.control;
 
 import java.awt.Font;
+import static java.awt.Font.PLAIN;
+import static java.awt.Font.SANS_SERIF;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -42,7 +44,8 @@ public class GlobalSettings implements Konstanten{
 	private static String zuletztGenutzterSpeicherpfad = "";
 	private static String zuletztGenutzterPfadFuerBild = "";
 	private static boolean letzteElementeStrecken = false;
-	public static final Font fontStandard = new Font("serif", Font.PLAIN, 15);
+	/** Lesbare Bildschirmschrift für den Canvas (Sans Serif wirkt auf kleinen Größen klar Serif). */
+	public static final Font fontStandard = new Font(SANS_SERIF, PLAIN, 15);
 	private static final String einstellungsDateiPfad = "struktogrammeditor.properties";
 	private static final String einstellungsDateiPfadBisVersion1Punkt4 = "StruktogrammeditorEinstellungen.txt";
 	

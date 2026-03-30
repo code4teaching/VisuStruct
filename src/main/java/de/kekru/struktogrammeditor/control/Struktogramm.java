@@ -251,6 +251,18 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	//	}
 
 
+	/** Bessere Lesbarkeit von Text auf dem Offscreen-Canvas (Antialiasing unabhängig von „Kantenglättung“). */
+	private static void applyCanvasRenderingHints(Graphics2D g2){
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		if (GlobalSettings.isKantenglaettungVerwenden()){
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+		}
+	}
+
+
 	//Graphics-Kontext Panel (Struktogramm) wird gespeichert und ein BufferedImage wird erzeugt und dessen Graphics-Kontext an alle StruktogrammElemente weitergegeben
 	public boolean graphicsInitialisieren(){
 		//panelGraphics = (Graphics2D)getGraphics();//Panel Graphics-Kontext speichern
@@ -261,9 +273,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			bild = (BufferedImage)createImage(dimGroesse.width, dimGroesse.height);
 			g = bild.createGraphics();//Graphics-Kontext in g speichern
 
-			if(GlobalSettings.isKantenglaettungVerwenden()){
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-			}
+			applyCanvasRenderingHints(g);
 
 			//g.setFont(new Font("serif", Font.PLAIN, 15)); //Schriftart für die StruktogrammElemente setzen
 			g.setFont(fontStr);
@@ -300,6 +310,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 		if (g != null){
 			//Zunächst wird auf das BufferedImage bild mit dem Graphics-Kontext g gezeichnet
+			applyCanvasRenderingHints(g);
 
 			//alten Inhalt mit einem weißen ausgefüllten Rechteck übermalen
 			g.setColor(Color.white);
