@@ -361,8 +361,8 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		case sourceCode:{
 				String v = GlobalSettings.buildInfoGitHash;
 				String url = v.isEmpty()
-						? "https://github.com/code4teaching/visustruct"
-						: "https://github.com/code4teaching/visustruct/tree/" + v;
+						? "https://github.com/code4teaching/VisuStruct"
+						: "https://github.com/code4teaching/VisuStruct/tree/" + v;
 				Helpers.openWebsite(url);
 			}
 			break;
@@ -435,7 +435,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 
 	public void showInfo(){
-		final String projektUrl = "https://github.com/code4teaching/visustruct";
+		final String projektUrl = "https://github.com/code4teaching/VisuStruct";
 		final String webUrl = "https://www.sebastiao.org/";
 		final String originalUrl = "https://github.com/kekru/struktogrammeditor";
 
@@ -444,7 +444,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				+ GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + "</b></p>"
 				+ "<p style=\"margin-top:0;\">Holger Sebastiao<br/>"
 				+ "Ludwig-Geißler-Schule, Hanau<br/>"
-				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/visustruct</a><br/>"
+				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/VisuStruct</a><br/>"
 				+ "Web: <a href=\"" + webUrl + "\">www.sebastiao.org</a></p>"
 				+ "<hr style=\"border:0;border-top:1px solid #ccc;\"/>"
 				+ "<p style=\"margin-bottom:6px;\"><b>Credits</b></p>"

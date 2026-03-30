@@ -13,9 +13,9 @@
 	</properties>
 
 	<scm>
-		<url>https://github.com/code4teaching/visustruct</url>
-		<connection>scm:git:git://github.com/code4teaching/visustruct.git</connection>
-		<developerConnection>scm:git:git@github.com:code4teaching/visustruct.git</developerConnection>
+		<url>https://github.com/code4teaching/VisuStruct</url>
+		<connection>scm:git:git://github.com/code4teaching/VisuStruct.git</connection>
+		<developerConnection>scm:git:git@github.com:code4teaching/VisuStruct.git</developerConnection>
 	</scm>
 
 	<dependencies>

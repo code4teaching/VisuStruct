@@ -1,6 +1,6 @@
 # VisuStruct
 
-[![Build-Status](https://github.com/code4teaching/visustruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/visustruct/actions)
+[![Build-Status](https://github.com/code4teaching/VisuStruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/VisuStruct/actions)
 
 Visueller Editor zur Erstellung von **Nassi-Shneiderman-Diagrammen** (Struktogrammen).  
 Die **Benutzeroberfläche** und die **Bedienung** des Programms sind **deutsch**.
@@ -10,10 +10,10 @@ Dieses **Projektarchiv** ist eine **Abzweigung** (*Fork*) des Originals
 Es enthält unter anderem Anpassungen für **aktuelle Java-Versionen**, ein **überarbeitetes Aussehen** sowie die Marke **VisuStruct** (Struktogramm-Editor).
 
 **Website:** [visustruct.de](https://visustruct.de)  
-**Repository:** [github.com/code4teaching/visustruct](https://github.com/code4teaching/visustruct)
+**Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
 ```bash
-git clone https://github.com/code4teaching/visustruct.git
+git clone https://github.com/code4teaching/VisuStruct.git
 ```
 
 Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** MIT (siehe [LICENSE](LICENSE)).
@@ -32,7 +32,7 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 
 **Direkter Download der neuesten veröffentlichten Version** (fester Dateiname, immer die aktuelle Release):
 
-**[➜ visustruct.jar herunterladen](https://github.com/code4teaching/visustruct/releases/latest/download/visustruct.jar)**
+**[➜ visustruct.jar herunterladen](https://github.com/code4teaching/VisuStruct/releases/latest/download/visustruct.jar)**
 
 Danach z. B. im Ordner, in dem die Datei liegt:
 
@@ -43,7 +43,7 @@ java -jar visustruct.jar
 Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft ist.
 
 Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
-[github.com/code4teaching/visustruct/releases](https://github.com/code4teaching/visustruct/releases)
+[github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
 ## Voraussetzungen
 
@@ -99,7 +99,7 @@ Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der
 
 ## Mitmachen
 
-Verbesserungsvorschläge und **Fehlerbeschreibungen** sind willkommen – über [**Issues** und **Pull requests**](https://github.com/code4teaching/visustruct) dieses Repositories.
+Verbesserungsvorschläge und **Fehlerbeschreibungen** sind willkommen – über [**Issues** und **Pull requests**](https://github.com/code4teaching/VisuStruct) dieses Repositories.
 
 Für **Commits** und **Programm-Kommentare** kann **Englisch** verwendet werden.  
 Alle **sichtbaren Texte im Programm** sollten **deutsch** bleiben – so wie beim Original vereinbart.
