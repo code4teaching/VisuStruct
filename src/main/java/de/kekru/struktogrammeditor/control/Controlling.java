@@ -1,4 +1,4 @@
-package de.kekru.struktogrammeditor.control;
+																																package de.kekru.struktogrammeditor.control;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -358,8 +358,13 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			Helpers.openWebsite("http://strukt.whiledo.de/hilfe.html");
 			break;
 
-		case sourceCode:
-			Helpers.openWebsite("https://github.com/kekru/struktogrammeditor/tree/" + GlobalSettings.buildInfoGitHash);
+		case sourceCode:{
+				String v = GlobalSettings.buildInfoGitHash;
+				String url = v.isEmpty()
+						? "https://github.com/code4teaching/visustruct"
+						: "https://github.com/code4teaching/visustruct/tree/" + v;
+				Helpers.openWebsite(url);
+			}
 			break;
 
 		case info:
@@ -430,7 +435,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 
 	public void showInfo(){
-		final String projektUrl = "https://github.com/code4teaching/struktogrammeditor-studio";
+		final String projektUrl = "https://github.com/code4teaching/visustruct";
 		final String webUrl = "https://www.sebastiao.org/";
 		final String originalUrl = "https://github.com/kekru/struktogrammeditor";
 
@@ -439,7 +444,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				+ GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + "</b></p>"
 				+ "<p style=\"margin-top:0;\">Holger Sebastiao<br/>"
 				+ "Ludwig-Geißler-Schule, Hanau<br/>"
-				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/struktogrammeditor-studio</a><br/>"
+				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/visustruct</a><br/>"
 				+ "Web: <a href=\"" + webUrl + "\">www.sebastiao.org</a></p>"
 				+ "<hr style=\"border:0;border-top:1px solid #ccc;\"/>"
 				+ "<p style=\"margin-bottom:6px;\"><b>Credits</b></p>"

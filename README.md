@@ -1,13 +1,20 @@
-# Struktogramm Studio
+# VisuStruct
 
-[![Build-Status](https://github.com/code4teaching/struktogrammeditor-studio/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/struktogrammeditor-studio/actions)
+[![Build-Status](https://github.com/code4teaching/visustruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/visustruct/actions)
 
 Visueller Editor zur Erstellung von **Nassi-Shneiderman-Diagrammen** (Struktogrammen).  
 Die **Benutzeroberfläche** und die **Bedienung** des Programms sind **deutsch**.
 
 Dieses **Projektarchiv** ist eine **Abzweigung** (*Fork*) des Originals  
 [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor).  
-Es enthält unter anderem Anpassungen für **aktuelle Java-Versionen**, ein **überarbeitetes Aussehen** sowie den Namen **Struktogramm Studio**.
+Es enthält unter anderem Anpassungen für **aktuelle Java-Versionen**, ein **überarbeitetes Aussehen** sowie die Marke **VisuStruct** (Struktogramm-Editor).
+
+**Website:** [visustruct.de](https://visustruct.de)  
+**Repository:** [github.com/code4teaching/visustruct](https://github.com/code4teaching/visustruct)
+
+```bash
+git clone https://github.com/code4teaching/visustruct.git
+```
 
 Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** MIT (siehe [LICENSE](LICENSE)).
 
@@ -17,7 +24,7 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 - **FlatLaf** mit Farben wie auf **[VisuStruct](https://visustruct.de)** (hell: `style.css`, dunkel: Layout-Farben aus `styles.css`), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
 - **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
-- Gebaute Datei: **`struktogrammeditor-studio-1.0.1.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
+- Gebaute Datei: **`visustruct-1.0.1.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
 
 ## Fertiges Programm herunterladen (ohne selbst zu bauen)
 
@@ -25,18 +32,18 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 
 **Direkter Download der neuesten veröffentlichten Version** (fester Dateiname, immer die aktuelle Release):
 
-**[➜ struktogramm-studio.jar herunterladen](https://github.com/code4teaching/struktogrammeditor-studio/releases/latest/download/struktogramm-studio.jar)**
+**[➜ visustruct.jar herunterladen](https://github.com/code4teaching/visustruct/releases/latest/download/visustruct.jar)**
 
 Danach z. B. im Ordner, in dem die Datei liegt:
 
 ```bash
-java -jar struktogramm-studio.jar
+java -jar visustruct.jar
 ```
 
 Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft ist.
 
 Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
-[github.com/code4teaching/struktogrammeditor-studio/releases](https://github.com/code4teaching/struktogrammeditor-studio/releases)
+[github.com/code4teaching/visustruct/releases](https://github.com/code4teaching/visustruct/releases)
 
 ## Voraussetzungen
 
@@ -63,13 +70,13 @@ chmod +x mvnw
 Die fertige Datei befindet sich hier:
 
 ```text
-target/struktogrammeditor-studio-1.0.1.jar
+target/visustruct-1.0.1.jar
 ```
 
 ## Programm starten
 
 ```bash
-java -jar target/struktogrammeditor-studio-1.0.1.jar
+java -jar target/visustruct-1.0.1.jar
 ```
 
 Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.
@@ -92,7 +99,7 @@ Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der
 
 ## Mitmachen
 
-Verbesserungsvorschläge und **Fehlerbeschreibungen** sind willkommen – über die **Themenverwaltung** und **Zusammenführungsanträge** dieses Projekts auf GitHub (auf der Oberfläche oft „Issues“ und „Pull requests“ genannt).
+Verbesserungsvorschläge und **Fehlerbeschreibungen** sind willkommen – über [**Issues** und **Pull requests**](https://github.com/code4teaching/visustruct) dieses Repositories.
 
 Für **Commits** und **Programm-Kommentare** kann **Englisch** verwendet werden.  
 Alle **sichtbaren Texte im Programm** sollten **deutsch** bleiben – so wie beim Original vereinbart.

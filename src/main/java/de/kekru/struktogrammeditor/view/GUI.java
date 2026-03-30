@@ -24,7 +24,7 @@ import de.kekru.struktogrammeditor.control.GlobalSettings;
 import de.kekru.struktogrammeditor.control.Konstanten;
 import de.kekru.struktogrammeditor.other.XActionCommands;
 
-/** Hauptfenster von Struktogramm Studio (basiert auf Struktogrammeditor). */
+/** Hauptfenster von VisuStruct (basiert auf Struktogrammeditor). */
 
 public class GUI extends JFrame implements Konstanten{
 

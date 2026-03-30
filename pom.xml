@@ -5,7 +5,7 @@
 	<groupId>de.kekru.struktogrammeditor</groupId>
 	<artifactId>struktogrammeditor</artifactId>
 	<version>1.0.1</version>
-	<name>Struktogramm Studio</name>
+	<name>VisuStruct</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -13,9 +13,9 @@
 	</properties>
 
 	<scm>
-		<url>https://github.com/kekru/struktogrammeditor</url>
-		<connection>scm:git:git://github.com/kekru/struktogrammeditor.git</connection>
-		<developerConnection>scm:git:git@github.com:kekru/struktogrammeditor.git</developerConnection>
+		<url>https://github.com/code4teaching/visustruct</url>
+		<connection>scm:git:git://github.com/code4teaching/visustruct.git</connection>
+		<developerConnection>scm:git:git@github.com:code4teaching/visustruct.git</developerConnection>
 	</scm>
 
 	<dependencies>
@@ -32,8 +32,8 @@
 	</dependencies>
 
 	<build>
-		<!-- Ausgabe: struktogrammeditor-studio-${project.version}.jar (Fat-JAR mit Abhängigkeiten) -->
-		<finalName>struktogrammeditor-studio-${project.version}</finalName>
+		<!-- Ausgabe: visustruct-${project.version}.jar (Fat-JAR mit Abhängigkeiten) -->
+		<finalName>visustruct-${project.version}</finalName>
 		<!-- Icons ungefiltert (binär); build.properties erhält ${project.version} -->
 		<resources>
 			<resource>

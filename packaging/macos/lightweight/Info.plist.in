@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Struktogramm Studio</string>
+	<string>VisuStruct</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -24,7 +24,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Struktogramm Studio Dokument</string>
+			<string>VisuStruct-Dokument</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -45,7 +45,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>de.kekru.struktogrammeditor.strukstudio</string>
 			<key>UTTypeDescription</key>
-			<string>Struktogramm Studio Dokument</string>
+			<string>VisuStruct-Dokument</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>

@@ -110,7 +110,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		add(pngExport, c);
 		c.gridy++;
 
-		JButton infoBtn = paletteIconButton('\u2139', "About Struktogramm Studio", "Information");
+		JButton infoBtn = paletteIconButton('\u2139', "Über VisuStruct", "Information");
 		infoBtn.addActionListener(e -> controlling.showInfo());
 		JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
 		infoRow.setOpaque(false);

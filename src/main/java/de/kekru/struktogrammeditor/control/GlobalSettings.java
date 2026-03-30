@@ -25,7 +25,7 @@ import de.kekru.struktogrammeditor.view.StruktogrammPalette;
 public class GlobalSettings implements Konstanten{
 
 	/** Anzeigename in Titelleiste, Dock und Infodialog (unabhängig vom ursprünglichen Projektautor). */
-	public static final String APP_DISPLAY_NAME = "Struktogramm Studio";
+	public static final String APP_DISPLAY_NAME = "VisuStruct";
 
 	public static final int updateNummer = 8;
 	public static String versionsString = "";
@@ -38,7 +38,7 @@ public class GlobalSettings implements Konstanten{
 	public static String buildInfoGitHash = "";
 	public static String buildInfoBuildTime = "";
 	
-	/** Standard: FlatLaf Hell („Struktogramm Studio“-Erscheinungsbild). */
+	/** Standard: FlatLaf Hell (VisuStruct-Erscheinungsbild). */
 	private static int lookAndFeelAktuell = 4;
 
 	private static String zuletztGenutzterSpeicherpfad = "";

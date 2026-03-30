@@ -30,12 +30,12 @@ jobs:
       - name: Zweite Datei mit festem Namen (stabil für Download-Link „neueste Version“)
         run: |
           set -e
-          jar=$(ls target/struktogrammeditor-studio-*.jar | head -1)
-          cp "$jar" struktogramm-studio.jar
+          jar=$(ls target/visustruct-*.jar | head -1)
+          cp "$jar" visustruct.jar
 
       - name: An die veröffentlichte Release anhängen
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            target/struktogrammeditor-studio-*.jar
-            struktogramm-studio.jar
+            target/visustruct-*.jar
+            visustruct.jar

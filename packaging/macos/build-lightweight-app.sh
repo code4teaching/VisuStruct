@@ -5,9 +5,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 VER="${PROJECT_VERSION:-1.0.1}"
-JAR_NAME="struktogrammeditor-studio-${VER}.jar"
+JAR_NAME="visustruct-${VER}.jar"
 OUT="${ROOT}/dist/macos-app-light"
-APP="${OUT}/Struktogramm Studio.app"
+APP="${OUT}/VisuStruct.app"
 
 if [[ ! -f "${ROOT}/target/${JAR_NAME}" ]]; then
 	echo "Fehlt: ${ROOT}/target/${JAR_NAME} — zuerst ./mvnw -q clean package" >&2
@@ -22,5 +22,5 @@ sed "s/__JAR_NAME__/${JAR_NAME}/g" "${SCRIPT_DIR}/lightweight/launcher.in" > "${
 chmod +x "${APP}/Contents/MacOS/launcher"
 cp "${ROOT}/target/${JAR_NAME}" "${APP}/Contents/Java/"
 
-echo "Schlanke App (ohne eingebettete JRE): ${APP}"
+echo "Schlanke App VisuStruct.app (ohne eingebettete JRE): ${APP}"
 du -sh "${APP}" 2>/dev/null || true

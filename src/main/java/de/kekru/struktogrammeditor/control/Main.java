@@ -25,11 +25,11 @@ public class Main {
 			System.setProperty("sun.java2d.metal", "false");
 			// Menüleiste links neben „Apple“: Anzeigename statt Startklassenname „Main“
 			// (muss vor dem ersten AWT-Zugriff gesetzt werden, gleicher Wert wie GlobalSettings.APP_DISPLAY_NAME).
-			System.setProperty("apple.awt.application.name", "Struktogramm Studio");
+			System.setProperty("apple.awt.application.name", GlobalSettings.APP_DISPLAY_NAME);
 		}
 
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", GlobalSettings.guiTitel);
 		GlobalSettings.init();
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", GlobalSettings.guiTitel);
 
 		final String[] startArgs = args != null ? args : new String[0];
 

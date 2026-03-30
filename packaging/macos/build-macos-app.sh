@@ -5,7 +5,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 VER="${PROJECT_VERSION:-1.0.1}"
-JAR="struktogrammeditor-studio-${VER}.jar"
+JAR="visustruct-${VER}.jar"
 INPUT="${ROOT}/target"
 OUT="${ROOT}/dist/macos-app"
 
@@ -31,10 +31,10 @@ mkdir -p "${OUT}"
 	--input "${INPUT}" \
 	--main-jar "${JAR}" \
 	--main-class de.kekru.struktogrammeditor.control.Main \
-	--name "Struktogramm Studio" \
+	--name "VisuStruct" \
 	--app-version "${VER}" \
 	--dest "${OUT}" \
 	--file-associations "${ROOT}/packaging/macos/file-association-strukstudio.properties"
 
-echo "App-Bundle: ${OUT}/Struktogramm Studio.app"
+echo "App-Bundle: ${OUT}/VisuStruct.app"
 echo "Diese App in /Applications legen oder per Doppelklick starten; .strukstudio mit „Öffnen mit“ zuordnen."

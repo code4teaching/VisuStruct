@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileFilter;
 public class StrFileFilter extends FileFilter {
 	private int filtertyp;
 	public static final int filterAlleSpeicherdateien = 0;
-	/** Standard-Erweiterung für Struktogramm Studio (Inhalt weiterhin XML). */
+	/** Standard-Erweiterung für VisuStruct (Inhalt weiterhin XML). */
 	public static final int filterStruktogrammStudio = 8;
 	private static final int filterAlleBilddateien = 3;
 
@@ -25,7 +25,7 @@ public class StrFileFilter extends FileFilter {
 	//Beschreibungen für die einzelnen Filtertypen
 	public String getDescription(){
 		switch(filtertyp){
-		case filterStruktogrammStudio: return "Struktogramm Studio (*.strukstudio)";
+		case filterStruktogrammStudio: return "VisuStruct (*.strukstudio)";
 		case filterAlleSpeicherdateien: return "All chart files (*.strukstudio, *.strk, *.xml)";
 		case 1: return "Legacy .strk";
 		case 2: return "XML (*.xml)";
