@@ -18,13 +18,20 @@ git clone https://github.com/code4teaching/VisuStruct.git
 
 Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** MIT (siehe [LICENSE](LICENSE)).
 
-## Änderungen in dieser Version (Auszug)
+## Änderungen in Version 1.0.2 (Auszug)
+
+- **Quellcode-Generator:** schnellere Ausgabe (gepuffertes Schreiben), effizientere String-Verarbeitung; bei Option „Struktogrammtext als Kommentare“ stehen Bedingungen lesbarer (Kommentarzeile, Klartext in den Klammern)
+- **Textvorlagen für neue Elemente:** Einstellungsdialog mit Presets (u. a. englisch/Java-nah mit `condition`, `selector`, …)
+- **Marke / Dateien:** u. a. Anpassungen für **VisuStruct** und **`.visustruct`** (Filter, Assoziationen)
+- **Logo** und weitere kleinere UI-Anpassungen
+
+## Technische Basis (1.0.1 und früher)
 
 - **Java 17** als Zielversion (mit JDK 17 oder höher bauen und ausführen)
 - **FlatLaf** mit Farben wie auf **[VisuStruct](https://visustruct.de)** (hell: `style.css`, dunkel: Layout-Farben aus `styles.css`), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
 - **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
-- Gebaute Datei: **`visustruct-1.0.1.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
+- Gebaute Datei: **`visustruct-1.0.2.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
 
 ## Fertiges Programm herunterladen (ohne selbst zu bauen)
 
@@ -44,6 +51,8 @@ Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft is
 
 Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
 [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
+
+**Release auf GitHub aktualisieren:** Unter *Releases* eine **neue Version** anlegen, Tag z. B. **`v1.0.2`** auf den passenden Commit setzen und veröffentlichen. Die Workflow-Datei [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) baut dann die JARs und hängt u. a. **`visustruct.jar`** (fester Download-Link oben) an die Release an.
 
 ## Voraussetzungen
 
@@ -70,13 +79,13 @@ chmod +x mvnw
 Die fertige Datei befindet sich hier:
 
 ```text
-target/visustruct-1.0.1.jar
+target/visustruct-1.0.2.jar
 ```
 
 ## Programm starten
 
 ```bash
-java -jar target/visustruct-1.0.1.jar
+java -jar target/visustruct-1.0.2.jar
 ```
 
 Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.
