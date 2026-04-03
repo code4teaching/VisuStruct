@@ -25,11 +25,14 @@ public class Anweisung extends StruktogrammElement {
    
    @Override
    public void quellcodeGenerieren(int typ, int anzahlEingerueckt, int anzahlEinzuruecken, boolean alsKommentar, JTextAreaEasy textarea){
-
-
-
-      textarea.hinzufuegen(wandleZuAusgabe( co("kommentar")+co("text")+co("kommentarzu"),
-                                            typ,anzahlEingerueckt,alsKommentar)+"\n");
+      String zeile;
+      if (alsKommentar) {
+    	  zeile = wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true)
+    			  + wandleZuAusgabe(co("text"), typ, anzahlEingerueckt, false);
+      } else {
+    	  zeile = wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu"), typ, anzahlEingerueckt, false);
+      }
+      textarea.hinzufuegen(zeile + "\n");
    }
    
    

@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import de.kekru.struktogrammeditor.view.CodeErzeuger;
+import de.kekru.struktogrammeditor.view.ElementBeschriftungPresets;
 import de.kekru.struktogrammeditor.view.StruktogrammPalette;
 
 public class GlobalSettings implements Konstanten{
@@ -33,6 +34,9 @@ public class GlobalSettings implements Konstanten{
 	public static final String[] updateDaten = {"30.05.2011", "31.05.2011", "05.06.2011", "11.09.2011", "18.01.2012", "17.02.2012", "02.05.2012", "16.08.2012", "13.05.2014", "10.07.2014"};
 	
 	public static final String logoName = "/icons/logostr.png";
+
+	/** Vorgeschlagener Dateiname beim ersten Speichern (Endung {@code .visustruct}). */
+	public static final String STANDARD_SPEICHERDATEI = "visustruct.visustruct";
 	
 	public static final String BUILDINFO_FILE = "/build.properties";
 	public static String buildInfoGitHash = "";
@@ -59,8 +63,9 @@ public class GlobalSettings implements Konstanten{
 	
 	private static int xZoomProSchritt = 10;
 	private static int yZoomProSchritt = 10;
-	
-	private static boolean kantenglaettungVerwenden = false;
+
+	/** Textpaket für neu eingefügte Elemente (siehe {@link ElementBeschriftungPresets}). */
+	private static int elementBeschriftungPresetIndex = ElementBeschriftungPresets.PRESET_ENGLISH_JAVA;
 
 	/**
 	 * Tastaturmaske für Menü-Kurzbefehle (Strg bzw. ⌘). Ohne Anzeige (Headless) wirft
@@ -225,14 +230,26 @@ public class GlobalSettings implements Konstanten{
 			s = pr.getProperty("lookandfeel");
 			if(s != null){
 				lookAndFeelAktuell = Integer.parseInt(s);
-				if (lookAndFeelAktuell < lookAndFeelOSStandard || lookAndFeelAktuell > lookAndFeelFlatDark) {
+				// Früher Index 3 = „Metal (classic)“ (entfernt) → Modern · light
+				if (lookAndFeelAktuell == 3) {
+					lookAndFeelAktuell = lookAndFeelFlatLight;
+				}
+				if (lookAndFeelAktuell < lookAndFeelOSStandard || lookAndFeelAktuell > lookAndFeelFlatDark
+						|| (lookAndFeelAktuell > lookAndFeelNimbus && lookAndFeelAktuell < lookAndFeelFlatLight)) {
 					lookAndFeelAktuell = lookAndFeelFlatLight;
 				}
 			}
 			
-			s = pr.getProperty("useantialiasing");
-			if(s != null){
-				kantenglaettungVerwenden = s.equals("1");
+			s = pr.getProperty("elementbeschriftungpreset");
+			if (s != null) {
+				try {
+					int p = Integer.parseInt(s.trim());
+					if (p >= 0 && p < ElementBeschriftungPresets.ANZAHL_PRESETS) {
+						elementBeschriftungPresetIndex = p;
+					}
+				} catch (NumberFormatException ignored) {
+					// ungültig → Standard beibehalten
+				}
 			}
 		}		
 	}
@@ -259,8 +276,8 @@ public class GlobalSettings implements Konstanten{
 		properties.setProperty("zoomy", ""+yZoomProSchritt);
 		
 		properties.setProperty("lookandfeel", ""+lookAndFeelAktuell);
-		
-		properties.setProperty("useantialiasing", kantenglaettungVerwenden ? "1" : "0");
+
+		properties.setProperty("elementbeschriftungpreset", "" + elementBeschriftungPresetIndex);
 
 		try {
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(einstellungsDateiPfad)));
@@ -306,9 +323,28 @@ public class GlobalSettings implements Konstanten{
 		return letzteElementeStrecken;
 	}
 
-	/** Text für neu erzeugte Struktogramm-Elemente (fest englisch / code-nah). */
+	/** Text für neu erzeugte Struktogramm-Elemente (gewähltes Textpaket). */
 	public static String gibElementBeschriftung(int typNummer){
+		String[] row = ElementBeschriftungPresets.gibPresetZeile(elementBeschriftungPresetIndex);
+		if (typNummer >= 0 && typNummer < row.length) {
+			return row[typNummer];
+		}
 		return StruktogrammPalette.getDefaultTextForNewElement(typNummer);
+	}
+
+	public static int getElementBeschriftungPresetIndex() {
+		return elementBeschriftungPresetIndex;
+	}
+
+	/**
+	 * Wendet ein Textpaket an (nur für <b>neu</b> eingefügte Elemente; bestehende Blöcke bleiben unverändert).
+	 */
+	public static void wendeElementBeschriftungsPresetAn(int presetIndex) {
+		if (presetIndex < 0 || presetIndex >= ElementBeschriftungPresets.ANZAHL_PRESETS) {
+			elementBeschriftungPresetIndex = ElementBeschriftungPresets.PRESET_ENGLISH_JAVA;
+		} else {
+			elementBeschriftungPresetIndex = presetIndex;
+		}
 	}
 
 	public static void setCodeErzeugerEinrueckungGesamt(
@@ -391,16 +427,6 @@ public class GlobalSettings implements Konstanten{
 
 	public static void setElementShortcutsVerwenden(boolean elementShortcutsVerwenden) {
 		GlobalSettings.elementShortcutsVerwenden = elementShortcutsVerwenden;
-	}
-
-
-	public static boolean isKantenglaettungVerwenden() {
-		return kantenglaettungVerwenden;
-	}
-
-
-	public static void setKantenglaettungVerwenden(boolean kantenglaettungVerwenden) {
-		GlobalSettings.kantenglaettungVerwenden = kantenglaettungVerwenden;
 	}
 
 

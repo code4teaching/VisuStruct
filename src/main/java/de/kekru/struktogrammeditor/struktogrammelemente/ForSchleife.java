@@ -24,12 +24,16 @@ public class ForSchleife extends WhileSchleife { //erbt von WhileSchleife
 
       switch(typ){
          case CodeErzeuger.typJava:
-            vorher = "for("+co("kommentar")+co("text")+co("kommentarzu")+"){\n";
+            vorher = quellcodeMitKommentarVorspann("for(", "){\n", typ, anzahlEingerueckt, alsKommentar);
             nachher = "}\n";
             break;
 
          case CodeErzeuger.typDelphi:
-            vorher = "for "+co("kommentar")+co("text")+co("kommentarzu")+" do \n"+einruecken("begin",anzahlEingerueckt)+"\n";
+            vorher = (alsKommentar
+            		? wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true)
+            		: "")
+            		+ wandleZuAusgabe("for " + co("text") + " do \n" + einruecken("begin\n", anzahlEingerueckt), typ,
+            				anzahlEingerueckt, false);
             nachher = "end;\n";
             break;
       }

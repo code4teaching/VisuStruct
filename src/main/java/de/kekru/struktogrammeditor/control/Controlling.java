@@ -121,11 +121,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			case lookAndFeelSwingStandard:
 				lookAndFeel = new MetalLookAndFeel();
 				break;
-
-			case lookAndFeelMotif:
-				// Motif-LAF ist ab Java 21 entfernt; Metal ist der naheliegende klassische Ersatz.
-				lookAndFeel = new MetalLookAndFeel();
-				break;
 			}
 
 			if(lookAndFeel != null){
@@ -338,26 +333,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			elementEinfuegenShortcutsVerwendenGeklickt(e.getSource());
 			break;
 
-		case kantenglaettungVerwenden:
-			kantenglaettungVerwendenGeklickt(e.getSource());
-			break;
-
-		case homepage:
-			Helpers.openWebsite("http://whiledo.de/index.php?p=struktogrammeditor");
-			break;
-
-		case changelog:
-			Helpers.openWebsite("http://strukt.whiledo.de/changelog.html");
-			break;
-
-		case kontaktformular:
-			Helpers.openWebsite("http://strukt.whiledo.de/kontakt.php");
-			break;
-
-		case hilfe:
-			Helpers.openWebsite("http://strukt.whiledo.de/hilfe.html");
-			break;
-
 		case sourceCode:{
 				String v = GlobalSettings.buildInfoGitHash;
 				String url = v.isEmpty()
@@ -381,10 +356,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 		case lookAndFeelNimbus:
 			changeLookAndFeel(lookAndFeelNimbus);
-			break;
-
-		case lookAndFeelMotif:
-			changeLookAndFeel(lookAndFeelMotif);
 			break;
 
 		case lookAndFeelFlatLight:
@@ -419,10 +390,14 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 
 	private void kopiereElement(){
-		StruktogrammElement element = gibAktuellesStruktogramm().getElementUnterMaus();
+		StruktogrammElement element = gibAktuellesStruktogramm().gibElementZumKopieren();
 
 		if(element != null){
 			getGUI().gibAuswahlPanel().setzeKopiertesStrElement(gibAktuellesStruktogramm().xmlErstellen(element));
+		} else {
+			JOptionPane.showMessageDialog(gui,
+					"No block to copy: move the mouse over a block (yellow highlight), or keep that highlight and use the menu / shortcut.",
+					"Copy block", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -503,16 +478,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		GlobalSettings.setElementShortcutsVerwenden(einOderAus);
 		GlobalSettings.saveSettings();
 	}
-
-
-	private void kantenglaettungVerwendenGeklickt(Object source){
-		GlobalSettings.setKantenglaettungVerwenden(((JCheckBoxMenuItem)source).isSelected());
-		GlobalSettings.saveSettings();
-		gibAktuellesStruktogramm().graphicsInitialisieren();
-		gibAktuellesStruktogramm().zeichenbereichAktualisieren();
-		gibAktuellesStruktogramm().zeichne();
-	}
-
 
 
 	public GUI getGUI(){

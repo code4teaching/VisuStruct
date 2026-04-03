@@ -34,7 +34,7 @@ mkdir -p "${OUT}"
 	--name "VisuStruct" \
 	--app-version "${VER}" \
 	--dest "${OUT}" \
-	--file-associations "${ROOT}/packaging/macos/file-association-strukstudio.properties"
+	--file-associations "${ROOT}/packaging/macos/file-association-visustruct.properties"
 
 echo "App-Bundle: ${OUT}/VisuStruct.app"
-echo "Diese App in /Applications legen oder per Doppelklick starten; .strukstudio mit „Öffnen mit“ zuordnen."
+echo "Diese App in /Applications legen oder per Doppelklick starten; .visustruct, .xml, ggf. ältere .strk mit „Öffnen mit“ zuordnen."

@@ -165,13 +165,15 @@ public class CodeErzeuger extends JDialog {
 
 
 			textarea.leeren();
-			
+			textarea.beginQuellcodeBatch();
 			final int einrueckung = numberfieldEinrueckung.getInt();
 			final int einrueckungProStufe = numberfieldZeichenzahl.getInt();
 			final boolean alsKommentar = checkboxKommentare.isSelected();
-			
-			str.gibListe().quellcodeAllerUnterelementeGenerieren(typ, einrueckung, einrueckungProStufe, alsKommentar, textarea);//Quellcode generieren
-		
+			try {
+				str.gibListe().quellcodeAllerUnterelementeGenerieren(typ, einrueckung, einrueckungProStufe, alsKommentar, textarea);
+			} finally {
+				textarea.endQuellcodeBatch();
+			}
 			GlobalSettings.setCodeErzeugerEinrueckungGesamt(einrueckung);
 			GlobalSettings.setCodeErzeugerEinrueckungProStufe(einrueckungProStufe);
 			GlobalSettings.setCodeErzeugerProgrammiersprache(typ);

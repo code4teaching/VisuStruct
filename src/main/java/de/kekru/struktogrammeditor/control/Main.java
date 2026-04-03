@@ -37,7 +37,7 @@ public class Main {
 
 		SwingUtilities.invokeLater(() -> {
 			// OpenFilesHandler muss vor new Controlling stehen, sonst geht das Ereignis beim
-			// Start per Doppelklick auf .strukstudio verloren.
+			// Start per Doppelklick auf .visustruct / .xml / Legacy .strk verloren.
 			if (isMac && Desktop.isDesktopSupported()) {
 				Desktop d = Desktop.getDesktop();
 				if (d.isSupported(Desktop.Action.APP_OPEN_FILE)) {

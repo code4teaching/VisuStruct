@@ -31,11 +31,13 @@
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.kekru.struktogrammeditor.strukstudio</string>
+				<string>de.kekru.struktogrammeditor.visustruct</string>
 			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>strukstudio</string>
+				<string>visustruct</string>
+				<string>xml</string>
+				<string>strk</string>
 			</array>
 		</dict>
 	</array>
@@ -43,7 +45,7 @@
 	<array>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.kekru.struktogrammeditor.strukstudio</string>
+			<string>de.kekru.struktogrammeditor.visustruct</string>
 			<key>UTTypeDescription</key>
 			<string>VisuStruct-Dokument</string>
 			<key>UTTypeConformsTo</key>
@@ -55,7 +57,9 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>strukstudio</string>
+					<string>visustruct</string>
+					<string>xml</string>
+					<string>strk</string>
 				</array>
 			</dict>
 		</dict>

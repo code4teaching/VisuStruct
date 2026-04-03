@@ -54,12 +54,12 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 
 		switch(typ){
 		case CodeErzeuger.typJava:
-			vorher = "switch("+co("kommentar")+co("text")+co("kommentarzu")+"){\n";//Kopfteil besteht aus "switch(" plus eventuellem Kommentarzeichen plus die Textzeilen plus eventuellenm Kommentar-Zu Zeichen plus "){"
+			vorher = quellcodeMitKommentarVorspann("switch(", "){\n", typ, anzahlEingerueckt, alsKommentar);
 			nachher = "}\n";
 			break;
 
 		case CodeErzeuger.typDelphi:
-			vorher = "case "+co("kommentar")+co("text")+co("kommentarzu")+" of\n";//+einruecken("begin",anzahlEingerueckt)+"\n";
+			vorher = quellcodeMitKommentarVorspann("case ", " of\n", typ, anzahlEingerueckt, alsKommentar);
 			nachher = "end;\n";
 			break;
 		}

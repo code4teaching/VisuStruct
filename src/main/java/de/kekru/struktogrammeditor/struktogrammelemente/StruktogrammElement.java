@@ -43,11 +43,11 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		codierung = einruecken(codierung,anzahlEinzuruecken);
 
 		if(alsKommentare){
-			codierung = codierung.replaceAll(co("kommentar"),CodeErzeuger.gibKommentarZeichen(true,typ))//Codierung von "kommentar" wird zum entsprechenden Zeichen umgewandelt
-			.replaceAll(co("kommentarzu"),CodeErzeuger.gibKommentarZeichen(false,typ));//Codierung von "kommentarzu" wird zum entsprechenden Zeichen umgewandelt
+			codierung = codierung.replace(co("kommentar"),CodeErzeuger.gibKommentarZeichen(true,typ))
+			.replace(co("kommentarzu"),CodeErzeuger.gibKommentarZeichen(false,typ));
 		}else{
-			codierung = codierung.replaceAll(co("kommentar"),"") //Codierung der Kommentare wird entfernt, weil der User den Quelltext ohne Kommentare will
-			.replaceAll(co("kommentarzu"),"");
+			codierung = codierung.replace(co("kommentar"),"")
+			.replace(co("kommentarzu"),"");
 		}
 
 		int x = codierung.indexOf(co("text")); //x ist die Position, wo das erste Zeichen des Textes erscheinen soll
@@ -59,11 +59,25 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 
 
 
-		return codierung.replace(co("text"),textzeilenAusgeben(anzahlEinzuruecken, x)) //co("text") wird durch die eingerückten Textzeilen ersetzt
-		.replaceAll(co("zwangkommentar"),CodeErzeuger.gibKommentarZeichen(true,typ)) //Zwangkommentare werden eingefügt
-		.replaceAll(co("zwangkommentarzu"),CodeErzeuger.gibKommentarZeichen(false,typ));
+		return codierung.replace(co("text"),textzeilenAusgeben(anzahlEinzuruecken, x))
+		.replace(co("zwangkommentar"),CodeErzeuger.gibKommentarZeichen(true,typ))
+		.replace(co("zwangkommentarzu"),CodeErzeuger.gibKommentarZeichen(false,typ));
 	}
 
+	/**
+	 * Kopfzeilen mit Bedingung/Ausdruck in Klammern: Bei {@code alsKommentar} zuerst den Struktogramm-Text
+	 * als Kommentarzeile(n), danach {@code linkerTeil + Text + rechterTeil} ohne Kommentar in den Klammern
+	 * (vermeidet verschachteltes {@code if} plus auskommentierte Bedingung in einer Zeile).
+	 */
+	protected String quellcodeMitKommentarVorspann(String linkerTeil, String rechterTeil, int typ, int anzahlEingerueckt,
+			boolean alsKommentar) {
+		StringBuilder sb = new StringBuilder();
+		if (alsKommentar) {
+			sb.append(wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true));
+		}
+		sb.append(wandleZuAusgabe(linkerTeil + co("text") + rechterTeil, typ, anzahlEingerueckt, false));
+		return sb.toString();
+	}
 
 	protected String co(String s){ //codiert s, damit es sehr unwahrscheinlich wird, dass der User zufällig den Schlüsselstring eingibt
 		return "%%"+s+"SbGRXEJUz4ZbvaaN%%";
@@ -72,22 +86,18 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 
 	//gibt einen String zurück, in dem alle Textzeilen mit Zeilenumbrüchen eingerückt enthalten sind
 	protected String textzeilenAusgeben(int anzahlEinzuruecken, int xPosErsteZeile){
-		String rueckgabe = "";
-
-		for (int i=0; i < text.length; i++){
-
-			if (i > 0){
-				rueckgabe += einruecken(text[i], xPosErsteZeile);
-			}else{
-				rueckgabe += text[i];//erste Zeile nicht einrücken, damit z.B. zwischen while( und der Zeile keine Leerschritte sind
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < text.length; i++) {
+			if (i > 0) {
+				b.append(einruecken(text[i], xPosErsteZeile));
+			} else {
+				b.append(text[i]);
 			}
-
-
-			if(i < text.length -1)//nach der letzten Zeile keinen Zeilenumbruch, damit ein eventuelles Kommentar-Zu Zeichen direkt dahinter gehangen werden kann
-				rueckgabe += "\n";
+			if (i < text.length - 1) {
+				b.append('\n');
+			}
 		}
-
-		return rueckgabe;
+		return b.toString();
 	}
 
 
@@ -105,10 +115,10 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 	}
 
 	protected String einruecken(String codeZeile, int anzahlStellen){
-		for (int i=0; i < anzahlStellen; i++){ //gewünschte Anzahl an Leerzeichen vorne anhängen
-			codeZeile = " "+codeZeile;
+		if (anzahlStellen <= 0) {
+			return codeZeile;
 		}
-		return codeZeile;
+		return " ".repeat(anzahlStellen) + codeZeile;
 	}
 
 
@@ -180,7 +190,9 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		this.markiert = markiert;
 	}
 
-
+	public boolean istMarkiert(){
+		return markiert;
+	}
 
 	protected boolean objGesetzt(Object obj){
 		return obj != null;

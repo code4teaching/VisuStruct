@@ -82,15 +82,15 @@ public final class StruktogrammPalette {
 		case 0:
 			return "Statement";
 		case 1:
-			return "if(condition)";
+			return "condition";
 		case 2:
-			return "switch(selector)";
+			return "selector";
 		case 3:
-			return "for(initialization; condition; increment)";
+			return "i = 0; i < n; i++";
 		case 4:
-			return "while(condition)";
+			return "condition";
 		case 5:
-			return "do while(condition)";
+			return "condition";
 		case 6:
 			return "\u221e";
 		case 7:

@@ -10,6 +10,8 @@ import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import org.jdom2.Document;
+
 import de.kekru.struktogrammeditor.control.Struktogramm;
 import de.kekru.struktogrammeditor.struktogrammelemente.Fallauswahl;
 import de.kekru.struktogrammeditor.struktogrammelemente.StruktogrammElement;
@@ -24,14 +26,18 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 	private int typ;
 	private StruktogrammElement element; //das Element, bei dem das PopupMenü geöffnet wurde
 	private Struktogramm struktogramm;
+	private final int popupKlickX;
+	private final int popupKlickY;
 
-	public StruktogrammPopup(StruktogrammElement element, Struktogramm struktogramm){
+	public StruktogrammPopup(StruktogrammElement element, Struktogramm struktogramm, int klickX, int klickY){
 		super();
 
 		addPopupMenuListener(this);
 
 		this.element = element;
 		this.struktogramm = struktogramm;
+		this.popupKlickX = klickX;
+		this.popupKlickY = klickY;
 
 		typ = Struktogramm.strElementZuTypnummer(element);
 
@@ -48,6 +54,7 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 
 		einfuegen("Edit Text",0);
 		einfuegen("Copy",7);
+		einfuegen("Paste",14);
 		einfuegen("Delete...",1);
 
 		switch(typ){
@@ -190,6 +197,19 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 
 			case 7: struktogramm.gibTabbedPane().gibGUI().gibAuswahlPanel().setzeKopiertesStrElement(struktogramm.xmlErstellen(element)); //Abbild des Elementes in Kopier-Box ablegen
 			mussSpeicherpunktSetzen = false;
+			break;
+
+			case 14: {
+				Document kopie = struktogramm.gibTabbedPane().gibGUI().gibAuswahlPanel().gibKopiertesStrElement();
+				if (kopie == null) {
+					JOptionPane.showMessageDialog(struktogramm, "Nothing copied yet. Use Copy first.", "Paste",
+							JOptionPane.INFORMATION_MESSAGE);
+					mussSpeicherpunktSetzen = false;
+				} else {
+					struktogramm.elementAusKopierFeldEinfuegenAnKoordinaten(popupKlickX, popupKlickY);
+					mussSpeicherpunktSetzen = false;
+				}
+			}
 			break;
 
 			case 8: //Größer (x-Richtung und y-Richtung)

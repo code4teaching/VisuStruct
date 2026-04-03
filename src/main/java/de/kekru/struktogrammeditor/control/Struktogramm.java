@@ -75,6 +75,8 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private int sperre = 0; //laufender int-Wert für entlasten der CPU (siehe auch nächste Zeile und mausBewegt(...))
 	private static final int sperreAktualisierung = 0;//10;//war gedacht, zum mindern der CPU-Last, weil MouseMoved sehr oft ausgelöst wurde; es wird nur alle sperreAktualisierung+1 Mal neu gezeichnet
 	private boolean popupmenuSichtbar = false;
+	/** Zuletzt bekannte Mausposition auf der Zeichenfläche (für Einfügen, wenn der Zeiger schon in Menüleiste etc. ist). */
+	private Point letzteDiagrammMausKoords;
 	//private JScrollPane scrollpane; //in diesem JScrollPane liegt das Struktogramm, scrollpane liegt wiederrum in einem JTabbedPane (siehe GUI)
 	private StrTabbedPane tabbedpane; //für eine kennt-Beziehung mit dem JTabbedPane
 	private Dimension dimGroesse; //Ausmaße des Struktogramms
@@ -251,15 +253,13 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	//	}
 
 
-	/** Bessere Lesbarkeit von Text auf dem Offscreen-Canvas (Antialiasing unabhängig von „Kantenglättung“). */
+	/** Text- und Linienglättung auf dem Offscreen-Canvas (immer aktiv). */
 	private static void applyCanvasRenderingHints(Graphics2D g2){
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		if (GlobalSettings.isKantenglaettungVerwenden()){
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-		}
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 	}
 
 
@@ -616,6 +616,21 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		return null;
 	}
 
+	/**
+	 * Block zum Kopieren: zuerst unter der Maus (wenn Zeiger auf der Zeichenfläche),
+	 * sonst der zuletzt gelb hervorgehobene Block (z. B. Menü geöffnet, Maus nicht mehr auf dem Diagramm).
+	 */
+	public StruktogrammElement gibElementZumKopieren(){
+		StruktogrammElement unterMaus = getElementUnterMaus();
+		if (unterMaus != null) {
+			return unterMaus;
+		}
+		if (markiertesElement != null && markiertesElement.istMarkiert()) {
+			return markiertesElement;
+		}
+		return null;
+	}
+
 	//ein Drop wurde regstriert, er kam vom Auswahlpanel und es soll jetzt ein neues Element an der Position (x/y) eingefügt werden
 	private void gezogenesElementEinfuegen(int x, int y, int typ){
 		StruktogrammElement neues = neuesStruktogrammElement(typ);
@@ -687,9 +702,21 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	public void elementAusKopierFeldEinfuegenAnMausPos(){
 		Point p = getMousePosition();
-		if(p != null){
-			elementAusKopierFeldEinfuegen(p.x, p.y);
+		if (p == null) {
+			p = letzteDiagrammMausKoords;
 		}
+		if (p != null) {
+			elementAusKopierFeldEinfuegen(p.x, p.y);
+		} else {
+			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
+					"Move the mouse over the diagram to the desired insert position, then use Paste again.",
+					"Paste", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
+	/** Einfügen aus der Kopier-Box an festen Koordinaten (z. B. Rechtsklick-Menü). */
+	public void elementAusKopierFeldEinfuegenAnKoordinaten(int x, int y) {
+		elementAusKopierFeldEinfuegen(x, y);
 	}
 
 
@@ -750,7 +777,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		StruktogrammElement tmp = (StruktogrammElement)liste.gibElementAnPos(x,y,false);
 
 		if ((tmp != null)&&!(tmp instanceof LeerElement)){//LeerElemente brauchen kein Popup-Menü
-			popup = new StruktogrammPopup(tmp,this); //erzeugen des Popup-Menüs; das Element, das unter der Maus ist (tmp), wird übergeben
+			popup = new StruktogrammPopup(tmp, this, x, y);
 			popup.show(this,x,y);
 		}
 	}
@@ -957,11 +984,28 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			chooser.addChoosableFileFilter(new StrFileFilter(struktogrammFilterNummern[i]));//FileFilter hinzufügen
 		}
 		if (struktogrammFilterNummern.length > 0){
-			chooser.setFileFilter(new StrFileFilter(struktogrammFilterNummern[0]));//Standard: erster Filter (z. B. .strukstudio beim Speichern, PNG beim Bildexport)
+			chooser.setFileFilter(new StrFileFilter(struktogrammFilterNummern[0]));//Standard: erster Filter (z. B. .visustruct beim Speichern, PNG beim Bildexport)
 		}
 
 		if(!voreingestellterPfad.equals("")){
 			chooser.setCurrentDirectory(new File(voreingestellterPfad));//Startordner setzen
+		}
+
+		if (!bildExport) {
+			if (!aktuellerSpeicherpfad.isEmpty()) {
+				File cur = new File(aktuellerSpeicherpfad);
+				File par = cur.getParentFile();
+				if (par != null && par.isDirectory()) {
+					chooser.setCurrentDirectory(par);
+				}
+				chooser.setSelectedFile(cur);
+			} else {
+				File dir = chooser.getCurrentDirectory();
+				if (dir == null || !dir.isDirectory()) {
+					dir = new File(System.getProperty("user.home", "."));
+				}
+				chooser.setSelectedFile(new File(dir, GlobalSettings.STANDARD_SPEICHERDATEI));
+			}
 		}
 
 		int returnVal = chooser.showSaveDialog(tabbedpane.gibGUI());//Speicherndialog anzeigen
@@ -974,7 +1018,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			if(chooser.getFileFilter() instanceof StrFileFilter){
 				pfad = ((StrFileFilter)chooser.getFileFilter()).erweiterungBeiBedarfAnhaengen(pfad);//Endung passend zum gewählten Dateityp
 			}else if (!bildExport){
-				pfad = StrFileFilter.haengeStrukstudioAnFallsKeineSpeicherendung(pfad);//„Alle Dateien“: .strukstudio, falls noch keine .strukstudio/.xml/.strk
+				pfad = StrFileFilter.haengeStandardSpeicherendungAnFallsNoetig(pfad);//„Alle Dateien“: .visustruct, falls noch keine übliche Endung
 			}
 
 			if((new File(pfad)).exists()){ //wenn die ausgewählte Datei bereits existiert, erst nachfragen, ob diese überschrieben werden soll
@@ -1000,7 +1044,11 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			pfad = voreingestellterPfad;//...sonst voreingestellterPfad (kommt von der GUI)
 		}
 
-		pfad = saveFileChooser(new int[] { StrFileFilter.filterStruktogrammStudio, 1, 2, StrFileFilter.filterAlleSpeicherdateien }, pfad, false);
+		pfad = saveFileChooser(new int[] {
+				StrFileFilter.filterStruktogrammStudio,
+				StrFileFilter.filterLegacyStrk,
+				2,
+				StrFileFilter.filterAlleSpeicherdateien }, pfad, false);
 
 		if(!pfad.equals("")){//wenn nicht auf Abbrechen geklickt wurde...
 			setzeAktuellerSpeicherpfad(pfad);
@@ -1039,6 +1087,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
      wird gelb unterlegt und wenn vorschauFuerNeuesElement true ist,
      soll die rote Vorschaumarkierung angezeigt werden*/
 	private void mausBewegt(int x, int y, boolean vorschauFuerNeuesElement){
+		letzteDiagrammMausKoords = new Point(x, y);
 		if (sperre == 0){//nur alle sperreAktualisierung Mal soll neu gezeichnet werden, um die CPU Last etwas zu mildern
 			vorschauMarkierungAnzeigen(x,y,vorschauFuerNeuesElement);
 			zeichne();
@@ -1090,6 +1139,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	}
 
 	public void mouseClicked(MouseEvent e){
+		letzteDiagrammMausKoords = new Point(e.getX(), e.getY());
 		switch(e.getModifiers()){
 
 		case MouseEvent.BUTTON1_MASK: //linke Maustaste

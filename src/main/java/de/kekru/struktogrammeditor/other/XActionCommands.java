@@ -8,12 +8,12 @@ public enum XActionCommands {
 	
 	letztesElementStrecken, schriftartAendern,
 	groesseAendernMitMausrad, zoomeinstellungen, vergroesserungenRuckgaengigMachen,
-	elementShortcutsVerwenden, kantenglaettungVerwenden,
+	elementShortcutsVerwenden,
 	
-	homepage, changelog, kontaktformular, hilfe, info,
+	info,
 	sourceCode,
 	
-	lookAndFeelOSStandard, lookAndFeelSwingStandard, lookAndFeelNimbus, lookAndFeelMotif,
+	lookAndFeelOSStandard, lookAndFeelSwingStandard, lookAndFeelNimbus,
 	lookAndFeelFlatLight, lookAndFeelFlatDark, struktogrammbeschreibungHinzufuegen
 	
 }

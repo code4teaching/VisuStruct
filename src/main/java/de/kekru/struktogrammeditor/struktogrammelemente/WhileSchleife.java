@@ -30,12 +30,16 @@ public class WhileSchleife extends Schleife { //erbt von Schleife
 
       switch(typ){
          case CodeErzeuger.typJava:
-            vorher = "while("+co("kommentar")+co("text")+co("kommentarzu")+"){\n";
+            vorher = quellcodeMitKommentarVorspann("while(", "){\n", typ, anzahlEingerueckt, alsKommentar);
             nachher = "}\n";
             break;
 
          case CodeErzeuger.typDelphi:
-            vorher = "while "+co("kommentar")+co("text")+co("kommentarzu")+" do \n"+einruecken("begin",anzahlEingerueckt)+"\n";
+            vorher = (alsKommentar
+            		? wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true)
+            		: "")
+            		+ wandleZuAusgabe("while " + co("text") + " do \n" + einruecken("begin\n", anzahlEingerueckt), typ,
+            				anzahlEingerueckt, false);
             nachher = "end;\n";
             break;
       }

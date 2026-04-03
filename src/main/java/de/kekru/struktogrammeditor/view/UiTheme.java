@@ -6,11 +6,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
-/** Globale UI-Defaults; bei Flat Light/Dunkel zusätzlich VisuStruct-Farben (visustruct.de). */
+/** Globale UI-Defaults; bei Flat Light VisuStruct-Farben (visustruct.de). Dunkel = unverändert FlatLaf-Dark. */
 public final class UiTheme {
 
 	private UiTheme() {
@@ -28,8 +27,6 @@ public final class UiTheme {
 
 			if (UIManager.getLookAndFeel() instanceof FlatLightLaf) {
 				VisuStructTheme.applyLightPalette();
-			} else if (UIManager.getLookAndFeel() instanceof FlatDarkLaf) {
-				VisuStructTheme.applyDarkPalette();
 			}
 
 			UIManager.put("Component.arc", Integer.valueOf(8));

@@ -98,6 +98,9 @@ public class GUI extends JFrame implements Konstanten{
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("Close Diagram", XActionCommands.struktogrammSchliessen, KeyEvent.VK_C));
 				menu.add(new JSeparator());
+				menu.add(createMenuItem("About", XActionCommands.info, KeyEvent.VK_B));
+				menu.add(createMenuItem("Original Editor Source (GitHub)", XActionCommands.sourceCode, KeyEvent.VK_H));
+				menu.add(new JSeparator());
 				menu.add(createMenuItem("Exit",	XActionCommands.programmBeenden, KeyEvent.VK_X));
 			}
 			menubar.add(menu);
@@ -110,7 +113,7 @@ public class GUI extends JFrame implements Konstanten{
 				menu.add(createMenuItem("Set Diagram Caption...", XActionCommands.struktogrammbeschreibungHinzufuegen, KeyEvent.VK_T));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("Copy Entire Diagram", XActionCommands.ganzesStruktogrammKopieren, KeyEvent.VK_Y));
-				menu.add(createMenuItem("Copy Element at Cursor", XActionCommands.elementUnterDerMausKopieren, KeyEvent.VK_E, KeyEvent.VK_C));
+				menu.add(createMenuItem("Copy highlighted block", XActionCommands.elementUnterDerMausKopieren, KeyEvent.VK_E, KeyEvent.VK_C));
 				menu.add(createMenuItem("Paste Copied Element at Cursor", XActionCommands.elementEinfuegen, KeyEvent.VK_P, KeyEvent.VK_V));
 			}
 			menubar.add(menu);
@@ -160,13 +163,6 @@ public class GUI extends JFrame implements Konstanten{
 					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelNimbus);
 					group.add(radioMenuitem);
 					menu2.add(radioMenuitem);
-					
-					radioMenuitem = new JRadioButtonMenuItem("Metal (classic)");
-					radioMenuitem.addActionListener(controlling);
-					radioMenuitem.setActionCommand(XActionCommands.lookAndFeelMotif.toString());
-					radioMenuitem.setSelected(GlobalSettings.getLookAndFeelAktuell() == lookAndFeelMotif);
-					group.add(radioMenuitem);
-					menu2.add(radioMenuitem);
 				}
 				menu.add(menu2);
 
@@ -177,21 +173,6 @@ public class GUI extends JFrame implements Konstanten{
 				menu.add(createMenuItem("Reset All Block Sizes", XActionCommands.vergroesserungenRuckgaengigMachen, KeyEvent.VK_R));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("Use keyboard shortcuts to insert blocks", XActionCommands.elementShortcutsVerwenden, KeyEvent.VK_K, GlobalSettings.isElementShortcutsVerwenden()));
-				menu.add(new JSeparator());
-				menu.add(createMenuItem("Use antialiasing", XActionCommands.kantenglaettungVerwenden, KeyEvent.VK_N, GlobalSettings.isKantenglaettungVerwenden()));
-			}
-			menubar.add(menu);
-
-			menu = createMenu("Help", KeyEvent.VK_H);
-			{
-				menu.add(createMenuItem("Project Website", XActionCommands.homepage, KeyEvent.VK_W));
-				menu.add(createMenuItem("Changelog", XActionCommands.changelog, KeyEvent.VK_C));
-				menu.add(createMenuItem("Contact / Feedback / Report an Issue", XActionCommands.kontaktformular, KeyEvent.VK_F));
-				menu.add(new JSeparator());
-				menu.add(createMenuItem("Online Help", XActionCommands.hilfe, KeyEvent.VK_D));
-				menu.add(new JSeparator());
-				menu.add(createMenuItem("About", XActionCommands.info, KeyEvent.VK_A));
-				menu.add(createMenuItem("Original Editor Source (GitHub)", XActionCommands.sourceCode, KeyEvent.VK_O));
 			}
 			menubar.add(menu);
 		}

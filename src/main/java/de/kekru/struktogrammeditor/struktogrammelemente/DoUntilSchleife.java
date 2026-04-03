@@ -59,12 +59,12 @@ public class DoUntilSchleife extends Schleife {//erbt von Schleife
       switch(typ){
          case CodeErzeuger.typJava:
             vorher = "do{\n";
-            nachher = "}while("+co("kommentar")+co("text")+co("kommentarzu")+");\n";//Schleifenende ist "}while(" plus Kommentar-Auf (bei Bedarf), plus die Textzeilen, plus Kommentar-Zu (bei Bedarf)
+            nachher = quellcodeMitKommentarVorspann("}while(", ");\n", typ, anzahlEingerueckt, alsKommentar);
             break;
 
          case CodeErzeuger.typDelphi:
             vorher = "repeat\n";
-            nachher = "until "+co("kommentar")+co("text")+co("kommentarzu")+";\n";
+            nachher = quellcodeMitKommentarVorspann("until ", ";\n", typ, anzahlEingerueckt, alsKommentar);
             break;
       }
 

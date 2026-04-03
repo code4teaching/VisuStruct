@@ -33,13 +33,17 @@ public class Verzweigung extends Fallauswahl { //erbt von Fallauswahl
 
       switch(typ){
          case CodeErzeuger.typJava:
-            vorher = "if("+co("kommentar")+co("text")+co("kommentarzu")+"){\n";
+            vorher = quellcodeMitKommentarVorspann("if(", "){\n", typ, anzahlEingerueckt, alsKommentar);
             zwischenStueck = "}else{\n";
             nachher = "}\n";
             break;
 
          case CodeErzeuger.typDelphi:
-            vorher = "if "+co("kommentar")+co("text")+co("kommentarzu")+" then \n"+einruecken("begin\n",anzahlEingerueckt);
+            vorher = (alsKommentar
+            		? wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true)
+            		: "")
+            		+ wandleZuAusgabe("if " + co("text") + " then \n" + einruecken("begin\n", anzahlEingerueckt), typ,
+            				anzahlEingerueckt, false);
             zwischenStueck = "end\n"+einruecken("else\n",anzahlEingerueckt)+einruecken("begin\n",anzahlEingerueckt);
             nachher = "end;\n";
             break;

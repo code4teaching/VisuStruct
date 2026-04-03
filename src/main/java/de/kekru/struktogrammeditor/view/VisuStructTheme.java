@@ -3,13 +3,12 @@ package de.kekru.struktogrammeditor.view;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 /**
- * Farben wie auf visustruct.de (CSS-Variablen aus {@code style.css} für Hell,
- * {@code styles.css} für Dunkel). Schlüssel {@code VisuStruct.paletteBackground}
- * für die linke Werkzeugleiste.
+ * Angepasste Farben für <b>Modern · hell</b> wie auf visustruct.de ({@code style.css}).
+ * Dunkelmodus nutzt die Standardpalette von FlatLaf ({@code FlatDarkLaf} / {@code FlatMacDarkLaf}) ohne Overlay.
+ * Schlüssel {@code VisuStruct.paletteBackground} für die linke Werkzeugleiste.
  */
 public final class VisuStructTheme {
 
@@ -85,65 +84,6 @@ public final class VisuStructTheme {
 		UIManager.put("TitledBorder.titleColor", c(muted));
 
 		UIManager.put("OptionPane.background", c(bg));
-		UIManager.put("OptionPane.messageForeground", c(text));
-	}
-
-	/** Dunkel: Farben aus dem Grid-Layout in {@code styles.css} (ältere Variante). */
-	public static void applyDarkPalette() {
-		int canvas = 0x0F0F1A;
-		int surface = 0x16213E;
-		int deep = 0x0F3460;
-		int border = 0x2A2A4A;
-		int text = 0xEAEAEA;
-		int accent = 0xE94560;
-		int muted = 0x8892B0;
-		int select = 0x2A2A4A;
-
-		UIManager.put(KEY_PALETTE_BACKGROUND, c(surface));
-
-		UIManager.put("Panel.background", c(canvas));
-		UIManager.put("Viewport.background", c(canvas));
-		UIManager.put("ScrollPane.background", c(canvas));
-		UIManager.put("SplitPane.background", c(canvas));
-
-		UIManager.put("MenuBar.background", c(surface));
-		UIManager.put("MenuBar.foreground", c(text));
-		UIManager.put("Menu.background", c(surface));
-		UIManager.put("Menu.foreground", c(text));
-		UIManager.put("PopupMenu.background", c(surface));
-		UIManager.put("PopupMenu.foreground", c(text));
-		UIManager.put("Menu.selectionBackground", c(select));
-		UIManager.put("Menu.selectionForeground", c(text));
-		UIManager.put("MenuItem.selectionBackground", c(select));
-		UIManager.put("MenuItem.selectionForeground", c(text));
-
-		UIManager.put("TabbedPane.background", c(canvas));
-		UIManager.put("TabbedPane.foreground", c(text));
-		UIManager.put("TabbedPane.selectedBackground", c(deep));
-		UIManager.put("TabbedPane.selectedForeground", c(text));
-		UIManager.put("TabbedPane.underlineColor", c(accent));
-		UIManager.put("TabbedPane.hoverColor", c(select));
-		UIManager.put("TabbedPane.focusColor", c(accent));
-
-		UIManager.put("Separator.foreground", c(border));
-		UIManager.put("Component.borderColor", c(border));
-
-		UIManager.put("Label.foreground", c(text));
-		if (!(UIManager.getLookAndFeel() instanceof FlatMacDarkLaf)) {
-			UIManager.put("Button.foreground", c(text));
-			UIManager.put("Button.default.background", c(accent));
-			UIManager.put("Button.default.foreground", c(0xFFFFFF));
-			UIManager.put("Button.default.focusedBackground", c(accent));
-			UIManager.put("Button.default.hoverBackground", c(0xFF6B7D));
-			UIManager.put("Button.default.pressedBackground", c(0xD63850));
-		}
-		UIManager.put("TextField.background", c(deep));
-		UIManager.put("TextField.foreground", c(text));
-		UIManager.put("TextArea.background", c(deep));
-		UIManager.put("TextArea.foreground", c(text));
-		UIManager.put("TitledBorder.titleColor", c(muted));
-
-		UIManager.put("OptionPane.background", c(canvas));
 		UIManager.put("OptionPane.messageForeground", c(text));
 	}
 }

@@ -10,6 +10,8 @@ public class JTextAreaEasy extends JTextArea {
     
 	private static final long serialVersionUID = -4009874987394271922L;
 	private JScrollPane scrollpane;
+	/** Während der Quellcode-Generierung: Sammeln statt vieler {@link #append}-Aufrufe. */
+	private StringBuilder quellcodeBatch;
 
     public JTextAreaEasy(){
        super();
@@ -32,7 +34,24 @@ public class JTextAreaEasy extends JTextArea {
     }
     
     public void hinzufuegen(String s){
-       append(s);
+       if (quellcodeBatch != null) {
+    	   quellcodeBatch.append(s);
+       } else {
+    	   append(s);
+       }
+    }
+
+    /** Startet gepufferte Ausgabe für {@link #hinzufuegen}/{@link #zeilenumbruch}; mit {@link #endQuellcodeBatch()} abschließen. */
+    public void beginQuellcodeBatch() {
+    	quellcodeBatch = new StringBuilder(16384);
+    }
+
+    /** Schreibt den Puffer einmal in die Textarea (siehe {@link #beginQuellcodeBatch()}). */
+    public void endQuellcodeBatch() {
+    	if (quellcodeBatch != null) {
+    		setText(quellcodeBatch.toString());
+    		quellcodeBatch = null;
+    	}
     }
     
     public void einfuegenAnStelle(String s, int stelle){
@@ -48,6 +67,7 @@ public class JTextAreaEasy extends JTextArea {
     }
     
     public void leeren(){
+       quellcodeBatch = null;
        setText("");
     }
     
