@@ -418,7 +418,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				+ "<p style=\"margin-top:0;margin-bottom:10px;\"><b>"
 				+ GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + "</b></p>"
 				+ "<p style=\"margin-top:0;\">Holger Sebastiao<br/>"
-				+ "Ludwig-Geißler-Schule, Hanau<br/>"
 				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/VisuStruct</a><br/>"
 				+ "Web: <a href=\"" + webUrl + "\">www.sebastiao.org</a></p>"
 				+ "<hr style=\"border:0;border-top:1px solid #ccc;\"/>"
