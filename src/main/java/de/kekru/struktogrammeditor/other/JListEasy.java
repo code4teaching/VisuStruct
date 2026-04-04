@@ -5,25 +5,26 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-public class JListEasy extends JList {
-   
+public class JListEasy extends JList<String> {
+
    private static final long serialVersionUID = -5302981897521724160L;
-   private DefaultListModel model;
+   private final DefaultListModel<String> model;
    private JScrollPane scrollpane;
-   
-   public JListEasy(){
-      super(new DefaultListModel());
-      model = (DefaultListModel)getModel();
-      //setBounds(8, 16, 225, 137);
+
+   public JListEasy() {
+      this(new DefaultListModel<>());
    }
 
-   public JListEasy(int xpos, int ypos, int breite, int hoehe){
-      super(new DefaultListModel());
-      model = (DefaultListModel)getModel();
+   public JListEasy(int xpos, int ypos, int breite, int hoehe) {
+      this();
       setBounds(xpos, ypos, breite, hoehe);
    }
-   
-   
+
+   private JListEasy(DefaultListModel<String> model) {
+      super(model);
+      this.model = model;
+   }
+
    public void setzeContainer(Container cp){
       scrollpane = new JScrollPane(this);//http://www.dpunkt.de/java/Programmieren_mit_Java/Oberflaechenprogrammierung/14.html
       scrollpane.setBounds(getBounds());
@@ -31,21 +32,21 @@ public class JListEasy extends JList {
      // scrollpane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
      // scrollpane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
    }
-   
+
    public int gibIndex(){
       return getSelectedIndex();
    }
-   
+
    public void setzeIndex(int neuerIndex){
       setSelectedIndex(neuerIndex);
    }
-   
+
    public void setzeText(String s, int index){
       if ((index >= 0) && (index < gibAnzahl())){
          model.set(index,s);
       }
    }
-   
+
    public String gibMarkiertenInhalt(){
       if (gibIndex() >= 0){
          return ""+getModel().getElementAt(gibIndex());
@@ -53,7 +54,7 @@ public class JListEasy extends JList {
          return "";
       }
    }
-   
+
    public String gibInhalt(int indexDesInhalt){
       if (indexIstVorhanden(indexDesInhalt)){
          return ""+getModel().getElementAt(indexDesInhalt);
@@ -61,42 +62,42 @@ public class JListEasy extends JList {
          return "";
       }
    }
-   
+
    public void fuegeHinzu(String s){
       model.add(gibAnzahl(),s);
    }
-   
+
    public void fuegeHinzuAmAnfang(String s){
       model.add(0,s);
    }
-   
+
    public void fuegeHinzuAnStelle(String s, int stelle){
       if (stelle > gibAnzahl()){
         stelle = gibAnzahl();
       }
       model.add(stelle,s);
    }
-   
+
    public void entferne(int indexDesEintrages){
       if (indexIstVorhanden(indexDesEintrages)){
          model.remove(indexDesEintrages);
       }
    }
-   
+
    public void entferneLetztenEintrag(){
       entferne(gibAnzahl()-1);
    }
-   
+
    public void entferneAlle(){
       for(int i=gibAnzahl()-1; i >= 0 ; i--){
          entferne(0);
       }
    }
-   
+
    private boolean indexIstVorhanden(int indexDesEintrages){
       return (indexDesEintrages >= 0) && (indexDesEintrages < gibAnzahl());
    }
-   
+
    public int gibAnzahl(){
       return model.getSize();
    }

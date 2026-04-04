@@ -39,6 +39,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -1140,17 +1141,12 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	public void mouseClicked(MouseEvent e){
 		letzteDiagrammMausKoords = new Point(e.getX(), e.getY());
-		switch(e.getModifiers()){
-
-		case MouseEvent.BUTTON1_MASK: //linke Maustaste
-			elementAnPosBefuellen(e.getX(),e.getY()); //EingabeDialog öffnen
-			pointMarkierungEckPunkte = null; //Markierungsrechteck entfernen
+		if (SwingUtilities.isLeftMouseButton(e)) { // linke Maustaste
+			elementAnPosBefuellen(e.getX(), e.getY()); // EingabeDialog öffnen
+			pointMarkierungEckPunkte = null; // Markierungsrechteck entfernen
 			zeichne();
-			break;
-
-		case MouseEvent.BUTTON3_MASK: //rechte Maustaste
-			popupMenueZeigen(e.getX(),e.getY()); //Popup-Menü zeigen
-			break;
+		} else if (SwingUtilities.isRightMouseButton(e)) { // rechte Maustaste
+			popupMenueZeigen(e.getX(), e.getY()); // Popup-Menü zeigen
 		}
 	}
 

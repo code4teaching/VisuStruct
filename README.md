@@ -18,6 +18,11 @@ git clone https://github.com/code4teaching/VisuStruct.git
 
 Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** MIT (siehe [LICENSE](LICENSE)).
 
+## Änderungen in Version 1.0.3 (Auszug)
+
+- **Build:** **Apache Maven Wrapper** **3.3.4** (*only-script*, ohne eingecheckte `maven-wrapper.jar`), gebündeltes Maven **3.9.9**; `maven-compiler-plugin` **3.14.1**, `maven-assembly-plugin` **3.7.1**; Kompilierung mit **`-Xlint:deprecation`**
+- **Code / APIs:** moderne Swing-Modifier (`getModifiersEx`, `SwingUtilities` für Maustasten, `getMenuShortcutKeyMaskEx`); **Generics** bei `JListEasy`, `FontChooser`; `Double`/`Integer`-Deprecations in `JNumberField` bereinigt
+
 ## Änderungen in Version 1.0.2 (Auszug)
 
 - **Quellcode-Generator:** schnellere Ausgabe (gepuffertes Schreiben), effizientere String-Verarbeitung; bei Option „Struktogrammtext als Kommentare“ stehen Bedingungen lesbarer (Kommentarzeile, Klartext in den Klammern)
@@ -31,7 +36,7 @@ Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** 
 - **FlatLaf** mit Farben wie auf **[VisuStruct](https://visustruct.de)** (hell: `style.css`, dunkel: Layout-Farben aus `styles.css`), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
 - **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
-- Gebaute Datei: **`visustruct-1.0.2.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
+- Gebaute Datei: **`visustruct-1.0.3.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
 
 ## Fertiges Programm herunterladen (ohne selbst zu bauen)
 
@@ -52,7 +57,7 @@ Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft is
 Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
 [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
-**Release auf GitHub aktualisieren:** Unter *Releases* eine **neue Version** anlegen, Tag z. B. **`v1.0.2`** auf den passenden Commit setzen und veröffentlichen. Die Workflow-Datei [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) baut dann die JARs und hängt u. a. **`visustruct.jar`** (fester Download-Link oben) an die Release an.
+**Release auf GitHub aktualisieren:** Unter *Releases* eine **neue Version** anlegen, Tag z. B. **`v1.0.3`** auf den passenden Commit setzen und veröffentlichen. Die Workflow-Datei [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) baut dann die JARs und hängt u. a. **`visustruct.jar`** (fester Download-Link oben) an die Release an.
 
 ## Voraussetzungen
 
@@ -79,13 +84,13 @@ chmod +x mvnw
 Die fertige Datei befindet sich hier:
 
 ```text
-target/visustruct-1.0.2.jar
+target/visustruct-1.0.3.jar
 ```
 
 ## Programm starten
 
 ```bash
-java -jar target/visustruct-1.0.2.jar
+java -jar target/visustruct-1.0.3.jar
 ```
 
 Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.

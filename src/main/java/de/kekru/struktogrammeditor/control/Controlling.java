@@ -551,7 +551,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if(e.getSource() == gui.gibTabbedpane() && e.getModifiers() != GlobalSettings.strgOderApfelMask){
+		if(e.getSource() == gui.gibTabbedpane() && (e.getModifiersEx() & GlobalSettings.strgOderApfelMask) == 0){
 
 			switch(e.getKeyChar()){
 			case '+':
@@ -574,7 +574,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getSource() == gui.gibTabbedpane() && e.getModifiers() != GlobalSettings.strgOderApfelMask){
+		if(e.getSource() == gui.gibTabbedpane() && (e.getModifiersEx() & GlobalSettings.strgOderApfelMask) == 0){
 
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_A:

@@ -21,26 +21,22 @@ public class JNumberField extends JTextField {
 
   /** Gets a double-value from the JNumberField. */
   public double getDouble() {
-    Double d = new Double(getText());
-    return d.doubleValue();
+    return Double.parseDouble(getText());
   }
 
   /** Gets a float-value from the JNumberField. */
   public float getFloat() {
-    Double d = new Double(getText());
-    return d.floatValue();
+    return (float) Double.parseDouble(getText());
   }
 
   /** Gets an int-value from the JNumberField. */
   public int getInt() {
-    Double d = new Double(getText());
-    return d.intValue();
+    return (int) Double.parseDouble(getText());
   }
 
   /** Gets a long-value from the JNumberField. */
   public long getLong() {
-    Double d = new Double(getText());
-    return d.longValue();
+    return (long) Double.parseDouble(getText());
   }
 
   /** Checks wether the JNumberField contains a valid numeric value. */

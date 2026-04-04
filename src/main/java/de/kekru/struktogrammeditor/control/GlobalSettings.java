@@ -68,15 +68,16 @@ public class GlobalSettings implements Konstanten{
 	private static int elementBeschriftungPresetIndex = ElementBeschriftungPresets.PRESET_ENGLISH_JAVA;
 
 	/**
-	 * Tastaturmaske für Menü-Kurzbefehle (Strg bzw. ⌘). Ohne Anzeige (Headless) wirft
-	 * {@link Toolkit#getMenuShortcutKeyMask()} — dann plattformtypischer Ersatz.
+	 * Extended-Modifier-Maske für Menü-Kurzbefehle (Strg bzw. ⌘), z. B. für
+	 * {@link javax.swing.KeyStroke#getKeyStroke(int, int)} und {@code KeyEvent#getModifiersEx()}.
+	 * Ohne Anzeige (Headless) plattformtypischer Ersatz.
 	 */
 	private static int initStrgOderApfelMask(){
 		try {
 			if (GraphicsEnvironment.isHeadless()){
 				return fallbackStrgOderApfelMask();
 			}
-			return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+			return Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 		}catch (HeadlessException e){
 			return fallbackStrgOderApfelMask();
 		}
@@ -84,7 +85,7 @@ public class GlobalSettings implements Konstanten{
 
 	private static int fallbackStrgOderApfelMask(){
 		String os = System.getProperty("os.name", "").toLowerCase();
-		return os.contains("mac") ? InputEvent.META_MASK : InputEvent.CTRL_MASK;
+		return os.contains("mac") ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
 	}
 
 	public static final int strgOderApfelMask = initStrgOderApfelMask();

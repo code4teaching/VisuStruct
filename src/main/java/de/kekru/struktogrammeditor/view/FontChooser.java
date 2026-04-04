@@ -25,9 +25,9 @@ public class FontChooser extends JDialog {
 
 	private static final long serialVersionUID = -7360108534182191037L;
 	private String[] schriftarten;  
-	private JComboBox schriftartenChooser;
-	private JComboBox styleChooser;
-	private JComboBox sizeChooser;
+	private JComboBox<String> schriftartenChooser;
+	private JComboBox<String> styleChooser;
+	private JComboBox<String> sizeChooser;
 	private JButton buttonOK = new JButton();
 	private JButton buttonAbbrechen = new JButton();
 	private JButton buttonZuruecksetzen = new JButton();
@@ -40,8 +40,7 @@ public class FontChooser extends JDialog {
 
 	// The style values that correspond to those names
 	static final Integer[] styleValues = new Integer[] {
-		new Integer(Font.PLAIN), new Integer(Font.ITALIC),
-		new Integer(Font.BOLD), new Integer(Font.BOLD + Font.ITALIC) };
+		Font.PLAIN, Font.ITALIC, Font.BOLD, Font.BOLD + Font.ITALIC };
 
 	// The size "names" to appear in the size menu
 	static final String[] sizeNames = new String[] { "8", "10", "12", "14", "15",
@@ -73,13 +72,13 @@ public class FontChooser extends JDialog {
 
 			// Create ItemChooser objects that allow the user to select font
 			// family, style, and size.
-			schriftartenChooser = new JComboBox(schriftarten);
+			schriftartenChooser = new JComboBox<String>(schriftarten);
 			schriftartenChooser.setBounds(10,10,250,20);
 			panel.add(schriftartenChooser);
-			styleChooser = new JComboBox(styleNames);
+			styleChooser = new JComboBox<String>(styleNames);
 			styleChooser.setBounds(270,10,120,20);
 			panel.add(styleChooser);
-			sizeChooser = new JComboBox(sizeNames);
+			sizeChooser = new JComboBox<String>(sizeNames);
 			sizeChooser.setBounds(400,10,50,20);
 			panel.add(sizeChooser);
 
@@ -169,7 +168,11 @@ public class FontChooser extends JDialog {
 
 	public void buttonOK_ActionPerformed(ActionEvent evt) {
 		Struktogramm str = controlling.gibAktuellesStruktogramm();
-		str.setFontStr(new Font(schriftartenChooser.getSelectedItem().toString(),styleValues[styleChooser.getSelectedIndex()],Integer.parseInt(sizeNames[sizeChooser.getSelectedIndex()])));
+		int fi = schriftartenChooser.getSelectedIndex();
+		String fam = (fi >= 0 && fi < schriftarten.length) ? schriftarten[fi] : schriftarten[0];
+		str.setFontStr(new Font(fam,
+				styleValues[styleChooser.getSelectedIndex()],
+				Integer.parseInt(sizeNames[sizeChooser.getSelectedIndex()])));
 		str.rueckgaengigPunktSetzen(true);
 		str.graphicsInitialisieren();   
 		str.zeichenbereichAktualisieren();

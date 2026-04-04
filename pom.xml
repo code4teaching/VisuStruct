@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.kekru.struktogrammeditor</groupId>
 	<artifactId>struktogrammeditor</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>VisuStruct</name>
 
 	<properties>
@@ -55,15 +55,18 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.14.1</version>
 				<configuration>
 					<release>${maven.compiler.release}</release>
+					<compilerArgs>
+						<arg>-Xlint:deprecation</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.7.1</version>
 				<extensions>false</extensions>
 				<executions>
 					<execution>
