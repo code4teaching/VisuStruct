@@ -3,7 +3,7 @@
 [![Build-Status](https://github.com/code4teaching/VisuStruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/VisuStruct/actions)
 
 Visueller Editor zur Erstellung von **Nassi-Shneiderman-Diagrammen** (Struktogrammen).  
-Die **Benutzeroberfläche** und die **Bedienung** des Programms sind **deutsch**.
+Die **Benutzeroberfläche** ist in diesem Fork **überwiegend englisch** (Menüs, viele Beschriftungen); vereinzelte Texte können noch deutsch sein.
 
 Dieses **Projektarchiv** ist eine **Abzweigung** (*Fork*) des Originals  
 [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor).  
@@ -11,6 +11,15 @@ Es enthält unter anderem Anpassungen für **aktuelle Java-Versionen**, ein **ü
 
 **Website:** [visustruct.de](https://visustruct.de)  
 **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
+
+### English
+
+**VisuStruct** is a visual editor for **Nassi–Shneiderman diagrams** (structured flowcharts).  
+The **user interface** is **mostly English** in this fork (menus and many labels); a few strings may still be in German.
+
+This repository is a **fork** of [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor), with updates for **current Java**, a refreshed **look and feel**, and the **VisuStruct** branding.
+
+**Website:** [visustruct.de](https://visustruct.de) — **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
 ```bash
 git clone https://github.com/code4teaching/VisuStruct.git
@@ -116,7 +125,7 @@ Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der
 Verbesserungsvorschläge und **Fehlerbeschreibungen** sind willkommen – über [**Issues** und **Pull requests**](https://github.com/code4teaching/VisuStruct) dieses Repositories.
 
 Für **Commits** und **Programm-Kommentare** kann **Englisch** verwendet werden.  
-Alle **sichtbaren Texte im Programm** sollten **deutsch** bleiben – so wie beim Original vereinbart.
+Neue **sichtbare UI-Texte** am besten **durchgehend englisch** halten (wie die bestehende Menüführung); bei Übersetzungen oder Vereinheitlichung deutsch verbleibender Stellen gerne vorher im Issue kurz abstimmen.
 
 ## Lizenz
 
