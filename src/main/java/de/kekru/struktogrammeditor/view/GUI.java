@@ -99,7 +99,7 @@ public class GUI extends JFrame implements Konstanten{
 				menu.add(createMenuItem("Close Diagram", XActionCommands.struktogrammSchliessen, KeyEvent.VK_C));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("About", XActionCommands.info, KeyEvent.VK_B));
-				menu.add(createMenuItem("Original Editor Source (GitHub)", XActionCommands.sourceCode, KeyEvent.VK_H));
+				menu.add(createMenuItem("Prior editor source (GitHub)", XActionCommands.sourceCode, KeyEvent.VK_H));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("Exit",	XActionCommands.programmBeenden, KeyEvent.VK_X));
 			}

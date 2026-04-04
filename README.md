@@ -2,30 +2,28 @@
 
 [![Build-Status](https://github.com/code4teaching/VisuStruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/VisuStruct/actions)
 
-Visueller Editor zur Erstellung von **Nassi-Shneiderman-Diagrammen** (Struktogrammen).  
-Die **Benutzeroberfläche** ist in diesem Fork **überwiegend englisch** (Menüs, viele Beschriftungen); vereinzelte Texte können noch deutsch sein.
+**VisuStruct** ist der **Struktogramm-Editor** (Nassi-Shneiderman-Diagramme) unter dieser Marke: aktuelle **Java**-Versionen, **FlatLaf**, Dateiformat **`.visustruct`**.
 
-Dieses **Projektarchiv** ist eine **Abzweigung** (*Fork*) des Originals  
-[kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor).  
-Es enthält unter anderem Anpassungen für **aktuelle Java-Versionen**, ein **überarbeitetes Aussehen** sowie die Marke **VisuStruct** (Struktogramm-Editor).
+Die **Benutzeroberfläche** ist **überwiegend englisch** (Menüs, viele Beschriftungen); vereinzelte Texte können noch deutsch sein.
+
+*Herkunft:* Das Programm basiert auf dem Open-Source-Projekt [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). Details und Copyright stehen in der [LICENSE](LICENSE).
 
 **Website:** [visustruct.de](https://visustruct.de)  
 **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
 ### English
 
-**VisuStruct** is a visual editor for **Nassi–Shneiderman diagrams** (structured flowcharts).  
-The **user interface** is **mostly English** in this fork (menus and many labels); a few strings may still be in German.
+**VisuStruct** is the **structure-chart editor** (Nassi–Shneiderman diagrams) under this brand: **current Java**, **FlatLaf**, **`.visustruct`** files.
 
-This repository is a **fork** of [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor), with updates for **current Java**, a refreshed **look and feel**, and the **VisuStruct** branding.
+The **user interface** is **mostly English** (menus and many labels); a few strings may still be in German.
+
+*Lineage:* Built on the open-source project [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). See [LICENSE](LICENSE) for copyright and terms.
 
 **Website:** [visustruct.de](https://visustruct.de) — **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
 ```bash
 git clone https://github.com/code4teaching/VisuStruct.git
 ```
-
-Das Original stammt von Kevin Krummenauer (Schulprojekt 2010/2011). **Lizenz:** MIT (siehe [LICENSE](LICENSE)).
 
 ## Änderungen in Version 1.0.3 (Auszug)
 
@@ -104,16 +102,16 @@ java -jar target/visustruct-1.0.3.jar
 
 Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.
 
-## Original und Synchronisation mit dem Ursprungsprojekt
+## Upstream (Basis-Projekt) und Git-Synchronisation
 
-- **Original auf GitHub:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)  
-- **Git – Bezug zum Original einrichten** (einmalig, falls noch nicht geschehen):
+- **Basis-Repo auf GitHub:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)  
+- **Git – `upstream` einrichten** (einmalig, falls noch nicht geschehen):
 
   ```bash
   git remote add upstream https://github.com/kekru/struktogrammeditor.git
   ```
 
-  **Änderungen vom Original übernehmen** (vereinfacht):
+  **Änderungen von `upstream` übernehmen** (vereinfacht):
 
   ```bash
   git fetch upstream
@@ -131,6 +129,6 @@ Neue **sichtbare UI-Texte** am besten **durchgehend englisch** halten (wie die b
 
 **MIT** – siehe [LICENSE](LICENSE). Das **Urheberrecht** am ursprünglichen Programmcode liegt bei Kevin Krummenauer (steht auch in der LICENSE-Datei).
 
-## Link zum Ursprungsprojekt (Web)
+## Historische Webseite zur Basis-Software
 
-Website zum Original: [whiledo.de – Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor)
+[whiledo.de – Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor) (zum ursprünglichen Editor von Kevin Krummenauer)

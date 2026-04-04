@@ -421,9 +421,9 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/VisuStruct</a><br/>"
 				+ "Web: <a href=\"" + webUrl + "\">www.sebastiao.org</a></p>"
 				+ "<hr style=\"border:0;border-top:1px solid #ccc;\"/>"
-				+ "<p style=\"margin-bottom:6px;\"><b>Credits</b></p>"
-				+ "<p style=\"margin-top:0;\">This program is based on the structure chart editor by Kevin Krummenauer.<br/>"
-				+ "Original on GitHub: <a href=\"" + originalUrl + "\">kekru/struktogrammeditor</a></p>"
+				+ "<p style=\"margin-bottom:6px;\"><b>Acknowledgement</b></p>"
+				+ "<p style=\"margin-top:0;\"><b>VisuStruct</b> builds on the open-source structure chart editor by Kevin Krummenauer (MIT).<br/>"
+				+ "Prior source: <a href=\"" + originalUrl + "\">kekru/struktogrammeditor</a> on GitHub.</p>"
 				+ "</body></html>";
 
 		JEditorPane pane = new JEditorPane("text/html", html);
