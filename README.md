@@ -25,10 +25,22 @@ The **user interface** is **mostly English** (menus and many labels); a few stri
 git clone https://github.com/code4teaching/VisuStruct.git
 ```
 
-## Änderungen in Version 1.0.4 (Auszug)
+## Änderungen in Version 1.0.4 (Release-Notizen)
 
-- **Maven:** Koordinaten **`de.visustruct:visustruct:1.0.4`** (Java-Paket **`de.visustruct.*`**); Fat-JAR z. B. **`visustruct-1.0.4.jar`** (über **`finalName`** und **`version`** in der **`pom.xml`**)
-- **Einstellungen:** Datei im Arbeitsverzeichnis heißt **`visustruct.properties`**; eine vorhandene **`struktogrammeditor.properties`** wird einmalig übernommen und beim nächsten Speichern durch die neue Datei ersetzt
+Diese Version richtet **Marke und technische Identität** an **VisuStruct** aus. **Projektdateien** (`.visustruct` / XML) sind unverändert lesbar; im XML werden Elementtypen weiterhin numerisch gespeichert.
+
+- **Java-Paket:** Quellcode unter **`de.visustruct`** (`control`, `view`, `other`, `struktogrammelemente`) statt `de.kekru.struktogrammeditor`.
+- **Maven:** Koordinaten **`de.visustruct:visustruct:1.0.4`** (`artifactId` **visustruct**). Wer das Projekt als Abhängigkeit einbindet, muss **groupId**, **artifactId** und ggf. **version** anpassen. Fat-JAR-Name: **`visustruct-1.0.4.jar`** (über `finalName` / `version` in der `pom.xml`). Der Release-Workflow liefert zusätzlich **`visustruct.jar`** mit festem Dateinamen.
+- **Einstellungen (Benutzer):** Standarddatei im Arbeitsverzeichnis **`visustruct.properties`**. Existiert nur noch **`struktogrammeditor.properties`**, werden die Werte beim Start übernommen; beim nächsten Speichern der Einstellungen schreibt die App **`visustruct.properties`** und entfernt die alte Datei, sofern möglich.
+- **macOS (`.app`):** **Bundle-Identifier** und **UTI** für Dokumenttypen sind auf **`de.visustruct.*`** umgestellt. Nach dem Wechsel der App ggf. **„Öffnen mit“** für `.visustruct` erneut zuordnen. **jpackage**-Skripte verwenden **`de.visustruct.control.Main`**.
+- **Herkunft / Lizenz:** Verweise auf das **Upstream-Projekt** [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) bleiben in README und Infodialog (Attribution, MIT).
+
+### English (summary for 1.0.4)
+
+- Java packages moved to **`de.visustruct.*`**; Maven coordinates **`de.visustruct:visustruct:1.0.4`**. Main class **`de.visustruct.control.Main`**.
+- Settings file is now **`visustruct.properties`**, with one-time migration from **`struktogrammeditor.properties`** on save.
+- macOS bundle ID / document UTI updated to **`de.visustruct`**; you may need to re-assign **Open With** for `.visustruct`.
+- **`.visustruct` / XML project files** remain compatible; upstream **kekru/struktogrammeditor** remains credited in README and the about dialog.
 
 ## Änderungen in Version 1.0.3 (Auszug)
 
