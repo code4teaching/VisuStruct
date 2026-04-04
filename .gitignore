@@ -18,6 +18,7 @@ buildNumber.properties
 settings.json
 
 struktogrammeditor.properties
+visustruct.properties
 
 .DS_Store
 

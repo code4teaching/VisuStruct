@@ -4,7 +4,7 @@
 # Voraussetzung: JDK 17+ mit jpackage (im PATH oder JAVA_HOME).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-VER="${PROJECT_VERSION:-1.0.3}"
+VER="${PROJECT_VERSION:-1.0.4}"
 JAR="visustruct-${VER}.jar"
 INPUT="${ROOT}/target"
 OUT="${ROOT}/dist/macos-app"
@@ -30,7 +30,7 @@ mkdir -p "${OUT}"
 	--type app-image \
 	--input "${INPUT}" \
 	--main-jar "${JAR}" \
-	--main-class de.kekru.struktogrammeditor.control.Main \
+	--main-class de.visustruct.control.Main \
 	--name "VisuStruct" \
 	--app-version "${VER}" \
 	--dest "${OUT}" \
