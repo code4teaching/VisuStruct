@@ -23,6 +23,8 @@ public class Main {
 		boolean isMac = os.contains("mac");
 		if (isMac) {
 			System.setProperty("sun.java2d.metal", "false");
+			// Menü im Fenster: Mit FlatLaf + Bildschirm-Menüleiste sind unter macOS oft „Speichern“ u. a. grau oder ohne Wirkung.
+			System.setProperty("apple.laf.useScreenMenuBar", "false");
 			// Menüleiste links neben „Apple“: Anzeigename statt Startklassenname „Main“
 			// (muss vor dem ersten AWT-Zugriff gesetzt werden, gleicher Wert wie GlobalSettings.APP_DISPLAY_NAME).
 			System.setProperty("apple.awt.application.name", GlobalSettings.APP_DISPLAY_NAME);

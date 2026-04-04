@@ -49,8 +49,22 @@ public final class VisuStructTheme {
 		UIManager.put("PopupMenu.foreground", c(text));
 		UIManager.put("Menu.selectionBackground", c(select));
 		UIManager.put("Menu.selectionForeground", c(text));
+		UIManager.put("Menu.acceleratorForeground", c(muted));
+		UIManager.put("MenuItem.background", c(surface));
+		UIManager.put("MenuItem.foreground", c(text));
+		UIManager.put("MenuItem.disabledForeground", c(muted));
 		UIManager.put("MenuItem.selectionBackground", c(select));
 		UIManager.put("MenuItem.selectionForeground", c(text));
+		UIManager.put("CheckBoxMenuItem.background", c(surface));
+		UIManager.put("CheckBoxMenuItem.foreground", c(text));
+		UIManager.put("CheckBoxMenuItem.disabledForeground", c(muted));
+		UIManager.put("CheckBoxMenuItem.selectionBackground", c(select));
+		UIManager.put("CheckBoxMenuItem.selectionForeground", c(text));
+		UIManager.put("RadioButtonMenuItem.background", c(surface));
+		UIManager.put("RadioButtonMenuItem.foreground", c(text));
+		UIManager.put("RadioButtonMenuItem.disabledForeground", c(muted));
+		UIManager.put("RadioButtonMenuItem.selectionBackground", c(select));
+		UIManager.put("RadioButtonMenuItem.selectionForeground", c(text));
 
 		UIManager.put("TabbedPane.background", c(bg));
 		UIManager.put("TabbedPane.foreground", c(text));

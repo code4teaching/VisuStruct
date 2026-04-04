@@ -16,7 +16,7 @@ public class MacHandler implements AboutHandler, QuitHandler {
 
 	public MacHandler(Controlling controlling) {
 
-		System.getProperties().put("apple.laf.useScreenMenuBar", "true");
+		// apple.laf.useScreenMenuBar wird in Main gesetzt (Menü im Fenster für zuverlässiges Speichern unter FlatLaf).
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", GlobalSettings.guiTitel);
 
 		this.controlling = controlling;

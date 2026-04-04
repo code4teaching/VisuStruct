@@ -1,5 +1,4 @@
 package de.visustruct.control;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
+import java.awt.Window;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -31,8 +33,10 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -90,6 +94,8 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private StruktogrammElementListe dragZwischenlagerListe; //die dragZwischenlagerElement übergeordnete StruktogrammElementListe
 	private Rectangle rectVorschau; //Bereich, wo das rote Vorschau-Rechteck erscheinen soll, wenn ein Element auf das Struktogramm gezogen wird; rectVorschau wird vom jeweiligen StruktogrammElement, dass sich an der aktuellen Mauspsosition befindet, gesetzt
 	private String aktuellerSpeicherpfad; //der absolute Pfad, wo dieses Struktogramm gespeichert wurde, oder von wo es geladen wurde
+	/** Ohne gesetzten Speicherpfad: Basisname für den Speichern-unter-Dialog (z. B. nach Tab-Umbenennung). */
+	private String vorgeschlagenerSpeicherBasisname = "";
 	//private boolean ueberwacheResize = false; //speichert, ob das Struktogramm auf Größenveränderungen der GUI reagieren soll; der Wert wird von der GUI gesetzt
 	private ArrayList<Document> rueckgaengigListe; //Liste mit Document-Objekte, in denen jeweils ein komplettes Struktogramm gespeichert ist; nach jeder Veränderung wird ein neues Abbild des Struktogramms in die Liste abgelegt, für die Rückgängig-Funktion
 	private int posInRueckgaengigListe = 0; //aktueller Index, an welcher Stelle man sich in der Rückgängig-Liste befindet; meist ist der Wert der letzte Index der Rückgängig-Liste, außer man hat auf Rückgängig geklickt
@@ -123,7 +129,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	public Struktogramm(StrTabbedPane tabbedpane){
 		super(true);
 
-		setBackground(Color.white);
+		setBackground(CanvasStyle.BACKGROUND);
 
 		this.tabbedpane = tabbedpane;
 
@@ -313,18 +319,17 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			//Zunächst wird auf das BufferedImage bild mit dem Graphics-Kontext g gezeichnet
 			applyCanvasRenderingHints(g);
 
-			//alten Inhalt mit einem weißen ausgefüllten Rechteck übermalen
-			g.setColor(Color.white);
+			g.setColor(CanvasStyle.BACKGROUND);
 			g.fillRect(0, 0, getWidth(), getHeight());
-			g.setColor(Color.black);
-			
+
 			if(!struktogrammBeschreibung.isEmpty()){
 				Font f = g.getFont();
 				g.setFont(new Font(f.getFamily(), f.getStyle(), 20));
+				g.setColor(CanvasStyle.TITLE_TEXT);
 				g.drawString(struktogrammBeschreibung, getXVerschiebungForCenteredText(struktogrammBeschreibung, dimGroesse.width, g), 35);
 				g.setFont(f);
+				g.setColor(CanvasStyle.DIAGRAM_FRAME);
 				g.drawRect(10,10,dimGroesse.width-21, dimGroesse.height -21);
-				
 			}
 
 			//alle StruktogrammElemente zeichnen
@@ -332,16 +337,18 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 
 			if (rectVorschau != null){//wenn die Vorschau gezeichnet werden soll...
-				g.setColor(Color.red);
-				g.fillRect(rectVorschau.x,rectVorschau.y,rectVorschau.width,rectVorschau.height);//...rotes Rechteck zeichnen
+				g.setColor(CanvasStyle.DROP_PREVIEW);
+				g.fillRect(rectVorschau.x,rectVorschau.y,rectVorschau.width,rectVorschau.height);
 			}
 
 
 			if (dragZwischenlagerElement != null){//wenn gerade ein Element aus dem Struktogramm gezogen wird...
 				Rectangle rectDragElement = dragZwischenlagerElement.gibRectangle();
-				g.setColor(Color.blue);
-				g.drawRect(rectDragElement.x,rectDragElement.y,rectDragElement.width,rectDragElement.height);//...blauen Rahmen zeichnen
-				g.drawRect(rectDragElement.x+1,rectDragElement.y+1,rectDragElement.width-2,rectDragElement.height-2);//und noch einen Rahmen in dem Anderen zeichnen, damit die Umrandung breiter ist
+				Stroke alt = g.getStroke();
+				g.setStroke(new BasicStroke(2f));
+				g.setColor(CanvasStyle.DRAG_FRAME);
+				g.drawRect(rectDragElement.x,rectDragElement.y,rectDragElement.width,rectDragElement.height);
+				g.setStroke(alt);
 			}
 
 
@@ -454,7 +461,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		posInRueckgaengigListe = rueckgaengigListe.size() -1; //aktuelle Position ist die Letzte in der Liste
 
 		if(tabbedpaneTitelAnpassen)  //bei Bedarf Titel aktualisieren
-			tabbedpane.titelDerAktuellenSeiteAlsBearbeitetOderAlsGespespeichertMarkieren(true);//true sagt, das Struktogramm wurde bearbeitet, also soll an den Titel ein (*) angehangen werden
+			tabbedpane.titelFuerStruktogrammBearbeitetMarkieren(this, true);//true sagt, das Struktogramm wurde bearbeitet, also soll an den Titel ein (*) angehangen werden
 	}
 
 
@@ -793,7 +800,70 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	private void setzeAktuellerSpeicherpfad(String pfad){
 		aktuellerSpeicherpfad = pfad;
-		tabbedpane.titelDerAktuellenSeiteSetzen(aktuellerSpeicherpfad.substring(pfad.lastIndexOf(File.separatorChar)+1));//der Titel des JTabbedPane wird gesetzt, dazu wird aus dem aktuellen Pfad der letzte \ oder / gesucht und der String danach übergeben, es soll also nur der Dateiname, ohne Pfad im Titel des JTabbedPane erscheinen
+		vorgeschlagenerSpeicherBasisname = "";
+		String name = new File(pfad).getName();
+		if (name.isEmpty()) {
+			name = "document";
+		}
+		tabbedpane.titelFuerStruktogrammSetzen(this, name);//nur der Dateiname im Reiter, unabhängig vom aktiven Tab
+	}
+
+	/** Nur wenn noch kein Speicherpfad: Dateiname ohne Pfad/Endung für „Speichern unter“. */
+	public void setVorgeschlagenenSpeicherBasisnamen(String name) {
+		String s = sanitizeDateiBasisname(name);
+		vorgeschlagenerSpeicherBasisname = s;
+	}
+
+	private static String sanitizeDateiBasisname(String s) {
+		if (s == null) {
+			return "";
+		}
+		String t = s.trim().replaceAll("[\\\\/:*?\"<>|]", "_").replaceAll("\\s+", " ").strip();
+		if (t.length() > 120) {
+			t = t.substring(0, 120);
+		}
+		return t;
+	}
+
+	/**
+	 * In {@code pathfiles} steht oft der zuletzt genutzte <b>Datei</b>pfad — {@link JFileChooser#setCurrentDirectory}
+	 * braucht aber ein existierendes <b>Verzeichnis</b> (sonst z. B. unter macOS kein zuverlässiger Dialog).
+	 */
+	private static File ermittleChooserStartVerzeichnis(String pfadHinweis) {
+		if (pfadHinweis == null || pfadHinweis.isEmpty()) {
+			return new File(System.getProperty("user.home", "."));
+		}
+		File f = new File(pfadHinweis);
+		try {
+			f = f.getCanonicalFile();
+		} catch (IOException ignored) {
+			// Originaldatei verwenden
+		}
+		if (f.isDirectory()) {
+			return f;
+		}
+		if (f.isFile()) {
+			File eltern = f.getParentFile();
+			if (eltern != null && eltern.isDirectory()) {
+				return eltern;
+			}
+		}
+		File eltern = f.getParentFile();
+		if (eltern != null && eltern.isDirectory()) {
+			return eltern;
+		}
+		return new File(System.getProperty("user.home", "."));
+	}
+
+	private static void chooserParentInDenVordergrund(Component parent) {
+		Window w = null;
+		if (parent != null) {
+			w = SwingUtilities.getWindowAncestor(parent);
+		}
+		if (w != null) {
+			w.toFront();
+			w.requestFocus();
+		}
 	}
 
 
@@ -907,7 +977,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private void laden(Document document){//Rückgängig-Punkt muss hier nicht gesetzt werden, weil diese Methode nur mit Document Objekten aus der rueckgaengigListe angewandt wird
 		XMLLeser tmp = new XMLLeser();
 		tmp.ladeXLM(document,this);
-		tabbedpane.titelDerAktuellenSeiteAlsBearbeitetOderAlsGespespeichertMarkieren(posInRueckgaengigListeWoZuletztGespeichert != posInRueckgaengigListe);//als bearbeitet markieren ("*" anhängen) (wenn posInRueckgaengigListeWoZuletztGespeichert != posInRueckgaengigListe) oder als abgespeichert (wenn posInRueckgaengigListeWoZuletztGespeichert == posInRueckgaengigListe)
+		tabbedpane.titelFuerStruktogrammBearbeitetMarkieren(this, posInRueckgaengigListeWoZuletztGespeichert != posInRueckgaengigListe);//als bearbeitet markieren ("*" anhängen) (wenn posInRueckgaengigListeWoZuletztGespeichert != posInRueckgaengigListe) oder als abgespeichert (wenn posInRueckgaengigListeWoZuletztGespeichert == posInRueckgaengigListe)
 
 		zeichenbereichAktualisieren();
 		zeichne();
@@ -922,9 +992,9 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileFilter(new StrFileFilter(StrFileFilter.filterAlleSpeicherdateien));
 
-		if(!voreingestellterOrdnerpfad.equals("")){
-			chooser.setCurrentDirectory(new File(voreingestellterOrdnerpfad));//Startordner setzen
-		}
+		chooser.setCurrentDirectory(ermittleChooserStartVerzeichnis(voreingestellterOrdnerpfad));
+
+		chooserParentInDenVordergrund(parentComponent);
 
 		int returnVal = chooser.showOpenDialog(parentComponent);//Öffnen-Dialog anzeigen
 		String pfad = "";
@@ -976,6 +1046,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	//Speicherndialog wird aufgerufen, mit den angegebenen StrFileFilter-Nummern und dem angegebenen Ordnerpfad
 	private String saveFileChooser(int[] struktogrammFilterNummern, String voreingestellterPfad, boolean bildExport){
 		JFileChooser chooser = new JFileChooser();
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 
 		if (bildExport){
 			chooser.setAcceptAllFileFilterUsed(false);
@@ -988,9 +1059,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			chooser.setFileFilter(new StrFileFilter(struktogrammFilterNummern[0]));//Standard: erster Filter (z. B. .visustruct beim Speichern, PNG beim Bildexport)
 		}
 
-		if(!voreingestellterPfad.equals("")){
-			chooser.setCurrentDirectory(new File(voreingestellterPfad));//Startordner setzen
-		}
+		chooser.setCurrentDirectory(ermittleChooserStartVerzeichnis(voreingestellterPfad));
 
 		if (!bildExport) {
 			if (!aktuellerSpeicherpfad.isEmpty()) {
@@ -1005,9 +1074,15 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 				if (dir == null || !dir.isDirectory()) {
 					dir = new File(System.getProperty("user.home", "."));
 				}
-				chooser.setSelectedFile(new File(dir, GlobalSettings.STANDARD_SPEICHERDATEI));
+				String vorschlag = GlobalSettings.STANDARD_SPEICHERDATEI;
+				if (!vorgeschlagenerSpeicherBasisname.isEmpty()) {
+					vorschlag = vorgeschlagenerSpeicherBasisname + ".visustruct";
+				}
+				chooser.setSelectedFile(new File(dir, vorschlag));
 			}
 		}
+
+		chooserParentInDenVordergrund(tabbedpane.gibGUI());
 
 		int returnVal = chooser.showSaveDialog(tabbedpane.gibGUI());//Speicherndialog anzeigen
 		String pfad = "";
@@ -1024,7 +1099,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 			if((new File(pfad)).exists()){ //wenn die ausgewählte Datei bereits existiert, erst nachfragen, ob diese überschrieben werden soll
 				Object[] options = {"Yes", "No"};
-				if (0 != JOptionPane.showOptionDialog(null, "The file " + pfad + " already exists.\nOverwrite?", "File Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
+				if (0 != JOptionPane.showOptionDialog(tabbedpane.gibGUI(), "The file " + pfad + " already exists.\nOverwrite?", "File Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
 					pfad = ""; //es wurde nicht ja gedrückt
 				}
 			}
@@ -1059,22 +1134,26 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 
 	private void xmlAbspeichernOhneFileChooser(String pfad){
-		Document myDocument = xmlErstellen(); //aus dem Struktogramm wird ein Document erstellt
-
-		//myDocument wird mit einem XMLOutputter und FileWriter als xml-Datei gespeichert, siehe http://www.ibm.com/developerworks/java/library/j-jdom/
-		XMLOutputter outputter;
-		try{
-			outputter = new XMLOutputter();
+		if (pfad == null || pfad.isEmpty()) {
+			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
+					"There is no file path to save to. Use “Save As…”.",
+					"Save", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		try {
+			Document myDocument = xmlErstellen();
+			XMLOutputter outputter = new XMLOutputter();
 			outputter.setFormat(Format.getPrettyFormat());
-
-			FileWriter writer = new FileWriter(pfad);
-			outputter.output(myDocument, writer);
-			writer.close();
-
-			tabbedpane.titelDerAktuellenSeiteAlsBearbeitetOderAlsGespespeichertMarkieren(false);
-			posInRueckgaengigListeWoZuletztGespeichert = posInRueckgaengigListe; //festhalten, welcher Zustand zuletzt gespeichert wurde
-		}catch(java.io.IOException e){
+			try (Writer writer = new OutputStreamWriter(new FileOutputStream(pfad), StandardCharsets.UTF_8)) {
+				outputter.output(myDocument, writer);
+			}
+			tabbedpane.titelFuerStruktogrammBearbeitetMarkieren(this, false);
+			posInRueckgaengigListeWoZuletztGespeichert = posInRueckgaengigListe;
+		} catch (Exception e) {
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
+					"The file could not be saved:\n" + e.getMessage(),
+					"Save", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -1314,7 +1393,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 		zeichenbereichAktualisieren();
 		zeichne();
-		tabbedpane.titelDerAktuellenSeiteAlsBearbeitetOderAlsGespespeichertMarkieren(true);
+		tabbedpane.titelFuerStruktogrammBearbeitetMarkieren(this, true);
 	}
 
 

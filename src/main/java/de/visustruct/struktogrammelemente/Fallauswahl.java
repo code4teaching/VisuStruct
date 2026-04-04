@@ -1,12 +1,12 @@
 package de.visustruct.struktogrammelemente;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import org.jdom2.Element;
 
+import de.visustruct.control.CanvasStyle;
 import de.visustruct.control.GlobalSettings;
 import de.visustruct.control.Struktogramm;
 import de.visustruct.control.XMLLeser;
@@ -344,7 +344,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 
 	@Override
 	public void zeichne(){
-		eigenenBereichZeichnen();//Umrandung und eventuell gelbe Unterlegung zeichnen
+		eigenenBereichZeichnen();//Umrandung und Markierungs-Hintergrund zeichnen
 
 		//Fall-Listen zeichnen
 		for (int i=0; i < listen.size(); i++){
@@ -355,6 +355,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 
 
 		//die beiden Schrägen Linien zeichnen
+		g.setColor(CanvasStyle.ELEMENT_BORDER);
 		g.drawLine(gibX(),gibY(),gibX() + xVerschiebungFuerTrennlinie, gibY() +getObererRand() +yVerschiebungFuerTrennLinie);
 		g.drawLine(gibX() + xVerschiebungFuerTrennlinie, gibY() +getObererRand() +yVerschiebungFuerTrennLinie, gibX() + gibBreite(), gibY());
 
@@ -369,7 +370,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 			x = tmp.gibRechterRand();
 
 			if (i != listen.size() -1){//senkrechte Striche zeichnen, die Sonstliste (die Letzte) braucht keinen senkrechten Strich
-				g.setColor(Color.black);
+				g.setColor(CanvasStyle.ELEMENT_BORDER);
 				g.drawLine(x, gibY()+gibHoehe(), x, gibPassendeYKoordFuerLinie(x));
 			}
 

@@ -2,7 +2,6 @@ package de.visustruct.control;
 
 import java.awt.Font;
 import static java.awt.Font.PLAIN;
-import static java.awt.Font.SANS_SERIF;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -16,8 +15,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import de.visustruct.view.CodeErzeuger;
 import de.visustruct.view.ElementBeschriftungPresets;
@@ -48,8 +50,38 @@ public class GlobalSettings implements Konstanten{
 	private static String zuletztGenutzterSpeicherpfad = "";
 	private static String zuletztGenutzterPfadFuerBild = "";
 	private static boolean letzteElementeStrecken = false;
-	/** Lesbare Bildschirmschrift für den Canvas (Sans Serif wirkt auf kleinen Größen klar Serif). */
-	public static final Font fontStandard = new Font(SANS_SERIF, PLAIN, 15);
+	/**
+	 * Standardschrift für den Struktogramm-Canvas: bevorzugt installierte Programmier-Monospace-Schriften,
+	 * sonst {@link Font#MONOSPACED}.
+	 */
+	public static final Font fontStandard = createPreferredMonospaceCanvasFont(15);
+
+	private static Font createPreferredMonospaceCanvasFont(int size) {
+		String[] preferred = {
+			"JetBrains Mono",
+			"JetBrains Mono NL",
+			"Cascadia Mono",
+			"Cascadia Code",
+			"SF Mono",
+			"Menlo",
+			"Monaco",
+			"Consolas",
+			"DejaVu Sans Mono",
+			"Liberation Mono",
+		};
+		try {
+			Set<String> installed = new HashSet<>(Arrays.asList(
+					GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
+			for (String family : preferred) {
+				if (installed.contains(family)) {
+					return new Font(family, Font.PLAIN, size);
+				}
+			}
+		} catch (RuntimeException ignored) {
+			// Headless o. Ä. → Fallback
+		}
+		return new Font(Font.MONOSPACED, PLAIN, size);
+	}
 	private static final String einstellungsDateiPfad = "visustruct.properties";
 	private static final String einstellungsDateiPfadLegacy = "struktogrammeditor.properties";
 	private static final String einstellungsDateiPfadBisVersion1Punkt4 = "StruktogrammeditorEinstellungen.txt";

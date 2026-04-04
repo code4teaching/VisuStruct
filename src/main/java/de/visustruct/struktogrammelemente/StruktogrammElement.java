@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import org.jdom2.Element;
 
+import de.visustruct.control.CanvasStyle;
 import de.visustruct.control.Struktogramm;
 import de.visustruct.control.XMLLeser;
 import de.visustruct.other.JTextAreaEasy;
@@ -20,7 +21,7 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 	private int obererRand; //verändert sich je nach Anzahl der Textzeilen
 	protected int obererRandZusatz; //wird pro von StruktogrammElement abgeleitete Klasse einmal gesetzt; beschreibt zusätzliche Pixelzahl zum für den oberen Rand
 	private int xVergroesserung, yVergroesserung;
-	private Color farbeSchrift = Color.black, farbeHintergrund = Color.white;
+	private Color farbeSchrift = CanvasStyle.ELEMENT_TEXT, farbeHintergrund = Color.white;
 
 	public StruktogrammElement(Graphics2D g){
 		this.g = g;
@@ -350,11 +351,11 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		if (!markiert){
 			g.setColor(farbeHintergrund);//für Rechteck mit eingestellter Farbe
 		}else{
-			g.setColor(Color.yellow);//für gelbes Rechteck als Markierung
+			g.setColor(CanvasStyle.ELEMENT_SELECTED_FILL);
 		}
 		g.fillRect(gibX(), gibY(), gibBreite(), gibHoehe());//ausgefülltes Rechteck zeichnen
-		g.setColor(Color.black);
-		g.drawRect(gibX(), gibY(), gibBreite(), gibHoehe());//schwarzer Rand
+		g.setColor(CanvasStyle.ELEMENT_BORDER);
+		g.drawRect(gibX(), gibY(), gibBreite(), gibHoehe());
 	}
 
 	//Nicht löschen, wird vielleicht später noch genutzt
