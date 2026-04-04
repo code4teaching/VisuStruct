@@ -2,7 +2,7 @@
 
 [![Build-Status](https://github.com/code4teaching/VisuStruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/VisuStruct/actions)
 
-**VisuStruct** ist ein **Struktogramm-Editor** für **Nassi-Shneiderman-Diagramme**: Laufzeit **Java 17+**, Oberfläche mit **FlatLaf**, speichert als **`.visustruct`**.
+**VisuStruct** ist ein **Struktogramm-Editor** für **Nassi-Shneiderman-Diagramme**.
 
 Die **Benutzeroberfläche** ist **überwiegend englisch** (Menüs, viele Beschriftungen); vereinzelte Texte können noch deutsch sein.
 
@@ -13,7 +13,7 @@ Die **Benutzeroberfläche** ist **überwiegend englisch** (Menüs, viele Beschri
 
 ### English
 
-**VisuStruct** is a **structure-chart editor** for **Nassi–Shneiderman diagrams**: **Java 17+**, **FlatLaf** UI, saves **`.visustruct`** files.
+**VisuStruct** is a **structure-chart editor** for **Nassi–Shneiderman diagrams**.
 
 The **user interface** is **mostly English** (menus and many labels); a few strings may still be in German.
 
