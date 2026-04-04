@@ -9,8 +9,6 @@ Dieses **Projektarchiv** ist eine **Abzweigung** (*Fork*) des Originals
 [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor).  
 Es enthält unter anderem Anpassungen für **aktuelle Java-Versionen**, ein **überarbeitetes Aussehen** sowie die Marke **VisuStruct** (Struktogramm-Editor).
 
-Der Maintainer setzt VisuStruct im **Unterricht** und für **Schülerinnen und Schüler** ein — das ist jedoch **kein offizielles Schul- oder Trägerprojekt**; **Pflege, Inhalt und Veröffentlichung** dieses Repositories liegen beim Maintainer und den Mitwirkenden (siehe [LICENSE](LICENSE)).
-
 **Website:** [visustruct.de](https://visustruct.de)  
 **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
@@ -20,8 +18,6 @@ Der Maintainer setzt VisuStruct im **Unterricht** und für **Schülerinnen und S
 The **user interface** is **mostly English** in this fork (menus and many labels); a few strings may still be in German.
 
 This repository is a **fork** of [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor), with updates for **current Java**, a refreshed **look and feel**, and the **VisuStruct** branding.
-
-The maintainer uses VisuStruct in **teaching** and with **students** — this is still **not an official school or district project**; **maintenance, content, and publication** of this repository are the maintainer’s and contributors’ (see [LICENSE](LICENSE)).
 
 **Website:** [visustruct.de](https://visustruct.de) — **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
