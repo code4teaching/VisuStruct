@@ -1,14 +1,14 @@
 # Schreibt die Beschreibung eines bestehenden GitHub-Releases aus release-notes/<Tag>.md.
-# Manuell: Actions → „Release-Notizen an GitHub-Release schreiben“ → Run workflow → Tag z. B. v1.0.5
+# Manuell: Actions → „Release-Notizen an GitHub-Release schreiben“ → Run workflow → Tag z. B. v1.0.6
 name: Release-Notizen an GitHub-Release schreiben
 
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Git-Tag des Releases (z. B. v1.0.5)"
+        description: "Git-Tag des Releases (z. B. v1.0.6)"
         required: true
-        default: "v1.0.5"
+        default: "v1.0.6"
         type: string
 
 permissions:

@@ -8,6 +8,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.SwingUtilities;
 
+import de.visustruct.i18n.I18n;
+
 public class Main {
 
 	/**
@@ -31,6 +33,7 @@ public class Main {
 		}
 
 		GlobalSettings.init();
+		I18n.syncWithSettings();
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", GlobalSettings.guiTitel);
 
 		final String[] startArgs = args != null ? args : new String[0];

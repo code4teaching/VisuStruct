@@ -13,6 +13,7 @@ import javax.swing.event.PopupMenuListener;
 import org.jdom2.Document;
 
 import de.visustruct.control.Struktogramm;
+import de.visustruct.i18n.I18n;
 import de.visustruct.struktogrammelemente.Fallauswahl;
 import de.visustruct.struktogrammelemente.StruktogrammElement;
 import de.visustruct.struktogrammelemente.Verzweigung;
@@ -43,50 +44,50 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 
 		// Platzhalter „ø“: nur Einfügen — kein Bearbeiten/Kopieren/Löschen/Zoom für ein LeerElement.
 		if (typ == Struktogramm.typLeerElement) {
-			einfuegen("Paste", 14);
+			einfuegen(I18n.tr("popup.paste"), 14);
 			return;
 		}
 
-		StrPopupUntermenue untermenue = unterMenueEinfuegen("Zoom");
-		untermenue.einfuegen("Larger",8,-1);
-		untermenue.einfuegen("Smaller",9,-1);
+		StrPopupUntermenue untermenue = unterMenueEinfuegen(I18n.tr("popup.zoom"));
+		untermenue.einfuegen(I18n.tr("popup.zoom.larger"), 8, -1);
+		untermenue.einfuegen(I18n.tr("popup.zoom.smaller"), 9, -1);
 		untermenue.add(new JSeparator());
-		untermenue.einfuegen("Wider",10,-1);
-		untermenue.einfuegen("Narrower",11,-1);
+		untermenue.einfuegen(I18n.tr("popup.zoom.wider"), 10, -1);
+		untermenue.einfuegen(I18n.tr("popup.zoom.narrower"), 11, -1);
 		untermenue.add(new JSeparator());
-		untermenue.einfuegen("Taller",12,-1);
-		untermenue.einfuegen("Shorter",13,-1);
+		untermenue.einfuegen(I18n.tr("popup.zoom.taller"), 12, -1);
+		untermenue.einfuegen(I18n.tr("popup.zoom.shorter"), 13, -1);
 		add(new JSeparator());
 
-		einfuegen("Edit Text",0);
-		einfuegen("Copy",7);
-		einfuegen("Paste",14);
-		einfuegen("Delete...",1);
+		einfuegen(I18n.tr("popup.editText"), 0);
+		einfuegen(I18n.tr("popup.copy"), 7);
+		einfuegen(I18n.tr("popup.paste"), 14);
+		einfuegen(I18n.tr("popup.delete"), 1);
 
 		switch(typ){
 		case Struktogramm.typVerzweigung: //Bei Verzweigung diesen Menüpunkt hinzufügen:
 			add(new JSeparator());
-			einfuegen("Swap true and false branches",2);
+			einfuegen(I18n.tr("popup.swapBranches"), 2);
 			break;
 
 		case Struktogramm.typFallauswahl: //Bei Fallauswahl diese Menüpunkte hinzufügen:
 			add(new JSeparator());
 
-			einfuegen("Insert New Case",3);
+			einfuegen(I18n.tr("popup.insertNewCase"), 3);
 
 			String[] faelle = element.gibFaelle();
 
 			for (int i=0; i < faelle.length; i++){
 
-				untermenue = unterMenueEinfuegen("Case: "+faelle[i]);
+				untermenue = unterMenueEinfuegen(I18n.trf("popup.caseSubmenu", faelle[i]));
 
-				if (i > 0)
-					untermenue.einfuegen("Move case \""+faelle[i]+"\" left", 4, i);
-
+				if (i > 0) {
+					untermenue.einfuegen(I18n.trf("popup.moveCaseLeft", faelle[i]), 4, i);
+				}
 
 				if (i < faelle.length -1){
-					untermenue.einfuegen("Move case \""+faelle[i]+"\" right", 5, i);
-					untermenue.einfuegen("Remove case \""+faelle[i]+"\"", 6, i);
+					untermenue.einfuegen(I18n.trf("popup.moveCaseRight", faelle[i]), 5, i);
+					untermenue.einfuegen(I18n.trf("popup.removeCase", faelle[i]), 6, i);
 				}
 
 			}
@@ -194,7 +195,10 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 			break;
 
 			case 6: String fallname = ((Fallauswahl)element).gibFaelle()[fallnummer]; //Spalte bzw. Fall löschen
-			if (JOptionPane.showConfirmDialog(null, "Delete case \""+fallname+"\" and all nested blocks?", "Remove Case", JOptionPane.YES_NO_OPTION) == 0){
+			if (JOptionPane.showConfirmDialog(struktogramm,
+					I18n.trf("popup.removeCaseConfirm", fallname),
+					I18n.tr("popup.removeCaseTitle"),
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
 				((Fallauswahl)element).entferneSpalte(fallnummer);
 			}else{
 				mussSpeicherpunktSetzen = false;
@@ -208,7 +212,7 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 			case 14: {
 				Document kopie = struktogramm.gibTabbedPane().gibGUI().gibAuswahlPanel().gibKopiertesStrElement();
 				if (kopie == null) {
-					JOptionPane.showMessageDialog(struktogramm, "Nothing copied yet. Use Copy first.", "Paste",
+					JOptionPane.showMessageDialog(struktogramm, I18n.tr("popup.pasteEmpty"), I18n.tr("popup.pasteTitle"),
 							JOptionPane.INFORMATION_MESSAGE);
 					mussSpeicherpunktSetzen = false;
 				} else {

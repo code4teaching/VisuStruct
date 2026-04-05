@@ -39,12 +39,15 @@ import org.jdom2.Document;
 
 import de.visustruct.control.Controlling;
 import de.visustruct.control.Struktogramm;
+import de.visustruct.i18n.I18n;
 
 
 public class AuswahlPanel extends JPanel implements DropTargetListener, DragGestureListener, DragSourceListener{
 
 	private static final long serialVersionUID = 3619714917985247680L;
 	private AuswahlPanelElement[] panelElemente = new AuswahlPanelElement[9]; //9 StruktogrammElemente stehen zur Auswahl
+	private JButton palettePngButton;
+	private JButton paletteInfoButton;
 	private DragSource dragSource;
 	//private DropTarget dropTarget;
 	private JLabel muelleimer;
@@ -99,22 +102,22 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		muelleimerAuf(!muelleimerIstAuf);
 		muelleimer.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 		muelleimer.setHorizontalAlignment(SwingConstants.CENTER);
-		muelleimer.setToolTipText("Drop here to delete");
+		muelleimer.setToolTipText(I18n.tr("palette.trashDrop"));
 		add(muelleimer, c);
 
 		c.gridy++;
 		c.insets = new Insets(1, 0, 3, 0);
 
-		JButton pngExport = paletteAktionsButton("Export PNG");
-		pngExport.addActionListener(e -> controlling.bildSpeichernNurPng());
-		add(pngExport, c);
+		palettePngButton = paletteAktionsButton(I18n.tr("palette.exportPng"));
+		palettePngButton.addActionListener(e -> controlling.bildSpeichernNurPng());
+		add(palettePngButton, c);
 		c.gridy++;
 
-		JButton infoBtn = paletteIconButton('\u2139', "Über VisuStruct", "Information");
-		infoBtn.addActionListener(e -> controlling.showInfo());
+		paletteInfoButton = paletteIconButton('\u2139', I18n.tr("palette.aboutTooltip"), I18n.tr("palette.aboutAccessible"));
+		paletteInfoButton.addActionListener(e -> controlling.showInfo());
 		JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
 		infoRow.setOpaque(false);
-		infoRow.add(infoBtn);
+		infoRow.add(paletteInfoButton);
 		add(infoRow, c);
 		c.gridy++;
 
@@ -151,6 +154,14 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 	
 	
 	public void aktualisiereBeschriftungen(){
+		muelleimer.setToolTipText(I18n.tr("palette.trashDrop"));
+		if (palettePngButton != null) {
+			palettePngButton.setText(I18n.tr("palette.exportPng"));
+		}
+		if (paletteInfoButton != null) {
+			paletteInfoButton.setToolTipText(I18n.tr("palette.aboutTooltip"));
+			paletteInfoButton.getAccessibleContext().setAccessibleName(I18n.tr("palette.aboutAccessible"));
+		}
 		for (AuswahlPanelElement el : panelElemente) {
 			el.aktualisiereBeschriftung();
 		}

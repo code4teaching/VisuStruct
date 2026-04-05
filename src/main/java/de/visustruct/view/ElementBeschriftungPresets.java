@@ -2,6 +2,9 @@ package de.visustruct.view;
 
 import java.util.Arrays;
 
+import de.visustruct.i18n.I18n;
+import de.visustruct.i18n.StructureElementI18n;
+
 /**
  * Fest vorgegebene Textvorlagen für neu eingefügte Elemente (keine freie Eingabe).
  * Muss dieselbe Länge haben wie {@link EinstellungsDialog#anzahlStruktogrammElemente}.
@@ -11,17 +14,13 @@ public final class ElementBeschriftungPresets {
 	public static final int PRESET_KLASSISCH = 0;
 	public static final int PRESET_FORMAL = 1;
 	public static final int PRESET_JAVA_NA = 2;
-	/** Wie {@link StruktogrammPalette#getDefaultTextForNewElement(int)} — Programm-Standard. */
+	/** Syntaxnahe Java-Vorgaben ({@code if}, {@code condition}, …) — Programm-Standard; Anzeigename z. B. „Java (Standard)“. */
 	public static final int PRESET_ENGLISH_JAVA = 3;
-	public static final int ANZAHL_PRESETS = 4;
+	/** Didaktische Begriffe gemäß UI-Sprache ({@link StructureElementI18n}). */
+	public static final int PRESET_DIDACTIC_I18N = 4;
+	public static final int ANZAHL_PRESETS = 5;
 
 	private static final int N = 10;
-
-	/** Anzeigenamen für die Radiobuttons. */
-	public static final String[] PRESET_NAMEN = {
-			"Klassisch (Schule, deutsch)", "Formal (deutsch)", "Deutsch, Java-ähnlich",
-			"Englisch / Java (Standard)"
-	};
 
 	private static final String[][] PRESETS = {
 			{"Anweisung", "Verzweigung", "Fallauswahl", "0 < i < anzahl", "While Schleife", "Do-While Schleife",
@@ -34,13 +33,8 @@ public final class ElementBeschriftungPresets {
 					"condition", "condition", "\u221e", "break", "method()", "\u00f8"},
 	};
 
-	private static final String[] VORSCHAU_BESCHRIFTUNG = {
-			"Anweisung", "Verzweigung", "Fallauswahl", "For-/Z\u00e4hlerschleife", "While-Schleife",
-			"Do-Until-Schleife", "Endlosschleife", "Aussprung", "Aufruf", "Leer-Element"
-	};
-
 	static {
-		if (PRESETS.length != ANZAHL_PRESETS || PRESET_NAMEN.length != ANZAHL_PRESETS) {
+		if (PRESETS.length != ANZAHL_PRESETS - 1) {
 			throw new IllegalStateException("Preset-Anzahl");
 		}
 		for (String[] row : PRESETS) {
@@ -48,15 +42,32 @@ public final class ElementBeschriftungPresets {
 				throw new IllegalStateException("Preset-L\u00e4nge");
 			}
 		}
-		if (VORSCHAU_BESCHRIFTUNG.length != N) {
-			throw new IllegalStateException("Vorschau-Labels");
-		}
 	}
 
 	private ElementBeschriftungPresets() {
 	}
 
+	public static String getPresetAnzeigename(int index) {
+		switch (index) {
+		case PRESET_KLASSISCH:
+			return I18n.tr("elementPreset.classic");
+		case PRESET_FORMAL:
+			return I18n.tr("elementPreset.formal");
+		case PRESET_JAVA_NA:
+			return I18n.tr("elementPreset.javaLikeDe");
+		case PRESET_ENGLISH_JAVA:
+			return I18n.tr("elementPreset.englishJava");
+		case PRESET_DIDACTIC_I18N:
+			return I18n.tr("menu.settings.labelsStruktogramm");
+		default:
+			return I18n.tr("elementPreset.englishJava");
+		}
+	}
+
 	public static String[] gibPresetZeile(int index) {
+		if (index == PRESET_DIDACTIC_I18N) {
+			return StructureElementI18n.didacticDefaultTexts();
+		}
 		if (index < 0 || index >= ANZAHL_PRESETS) {
 			return PRESETS[PRESET_ENGLISH_JAVA];
 		}
@@ -79,10 +90,11 @@ public final class ElementBeschriftungPresets {
 			return -1;
 		}
 		for (int p = 0; p < ANZAHL_PRESETS; p++) {
+			String[] ref = gibPresetZeile(p);
 			boolean match = true;
 			for (int i = 0; i < N; i++) {
 				String a = aktuell[i] != null ? aktuell[i].trim() : "";
-				if (!PRESETS[p][i].equals(a)) {
+				if (!ref[i].equals(a)) {
 					match = false;
 					break;
 				}
@@ -101,7 +113,7 @@ public final class ElementBeschriftungPresets {
 			if (i > 0) {
 				sb.append('\n');
 			}
-			sb.append(VORSCHAU_BESCHRIFTUNG[i]).append(": ").append(row[i]);
+			sb.append(StructureElementI18n.previewRowLabel(i)).append(": ").append(row[i]);
 		}
 		return sb.toString();
 	}

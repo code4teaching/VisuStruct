@@ -38,11 +38,13 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import de.visustruct.view.UiTheme;
 
+import de.visustruct.i18n.I18n;
 import de.visustruct.other.Helpers;
 import de.visustruct.other.XActionCommands;
 import de.visustruct.struktogrammelemente.StruktogrammElement;
 import de.visustruct.view.AuswahlPanel;
 import de.visustruct.view.CodeErzeuger;
+import de.visustruct.view.EinstellungsDialog;
 import de.visustruct.view.FontChooser;
 import de.visustruct.view.GUI;
 import de.visustruct.view.ZoomEinstellungen;
@@ -56,6 +58,8 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		handleOSSettingsAndTheme();
 
 		gui = new GUI(this);
+		// Nach vollständigem LaF/Layout: Paletten-Texte erneut setzen (sonst kann updateUI/Texte überschreiben).
+		SwingUtilities.invokeLater(this::aktualisierePalettenBeschriftungen);
 		neuesStruktogramm();		
 
 		if(params != null){
@@ -287,7 +291,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			break;
 
 		case quellcodeErzeugen:
-			new CodeErzeuger(gui, "Generate Source Code", true, gibAktuellesStruktogramm());
+			new CodeErzeuger(gui, I18n.tr("menu.file.generateCode"), true, gibAktuellesStruktogramm());
 			break;
 
 		case struktogrammSchliessen:
@@ -312,6 +316,10 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 		case letztesElementStrecken:
 			letzteElementeStreckenGeklickt(e.getSource());
+			break;
+
+		case elementBeschriftungEinstellen:
+			new EinstellungsDialog(gui, true);
 			break;
 
 		case schriftartAendern:
@@ -357,6 +365,18 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		case lookAndFeelFlatDark:
 			changeTheme(lookAndFeelFlatDark);
 			break;
+
+		case languageEnglish:
+			changeUiLanguageIfNeeded("en");
+			break;
+
+		case languageGerman:
+			changeUiLanguageIfNeeded("de");
+			break;
+
+		case languagePortuguesePortugal:
+			changeUiLanguageIfNeeded("pt_PT");
+			break;
 			
 		case struktogrammbeschreibungHinzufuegen:
 			addStruktogrammbeschriftung();
@@ -367,9 +387,32 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 	}
 
 
+	private void changeUiLanguageIfNeeded(String tag) {
+		String next = GlobalSettings.normalizeUiLanguageTag(tag);
+		if (next.equals(GlobalSettings.getUiLanguageTag())) {
+			return;
+		}
+		GlobalSettings.setUiLanguageTag(next);
+		I18n.syncWithSettings();
+		GlobalSettings.saveSettings();
+		gui.rebuildMenuBar();
+		SwingUtilities.updateComponentTreeUI(gui);
+		gui.validate();
+		// Nach updateComponentTreeUI (FlatLaf), sonst bleiben Paletten-Buttons oft auf der alten Sprache.
+		aktualisierePalettenBeschriftungen();
+		SwingUtilities.invokeLater(this::aktualisierePalettenBeschriftungen);
+	}
+
+	private void aktualisierePalettenBeschriftungen() {
+		if (gui == null) {
+			return;
+		}
+		gui.gibAuswahlPanel().aktualisiereBeschriftungen();
+	}
+
 	private void addStruktogrammbeschriftung() {
 		Struktogramm str = gibAktuellesStruktogramm();
-		String s = JOptionPane.showInputDialog("Diagram caption", str.getStruktogrammBeschreibung());
+		String s = JOptionPane.showInputDialog(gui, I18n.tr("dialog.diagramCaption"), str.getStruktogrammBeschreibung());
 		if(s == null){
 			return;
 		}
@@ -387,6 +430,8 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		applyConfiguredTheme();
 		SwingUtilities.updateComponentTreeUI(gui);
 		gui.validate();
+		aktualisierePalettenBeschriftungen();
+		SwingUtilities.invokeLater(this::aktualisierePalettenBeschriftungen);
 		gui.gibTabbedpane().refreshAllStruktogrammeNachThemeWechsel();
 	}
 

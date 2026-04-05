@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
@@ -49,6 +50,12 @@ public class GlobalSettings implements Konstanten{
 	 * Persistenzschlüssel in der Properties-Datei bleibt {@code lookandfeel} (Abwärtskompatibilität).
 	 */
 	private static int lookAndFeelAktuell = 4;
+
+	/** UI-Sprache: {@code en}, {@code de} oder {@code pt_PT} (Portugal; Menüleiste, I18n). */
+	private static String uiLanguageTag = "en";
+
+	/** {@code true}, wenn {@code uilanguage} in der geladenen Properties-Datei stand (sonst JVM-Locale als Vorgabe). */
+	private static boolean uiLanguageFromPropertiesFile = false;
 
 	private static String zuletztGenutzterSpeicherpfad = "";
 	private static String zuletztGenutzterPfadFuerBild = "";
@@ -132,7 +139,11 @@ public class GlobalSettings implements Konstanten{
 	}
 
 	public static void init(){
+		uiLanguageFromPropertiesFile = false;
 		loadSettings();
+		if (!uiLanguageFromPropertiesFile) {
+			applyDefaultUiLanguageFromRuntimeLocale();
+		}
 	}
 	
 	private static void readBuildInfoFile(){
@@ -293,6 +304,27 @@ public class GlobalSettings implements Konstanten{
 				// ungültig → Standard beibehalten
 			}
 		}
+
+		s = pr.getProperty("uilanguage");
+		if (s != null && !s.isEmpty()) {
+			setUiLanguageTag(s);
+			uiLanguageFromPropertiesFile = true;
+		}
+	}
+
+	/** Wenn keine {@code uilanguage} in den Einstellungen: an JVM-Locale anlehnen (z. B. deutsch → {@code de}). */
+	private static void applyDefaultUiLanguageFromRuntimeLocale() {
+		Locale def = Locale.getDefault();
+		String lang = def.getLanguage();
+		if ("de".equals(lang)) {
+			setUiLanguageTag("de");
+			return;
+		}
+		if ("pt".equals(lang) && "PT".equalsIgnoreCase(def.getCountry())) {
+			setUiLanguageTag("pt_PT");
+			return;
+		}
+		setUiLanguageTag("en");
 	}
 	
 	
@@ -319,6 +351,8 @@ public class GlobalSettings implements Konstanten{
 		properties.setProperty("lookandfeel", ""+lookAndFeelAktuell);
 
 		properties.setProperty("elementbeschriftungpreset", "" + elementBeschriftungPresetIndex);
+
+		properties.setProperty("uilanguage", uiLanguageTag);
 
 		try {
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(einstellungsDateiPfad)));
@@ -484,5 +518,51 @@ public class GlobalSettings implements Konstanten{
 
 	public static void setLookAndFeelAktuell(int themeIndex) {
 		GlobalSettings.lookAndFeelAktuell = themeIndex;
+	}
+
+	/** Locale für die UI-Texte: Englisch, Deutsch oder Português (Portugal, {@code pt-PT}). */
+	public static Locale getUiLocale() {
+		if ("de".equals(uiLanguageTag)) {
+			return Locale.GERMAN;
+		}
+		if ("pt_PT".equals(uiLanguageTag)) {
+			return Locale.forLanguageTag("pt-PT");
+		}
+		return Locale.ENGLISH;
+	}
+
+	public static String getUiLanguageTag() {
+		return uiLanguageTag;
+	}
+
+	/** Kanonische Tags: {@code en}, {@code de}, {@code pt_PT}. */
+	public static String normalizeUiLanguageTag(String tag) {
+		if (tag == null || tag.isBlank()) {
+			return "en";
+		}
+		String t = tag.trim();
+		if (t.equalsIgnoreCase("de")) {
+			return "de";
+		}
+		String hy = t.replace('_', '-').toLowerCase(Locale.ROOT);
+		if ("pt-pt".equals(hy)) {
+			return "pt_PT";
+		}
+		return "en";
+	}
+
+	/**
+	 * Setzt die UI-Sprache; unbekannte Werte werden wie {@code en} behandelt.
+	 */
+	public static void setUiLanguageTag(String tag) {
+		uiLanguageTag = normalizeUiLanguageTag(tag);
+	}
+
+	public static boolean isUiGerman() {
+		return "de".equals(uiLanguageTag);
+	}
+
+	public static boolean isUiPortuguesePortugal() {
+		return "pt_PT".equals(uiLanguageTag);
 	}
 }

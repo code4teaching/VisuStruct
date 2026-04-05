@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import de.visustruct.i18n.StructureElementI18n;
+
 /** Klickbare Kachel zum Ziehen eines neuen Struktogramm-Elements (FlatLaf-Button-Look). */
 public class AuswahlPanelElement extends JButton {
 
@@ -39,8 +41,9 @@ public class AuswahlPanelElement extends JButton {
 
 	public void aktualisiereBeschriftung() {
 		setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		setText(StruktogrammPalette.getPaletteButtonKurzEnglish(typ));
-		setToolTipText(StruktogrammPalette.getPaletteElementTooltipEnglish(typ));
+		// Immer UI-Sprache (I18n); Standardtexte neuer Blöcke weiter über das Text-Preset (Java usw.).
+		setText(StructureElementI18n.paletteShortLabel(typ));
+		setToolTipText(StructureElementI18n.paletteTooltip(typ));
 		invalidate();
 		revalidate();
 		repaint();
