@@ -44,12 +44,16 @@ public class GlobalSettings implements Konstanten{
 	public static String buildInfoGitHash = "";
 	public static String buildInfoBuildTime = "";
 	
-	/** Standard: FlatLaf Hell (VisuStruct-Erscheinungsbild). */
+	/**
+	 * Gewähltes UI-Theme (Menü „Settings → Theme“); technisch der Swing-LaF-Index.
+	 * Persistenzschlüssel in der Properties-Datei bleibt {@code lookandfeel} (Abwärtskompatibilität).
+	 */
 	private static int lookAndFeelAktuell = 4;
 
 	private static String zuletztGenutzterSpeicherpfad = "";
 	private static String zuletztGenutzterPfadFuerBild = "";
-	private static boolean letzteElementeStrecken = false;
+	/** Standard an: Spalten bei Verzweigung/Fallauswahl unten bündig (letztes Element wird bei Bedarf gestreckt). */
+	private static boolean letzteElementeStrecken = true;
 	/**
 	 * Standardschrift für den Struktogramm-Canvas: bevorzugt installierte Programmier-Monospace-Schriften,
 	 * sonst {@link Font#MONOSPACED}.
@@ -472,12 +476,13 @@ public class GlobalSettings implements Konstanten{
 	}
 
 
+	/** @return Index des gewählten Themes (siehe {@link Konstanten}). */
 	public static int getLookAndFeelAktuell() {
 		return lookAndFeelAktuell;
 	}
 
 
-	public static void setLookAndFeelAktuell(int lookAndFeelAktuell) {
-		GlobalSettings.lookAndFeelAktuell = lookAndFeelAktuell;
+	public static void setLookAndFeelAktuell(int themeIndex) {
+		GlobalSettings.lookAndFeelAktuell = themeIndex;
 	}
 }

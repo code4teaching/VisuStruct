@@ -31,6 +31,8 @@ public class EingabeDialog extends JDialog {
 	private StruktogrammElement element;
 	private boolean okWurdeGedrueckt = false;	
 	private Color schriftfarbeNeu, hintergrundfarbeNeu;
+	private final Color initialSchriftfarbe, initialHintergrundfarbe;
+	private final boolean initialFarbenExplizit;
 	private final JButton buttonSchriftfarbe, buttonHintergrundfarbe;
 	
 
@@ -41,9 +43,12 @@ public class EingabeDialog extends JDialog {
 
 
 		this.element = element;
-		
-		schriftfarbeNeu = element.getFarbeSchrift();
-		hintergrundfarbeNeu = element.getFarbeHintergrund();
+
+		initialSchriftfarbe = element.getFarbeSchrift();
+		initialHintergrundfarbe = element.getFarbeHintergrund();
+		initialFarbenExplizit = element.sindElementfarbenExplizit();
+		schriftfarbeNeu = initialSchriftfarbe;
+		hintergrundfarbeNeu = initialHintergrundfarbe;
 
 		setLayout(new GridBagLayout());
 
@@ -221,9 +226,12 @@ public class EingabeDialog extends JDialog {
 			element.setzeFaelle(fallBezeichnungen);//Fallüberschriften setzen
 		}
 		
-		
-		element.setFarbeSchrift(schriftfarbeNeu);
-		element.setFarbeHintergrund(hintergrundfarbeNeu);
+		boolean farbenGeaendert = schriftfarbeNeu.getRGB() != initialSchriftfarbe.getRGB()
+				|| hintergrundfarbeNeu.getRGB() != initialHintergrundfarbe.getRGB();
+		if (initialFarbenExplizit || farbenGeaendert) {
+			element.setFarbeSchrift(schriftfarbeNeu);
+			element.setFarbeHintergrund(hintergrundfarbeNeu);
+		}
 
 		rueckgabeInhalt = textarea.gibTextzeilenArray();
 

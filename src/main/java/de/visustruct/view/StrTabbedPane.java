@@ -197,6 +197,17 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    }
    
    
+   /** Alle geöffneten Diagramme nach Theme-Wechsel neu einfärben und zeichnen. */
+   public void refreshAllStruktogrammeNachThemeWechsel() {
+      for (int i = 0; i < getTabCount(); i++) {
+         Struktogramm str = gibStruktogrammAt(i);
+         if (str != null) {
+            str.refreshAfterThemeChange();
+         }
+      }
+   }
+
+
    public Struktogramm gibAktuellesStruktogramm(){
       if(getTabCount() > 0){
          /*getSelectedComponent() liefert das JScrollPane,

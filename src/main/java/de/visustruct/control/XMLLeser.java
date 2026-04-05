@@ -121,14 +121,12 @@ public class XMLLeser {
 			struktogrammelement.setYVergroesserung(Integer.parseInt(s));
 		}
 		
-		s = zugehoerigesKopfelement.getAttributeValue("textcolor");	   
-		if(s != null){
-			struktogrammelement.setFarbeSchrift(Color.decode(s));
-		}
-		
-		s = zugehoerigesKopfelement.getAttributeValue("bgcolor");	   
-		if(s != null){
-			struktogrammelement.setFarbeHintergrund(Color.decode(s));
+		String tx = zugehoerigesKopfelement.getAttributeValue("textcolor");
+		String bgc = zugehoerigesKopfelement.getAttributeValue("bgcolor");
+		if (tx != null || bgc != null) {
+			Color schrift = tx != null ? Color.decode(tx) : CanvasStyle.getElementText();
+			Color hg = bgc != null ? Color.decode(bgc) : CanvasStyle.getElementFill();
+			struktogrammelement.setzeFarbenAusXml(schrift, hg);
 		}
 	}
 

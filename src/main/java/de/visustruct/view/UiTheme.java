@@ -6,16 +6,20 @@ import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 
-/** Globale UI-Defaults; bei Flat Light VisuStruct-Farben (visustruct.de). Dunkel = unverändert FlatLaf-Dark. */
+import de.visustruct.control.CanvasStyle;
+
+/** Globale UI-Defaults nach Theme-Wechsel; eigene Paletten für „Modern · hell“ und „Modern · dunkel“. */
 public final class UiTheme {
 
 	private UiTheme() {
 	}
 
-	public static void applyAfterLookAndFeel() {
+	public static void applyAfterTheme() {
 		UIManager.put("ScrollPane.smoothScrolling", Boolean.TRUE);
 
 		if (UIManager.getLookAndFeel() instanceof FlatLaf) {
@@ -27,6 +31,9 @@ public final class UiTheme {
 
 			if (UIManager.getLookAndFeel() instanceof FlatLightLaf) {
 				VisuStructTheme.applyLightPalette();
+			} else if (UIManager.getLookAndFeel() instanceof FlatDarkLaf
+					|| UIManager.getLookAndFeel() instanceof FlatMacDarkLaf) {
+				VisuStructTheme.applyDarkPalette();
 			}
 
 			UIManager.put("Component.arc", Integer.valueOf(8));
@@ -48,5 +55,7 @@ public final class UiTheme {
 			UIManager.put("TabbedPane.tabHeight", Integer.valueOf(28));
 			UIManager.put("TabbedPane.tabsOverlap", Integer.valueOf(0));
 		}
+
+		CanvasStyle.syncToTheme();
 	}
 }

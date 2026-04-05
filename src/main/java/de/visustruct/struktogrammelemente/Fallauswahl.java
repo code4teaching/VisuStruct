@@ -355,7 +355,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 
 
 		//die beiden Schrägen Linien zeichnen
-		g.setColor(CanvasStyle.ELEMENT_BORDER);
+		g.setColor(CanvasStyle.getElementBorder());
 		g.drawLine(gibX(),gibY(),gibX() + xVerschiebungFuerTrennlinie, gibY() +getObererRand() +yVerschiebungFuerTrennLinie);
 		g.drawLine(gibX() + xVerschiebungFuerTrennlinie, gibY() +getObererRand() +yVerschiebungFuerTrennLinie, gibX() + gibBreite(), gibY());
 
@@ -370,7 +370,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 			x = tmp.gibRechterRand();
 
 			if (i != listen.size() -1){//senkrechte Striche zeichnen, die Sonstliste (die Letzte) braucht keinen senkrechten Strich
-				g.setColor(CanvasStyle.ELEMENT_BORDER);
+				g.setColor(CanvasStyle.getElementBorder());
 				g.drawLine(x, gibY()+gibHoehe(), x, gibPassendeYKoordFuerLinie(x));
 			}
 

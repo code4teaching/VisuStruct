@@ -87,6 +87,8 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private Dimension dimGroesse; //Ausmaße des Struktogramms
 	private static final int randLinks = 20; //Verschiebung der StruktogrammElemente nach rechts
 	private static final int randOben = 20;  //Verschiebung der StruktogrammElemente nach unten
+	/** Zusätzlicher horizontaler Rand links/rechts, damit die Diagramm-Überschrift (20 pt) nicht abgeschnitten wird. */
+	private static final int captionRandHorizontal = 24;
 	private DragSource dragSource; //benötigt zum Auslösen eines Drag
 	//private DropTarget dropTarget; //benötigt zum Empfangen eines Drop
 	private StruktogrammPopup popup; //Popup-Kontextmenü bei Rechtsklick
@@ -129,7 +131,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	public Struktogramm(StrTabbedPane tabbedpane){
 		super(true);
 
-		setBackground(CanvasStyle.BACKGROUND);
+		setBackground(CanvasStyle.getBackground());
 
 		this.tabbedpane = tabbedpane;
 
@@ -195,6 +197,14 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	public void setzePopupmenuSichtbar(boolean neuerStatus){
 		popupmenuSichtbar = neuerStatus;
+	}
+
+	/** Nach Theme-Wechsel ohne Neustart: Zeichenflächenhintergrund und Neuzeichnen. */
+	public void refreshAfterThemeChange() {
+		setBackground(CanvasStyle.getBackground());
+		revalidate();
+		zeichenbereichAktualisieren();
+		zeichne();
 	}
 
 
@@ -319,25 +329,27 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			//Zunächst wird auf das BufferedImage bild mit dem Graphics-Kontext g gezeichnet
 			applyCanvasRenderingHints(g);
 
-			g.setColor(CanvasStyle.BACKGROUND);
+			g.setColor(CanvasStyle.getBackground());
 			g.fillRect(0, 0, getWidth(), getHeight());
 
 			if(!struktogrammBeschreibung.isEmpty()){
 				Font f = g.getFont();
 				g.setFont(new Font(f.getFamily(), f.getStyle(), 20));
-				g.setColor(CanvasStyle.TITLE_TEXT);
+				g.setColor(CanvasStyle.getTitleText());
 				g.drawString(struktogrammBeschreibung, getXVerschiebungForCenteredText(struktogrammBeschreibung, dimGroesse.width, g), 35);
 				g.setFont(f);
-				g.setColor(CanvasStyle.DIAGRAM_FRAME);
-				g.drawRect(10,10,dimGroesse.width-21, dimGroesse.height -21);
 			}
+
+			// Außenrahmen immer (früher nur mit Diagramm-Beschriftung — wirkte ohne Caption / im Dark-Mode wie „ohne Rahmen“)
+			g.setColor(CanvasStyle.getDiagramFrame());
+			g.drawRect(10, 10, dimGroesse.width - 21, dimGroesse.height - 21);
 
 			//alle StruktogrammElemente zeichnen
 			liste.alleZeichnen();
 
 
 			if (rectVorschau != null){//wenn die Vorschau gezeichnet werden soll...
-				g.setColor(CanvasStyle.DROP_PREVIEW);
+				g.setColor(CanvasStyle.getDropPreview());
 				g.fillRect(rectVorschau.x,rectVorschau.y,rectVorschau.width,rectVorschau.height);
 			}
 
@@ -346,7 +358,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 				Rectangle rectDragElement = dragZwischenlagerElement.gibRectangle();
 				Stroke alt = g.getStroke();
 				g.setStroke(new BasicStroke(2f));
-				g.setColor(CanvasStyle.DRAG_FRAME);
+				g.setColor(CanvasStyle.getDragFrame());
 				g.drawRect(rectDragElement.x,rectDragElement.y,rectDragElement.width,rectDragElement.height);
 				g.setStroke(alt);
 			}
@@ -387,6 +399,23 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		return (int) ((breiteUntergrund - i) / 2);
 	}
 
+	/** Breite der Überschrift in px (gleiche Schrift wie in {@link #zeichne(Graphics)}), 0 wenn keine Überschrift. */
+	private int gibCaptionTextBreitePx() {
+		if (struktogrammBeschreibung.isEmpty()) {
+			return 0;
+		}
+		Font captionFont = new Font(fontStr.getFamily(), fontStr.getStyle(), 20);
+		BufferedImage scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = scratch.createGraphics();
+		try {
+			applyCanvasRenderingHints(g2);
+			g2.setFont(captionFont);
+			return (int) Math.ceil(g2.getFontMetrics().getStringBounds(struktogrammBeschreibung, g2).getWidth());
+		} finally {
+			g2.dispose();
+		}
+	}
+
 
 
 	//	@Override //bevorzugte Größe soll die Größe des Panels sein (wichtig für das JScrollPane
@@ -410,6 +439,13 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		dimGroesse.width += randLinksNeu *2; //links und rechts Rand hinzufügen, sonst würde das Struktogramm bis ganz an den Rand des scrollpane-Ausschnittes gehen
 		dimGroesse.height += randObenNeu *2; //oben und unten Rand hinzufügen
 
+		int captionBreite = gibCaptionTextBreitePx();
+		if (captionBreite > 0) {
+			int minBreiteFuerCaption = captionBreite + captionRandHorizontal * 2;
+			if (dimGroesse.width < minBreiteFuerCaption) {
+				dimGroesse.width = minBreiteFuerCaption;
+			}
+		}
 
 		//Dimension scrollpaneSichtbarerBereich = scrollpane.getViewport().getExtentSize();//Größe des sichtbaren Bereiches ermitteln, siehe: http://download.oracle.com/javase/1.4.2/docs/api/javax/swing/JViewport.html
 
@@ -614,31 +650,6 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	}
 
 
-	public StruktogrammElement getElementUnterMaus(){
-		Point p = getMousePosition();
-
-		if(p != null){
-			return (StruktogrammElement)liste.gibElementAnPos(p.x, p.y, false);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Block zum Kopieren: zuerst unter der Maus (wenn Zeiger auf der Zeichenfläche),
-	 * sonst der zuletzt gelb hervorgehobene Block (z. B. Menü geöffnet, Maus nicht mehr auf dem Diagramm).
-	 */
-	public StruktogrammElement gibElementZumKopieren(){
-		StruktogrammElement unterMaus = getElementUnterMaus();
-		if (unterMaus != null) {
-			return unterMaus;
-		}
-		if (markiertesElement != null && markiertesElement.istMarkiert()) {
-			return markiertesElement;
-		}
-		return null;
-	}
-
 	//ein Drop wurde regstriert, er kam vom Auswahlpanel und es soll jetzt ein neues Element an der Position (x/y) eingefügt werden
 	private void gezogenesElementEinfuegen(int x, int y, int typ){
 		StruktogrammElement neues = neuesStruktogrammElement(typ);
@@ -784,9 +795,9 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private void popupMenueZeigen(int x, int y){
 		StruktogrammElement tmp = (StruktogrammElement)liste.gibElementAnPos(x,y,false);
 
-		if ((tmp != null)&&!(tmp instanceof LeerElement)){//LeerElemente brauchen kein Popup-Menü
+		if (tmp != null) {
 			popup = new StruktogrammPopup(tmp, this, x, y);
-			popup.show(this,x,y);
+			popup.show(this, x, y);
 		}
 	}
 

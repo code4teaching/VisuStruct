@@ -53,7 +53,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 	private enum Betriebssysteme {Windows, Mac, Linux};
 
 	public Controlling(String[] params){
-		handleOSSettingsAndLookAndFeel();
+		handleOSSettingsAndTheme();
 
 		gui = new GUI(this);
 		neuesStruktogramm();		
@@ -69,10 +69,24 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 
 
-	public void handleOSSettingsAndLookAndFeel(){
+	public void handleOSSettingsAndTheme(){
 
 		try{
+			applyConfiguredTheme();
 
+			if(getOS() == Betriebssysteme.Mac){
+				new MacHandler(this);
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
+	/** Setzt das gewählte Theme (über Swing {@link UIManager#setLookAndFeel}) und wendet {@link UiTheme} an. */
+	private void applyConfiguredTheme() {
+		try {
 			LookAndFeel lookAndFeel = null;
 
 			switch (GlobalSettings.getLookAndFeelAktuell()) {
@@ -123,21 +137,16 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				break;
 			}
 
-			if(lookAndFeel != null){
+			if (lookAndFeel != null) {
 				try {
-					UIManager.setLookAndFeel(lookAndFeel);//Standard Swing Look And Feel
+					UIManager.setLookAndFeel(lookAndFeel);
 				} catch (UnsupportedLookAndFeelException e) {
 					e.printStackTrace();
 				}
 			}
 
-			UiTheme.applyAfterLookAndFeel();
-
-			if(getOS() == Betriebssysteme.Mac){
-				new MacHandler(this);
-			}
-
-		}catch(Exception e){
+			UiTheme.applyAfterTheme();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -301,14 +310,6 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			gui.gibAuswahlPanel().kopiereGanzesStruktogramm();
 			break;
 
-		case elementUnterDerMausKopieren:
-			kopiereElement();
-			break;
-
-		case elementEinfuegen:
-			gibAktuellesStruktogramm().elementAusKopierFeldEinfuegenAnMausPos();
-			break;
-
 		case letztesElementStrecken:
 			letzteElementeStreckenGeklickt(e.getSource());
 			break;
@@ -333,37 +334,28 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			elementEinfuegenShortcutsVerwendenGeklickt(e.getSource());
 			break;
 
-		case sourceCode:{
-				String v = GlobalSettings.buildInfoGitHash;
-				String url = v.isEmpty()
-						? "https://github.com/code4teaching/VisuStruct"
-						: "https://github.com/code4teaching/VisuStruct/tree/" + v;
-				Helpers.openWebsite(url);
-			}
-			break;
-
 		case info:
 			showInfo();
 			break;
 
 		case lookAndFeelOSStandard:
-			changeLookAndFeel(lookAndFeelOSStandard);
+			changeTheme(lookAndFeelOSStandard);
 			break;
 
 		case lookAndFeelSwingStandard:
-			changeLookAndFeel(lookAndFeelSwingStandard);
+			changeTheme(lookAndFeelSwingStandard);
 			break;
 
 		case lookAndFeelNimbus:
-			changeLookAndFeel(lookAndFeelNimbus);
+			changeTheme(lookAndFeelNimbus);
 			break;
 
 		case lookAndFeelFlatLight:
-			changeLookAndFeel(lookAndFeelFlatLight);
+			changeTheme(lookAndFeelFlatLight);
 			break;
 
 		case lookAndFeelFlatDark:
-			changeLookAndFeel(lookAndFeelFlatDark);
+			changeTheme(lookAndFeelFlatDark);
 			break;
 			
 		case struktogrammbeschreibungHinzufuegen:
@@ -389,23 +381,13 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 
 
-	private void kopiereElement(){
-		StruktogrammElement element = gibAktuellesStruktogramm().gibElementZumKopieren();
-
-		if(element != null){
-			getGUI().gibAuswahlPanel().setzeKopiertesStrElement(gibAktuellesStruktogramm().xmlErstellen(element));
-		} else {
-			JOptionPane.showMessageDialog(gui,
-					"No block to copy: move the mouse over a block (yellow highlight), or keep that highlight and use the menu / shortcut.",
-					"Copy block", JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-
-
-	private void changeLookAndFeel(int lookAndFeelIndex){
-		GlobalSettings.setLookAndFeelAktuell(lookAndFeelIndex);
+	private void changeTheme(int themeIndex){
+		GlobalSettings.setLookAndFeelAktuell(themeIndex);
 		GlobalSettings.saveSettings();
-		JOptionPane.showMessageDialog(gui, "Changes will take effect after you restart the application.", "Look and Feel", JOptionPane.INFORMATION_MESSAGE);
+		applyConfiguredTheme();
+		SwingUtilities.updateComponentTreeUI(gui);
+		gui.validate();
+		gui.gibTabbedpane().refreshAllStruktogrammeNachThemeWechsel();
 	}
 
 

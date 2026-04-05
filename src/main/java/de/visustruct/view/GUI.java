@@ -99,7 +99,6 @@ public class GUI extends JFrame implements Konstanten{
 				menu.add(createMenuItem("Close Diagram", XActionCommands.struktogrammSchliessen, KeyEvent.VK_C));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("About", XActionCommands.info, KeyEvent.VK_B));
-				menu.add(createMenuItem("Prior editor source (GitHub)", XActionCommands.sourceCode, KeyEvent.VK_H));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("Exit",	XActionCommands.programmBeenden, KeyEvent.VK_X));
 			}
@@ -113,17 +112,15 @@ public class GUI extends JFrame implements Konstanten{
 				menu.add(createMenuItem("Set Diagram Caption...", XActionCommands.struktogrammbeschreibungHinzufuegen, KeyEvent.VK_T));
 				menu.add(new JSeparator());
 				menu.add(createMenuItem("Copy Entire Diagram", XActionCommands.ganzesStruktogrammKopieren, KeyEvent.VK_Y));
-				menu.add(createMenuItem("Copy highlighted block", XActionCommands.elementUnterDerMausKopieren, KeyEvent.VK_E, KeyEvent.VK_C));
-				menu.add(createMenuItem("Paste Copied Element at Cursor", XActionCommands.elementEinfuegen, KeyEvent.VK_P, KeyEvent.VK_V));
 			}
 			menubar.add(menu);
 
 			menu = createMenu("Settings", KeyEvent.VK_S);
 			{
-				menu.add(createMenuItem("Stretch last block when needed", XActionCommands.letztesElementStrecken, KeyEvent.VK_T, GlobalSettings.gibLetzteElementeStrecken()));
+				menu.add(createMenuItem("Stretch last block when needed", XActionCommands.letztesElementStrecken, KeyEvent.VK_L, GlobalSettings.gibLetzteElementeStrecken()));
 				menu.add(new JSeparator());
 
-				JMenu menu2 = createMenu("Look and Feel", KeyEvent.VK_L);
+				JMenu menu2 = createMenu("Theme", KeyEvent.VK_T);
 				{
 					ButtonGroup group = new ButtonGroup();
 

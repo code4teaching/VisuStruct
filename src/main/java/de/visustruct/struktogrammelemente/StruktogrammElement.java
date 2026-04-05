@@ -21,7 +21,10 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 	private int obererRand; //verändert sich je nach Anzahl der Textzeilen
 	protected int obererRandZusatz; //wird pro von StruktogrammElement abgeleitete Klasse einmal gesetzt; beschreibt zusätzliche Pixelzahl zum für den oberen Rand
 	private int xVergroesserung, yVergroesserung;
-	private Color farbeSchrift = CanvasStyle.ELEMENT_TEXT, farbeHintergrund = Color.white;
+	/** Wenn false, kommen Schrift-/Hintergrundfarbe beim Zeichnen aus {@link CanvasStyle} (folgt Theme-Wechsel). */
+	private boolean elementfarbenExplizit;
+	private Color farbeSchrift;
+	private Color farbeHintergrund;
 
 	public StruktogrammElement(Graphics2D g){
 		this.g = g;
@@ -30,6 +33,7 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 
 		bereich = new Rectangle();
 		markiert = false;
+		elementfarbenExplizit = false;
 		setzeText("");
 		
 		xVergroesserung = 0;
@@ -129,9 +133,11 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		Element neues = new Element("strelem")//strelem-Tag mit dem Attribut typ, welches die Typnummer für das StruktogrammElement angibt, wird eingefügt
 			.setAttribute("typ",""+Struktogramm.strElementZuTypnummer(this))
 			.setAttribute("zx",""+xVergroesserung)
-			.setAttribute("zy",""+yVergroesserung)
-			.setAttribute("textcolor",""+getFarbeSchrift().getRGB())
-			.setAttribute("bgcolor",""+getFarbeHintergrund().getRGB());
+			.setAttribute("zy",""+yVergroesserung);
+		if (elementfarbenExplizit) {
+			neues.setAttribute("textcolor", "" + farbeSchrift.getRGB());
+			neues.setAttribute("bgcolor", "" + farbeHintergrund.getRGB());
+		}
 
 		for (int i=0; i < text.length; i++){
 			neues.addContent(new Element("text").addContent(XMLLeser.encodeS(text[i])));//in den strelem-Tag wird pro Textzeile ein text-Tag eingefügt, mit der Textzeile als Inhalt, die Textzeile ist dabei codiert, weil es beim laden später Probleme u.a. mit Umlauten gibt
@@ -322,7 +328,7 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		int texthoehe = gibTexthoehe(text[0]);
 		int yVerschiebungAktuell = texthoehe - 5;
 		
-		g.setColor(farbeSchrift);
+		g.setColor(getFarbeSchrift());
 
 		for (String s : text){
 			g.drawString(s, gibX() + gibXVerschiebungFuerTextInMitte(s), gibY() + yVerschiebungAktuell);//Textzeilen untereinander zeichnen
@@ -349,12 +355,12 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 
 	protected void eigenenBereichZeichnen(){
 		if (!markiert){
-			g.setColor(farbeHintergrund);//für Rechteck mit eingestellter Farbe
+			g.setColor(getFarbeHintergrund());//für Rechteck mit eingestellter Farbe
 		}else{
-			g.setColor(CanvasStyle.ELEMENT_SELECTED_FILL);
+			g.setColor(CanvasStyle.getElementSelectedFill());
 		}
 		g.fillRect(gibX(), gibY(), gibBreite(), gibHoehe());//ausgefülltes Rechteck zeichnen
-		g.setColor(CanvasStyle.ELEMENT_BORDER);
+		g.setColor(CanvasStyle.getElementBorder());
 		g.drawRect(gibX(), gibY(), gibBreite(), gibHoehe());
 	}
 
@@ -453,19 +459,32 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 
 
 	public Color getFarbeSchrift() {
-		return farbeSchrift;
+		return elementfarbenExplizit ? farbeSchrift : CanvasStyle.getElementText();
 	}
 
 	public void setFarbeSchrift(Color farbeSchrift) {
 		this.farbeSchrift = farbeSchrift;
+		elementfarbenExplizit = true;
 	}
 
 	public Color getFarbeHintergrund() {
-		return farbeHintergrund;
+		return elementfarbenExplizit ? farbeHintergrund : CanvasStyle.getElementFill();
 	}
 
 	public void setFarbeHintergrund(Color farbeHintergrund) {
 		this.farbeHintergrund = farbeHintergrund;
+		elementfarbenExplizit = true;
+	}
+
+	/** Beim XML-Laden, wenn mindestens eine Farbe im Tag steht. */
+	public void setzeFarbenAusXml(Color schrift, Color hintergrund) {
+		this.farbeSchrift = schrift;
+		this.farbeHintergrund = hintergrund;
+		elementfarbenExplizit = true;
+	}
+
+	public boolean sindElementfarbenExplizit() {
+		return elementfarbenExplizit;
 	}
 
 }

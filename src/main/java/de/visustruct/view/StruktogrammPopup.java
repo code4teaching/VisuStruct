@@ -41,6 +41,12 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 
 		typ = Struktogramm.strElementZuTypnummer(element);
 
+		// Platzhalter „ø“: nur Einfügen — kein Bearbeiten/Kopieren/Löschen/Zoom für ein LeerElement.
+		if (typ == Struktogramm.typLeerElement) {
+			einfuegen("Paste", 14);
+			return;
+		}
+
 		StrPopupUntermenue untermenue = unterMenueEinfuegen("Zoom");
 		untermenue.einfuegen("Larger",8,-1);
 		untermenue.einfuegen("Smaller",9,-1);
