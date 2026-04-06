@@ -19,6 +19,7 @@ import javax.swing.JRadioButton;
 import javax.swing.WindowConstants;
 
 import de.visustruct.control.GlobalSettings;
+import de.visustruct.i18n.I18n;
 import de.visustruct.control.Struktogramm;
 import de.visustruct.other.JNumberField;
 import de.visustruct.other.JTextAreaEasy;
@@ -180,7 +181,8 @@ public class CodeErzeuger extends JDialog {
 			GlobalSettings.setCodeErzeugerAlsKommentar(alsKommentar);
 			GlobalSettings.saveSettings();
 		}else{
-			JOptionPane.showMessageDialog(null, "Please enter whole numbers in the fields.", "Invalid input", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeInvalidInput.message"),
+					I18n.tr("dialog.codeInvalidInput.title"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

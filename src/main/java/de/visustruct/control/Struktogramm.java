@@ -50,6 +50,7 @@ import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import de.visustruct.i18n.I18n;
 import de.visustruct.struktogrammelemente.Anweisung;
 import de.visustruct.struktogrammelemente.Aufruf;
 import de.visustruct.struktogrammelemente.Aussprung;
@@ -728,8 +729,8 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			elementAusKopierFeldEinfuegen(p.x, p.y);
 		} else {
 			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
-					"Move the mouse over the diagram to the desired insert position, then use Paste again.",
-					"Paste", JOptionPane.INFORMATION_MESSAGE);
+					I18n.tr("dialog.pasteNeedPosition.message"),
+					I18n.tr("dialog.pasteNeedPosition.title"), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -768,15 +769,15 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	//es wurde im Popup-Menü auf "Löschen..." geklickt und es soll das übergebene StruktogrammElement gelöscht werden
 	public void elementLoeschen(StruktogrammElement zuLoeschen, boolean vorherFragen){
-		String frage;
+		String frage = ((zuLoeschen instanceof Schleife) || (zuLoeschen instanceof Fallauswahl))
+				? I18n.tr("dialog.deleteBlock.messageNested")
+				: I18n.tr("dialog.deleteBlock.message");
+		Object[] opts = { I18n.tr("dialog.deleteBlock.remove"), I18n.tr("dialog.deleteBlock.cancel") };
+		boolean loeschen = !vorherFragen
+				|| JOptionPane.showOptionDialog(tabbedpane.gibGUI(), frage, I18n.tr("dialog.deleteBlock.title"),
+						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opts, opts[1]) == 0;
 
-		if ((zuLoeschen instanceof Schleife) || (zuLoeschen instanceof Fallauswahl)){
-			frage = "Remove this block and all nested blocks?";
-		}else{
-			frage = "Remove this block?";
-		}
-
-		if (!vorherFragen || JOptionPane.showConfirmDialog(null, frage, "Delete", JOptionPane.YES_NO_OPTION) == 0){
+		if (loeschen){
 
 			StruktogrammElementListe tmp = liste.gibListeDieDasElementHat(zuLoeschen); //Liste, die das zu löschende Element hat wird gesucht
 			if (tmp != null){
@@ -941,13 +942,13 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		try (FileOutputStream fos = new FileOutputStream(pfad)){
 			if (!ImageIO.write(ausgabeBild, fmt, fos)){
 				JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
-						"The image could not be written (format: " + fmt + ").",
-						"Export Image", JOptionPane.ERROR_MESSAGE);
+						I18n.trf("dialog.exportImage.formatFailed", fmt),
+						I18n.tr("dialog.exportImage.title"), JOptionPane.ERROR_MESSAGE);
 			}
 		}catch (IOException | RuntimeException ex){
 			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
-					"Error while saving:\n" + ex.getMessage(),
-					"Export Image", JOptionPane.ERROR_MESSAGE);
+					I18n.trf("dialog.exportImage.error", ex.getMessage()),
+					I18n.tr("dialog.exportImage.title"), JOptionPane.ERROR_MESSAGE);
 		}
 
 		return pfad; //Ordner für den nächsten Dialog
@@ -1109,8 +1110,10 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			}
 
 			if((new File(pfad)).exists()){ //wenn die ausgewählte Datei bereits existiert, erst nachfragen, ob diese überschrieben werden soll
-				Object[] options = {"Yes", "No"};
-				if (0 != JOptionPane.showOptionDialog(tabbedpane.gibGUI(), "The file " + pfad + " already exists.\nOverwrite?", "File Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
+				Object[] options = { I18n.tr("dialog.overwriteFile.overwrite"), I18n.tr("dialog.overwriteFile.skip") };
+				if (0 != JOptionPane.showOptionDialog(tabbedpane.gibGUI(), I18n.trf("dialog.overwriteFile.message", pfad),
+						I18n.tr("dialog.overwriteFile.title"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+						null, options, options[1])){
 					pfad = ""; //es wurde nicht ja gedrückt
 				}
 			}
@@ -1147,8 +1150,8 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private void xmlAbspeichernOhneFileChooser(String pfad){
 		if (pfad == null || pfad.isEmpty()) {
 			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
-					"There is no file path to save to. Use “Save As…”.",
-					"Save", JOptionPane.WARNING_MESSAGE);
+					I18n.tr("dialog.saveNoPath.message"),
+					I18n.tr("dialog.saveNoPath.title"), JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		try {
@@ -1163,8 +1166,8 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(tabbedpane.gibGUI(),
-					"The file could not be saved:\n" + e.getMessage(),
-					"Save", JOptionPane.ERROR_MESSAGE);
+					I18n.trf("dialog.saveError.message", e.getMessage()),
+					I18n.tr("dialog.saveError.title"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

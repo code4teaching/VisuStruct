@@ -57,7 +57,7 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
       String current = dirty ? raw.substring(0, raw.length() - 1) : raw;
 
       String neu = (String) JOptionPane.showInputDialog(controlling.getGUI(),
-            "Diagram name:", "Rename tab", JOptionPane.PLAIN_MESSAGE,
+            I18n.tr("dialog.renameTab.message"), I18n.tr("dialog.renameTab.title"), JOptionPane.PLAIN_MESSAGE,
             null, null, current);
       if (neu == null) {
          return;

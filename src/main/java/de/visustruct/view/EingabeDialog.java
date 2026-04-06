@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
+import de.visustruct.i18n.I18n;
 import de.visustruct.other.JListEasy;
 import de.visustruct.other.JTextAreaEasy;
 import de.visustruct.struktogrammelemente.Fallauswahl;
@@ -261,7 +262,9 @@ public class EingabeDialog extends JDialog {
 	public void buttonFallname_ActionPerformed(ActionEvent evt) {
 		if(list.gibIndex() >= 0){
 
-			String fallname = JOptionPane.showInputDialog("New case label",list.gibMarkiertenInhalt());
+			String fallname = JOptionPane.showInputDialog(this, I18n.tr("dialog.caseLabel.newMessage"),
+					I18n.tr("dialog.caseLabel.newTitle"), JOptionPane.PLAIN_MESSAGE, null, null,
+					list.gibMarkiertenInhalt());
 
 			if (fallname != null){
 				if (fallname.equals("")){
@@ -271,7 +274,8 @@ public class EingabeDialog extends JDialog {
 			}
 
 		}else{//es ist noch kein Fall in der JListEasy ausgewählt
-			JOptionPane.showMessageDialog(null, "Please select a case label first.", "Selection required", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, I18n.tr("dialog.caseSelectFirst.message"),
+					I18n.tr("dialog.caseSelectFirst.title"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

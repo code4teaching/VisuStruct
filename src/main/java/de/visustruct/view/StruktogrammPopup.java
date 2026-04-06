@@ -195,12 +195,12 @@ public class StruktogrammPopup extends JPopupMenu implements PopupMenuListener{
 			break;
 
 			case 6: String fallname = ((Fallauswahl)element).gibFaelle()[fallnummer]; //Spalte bzw. Fall löschen
-			if (JOptionPane.showConfirmDialog(struktogramm,
-					I18n.trf("popup.removeCaseConfirm", fallname),
-					I18n.tr("popup.removeCaseTitle"),
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+			Object[] entfOpts = { I18n.tr("dialog.common.yes"), I18n.tr("dialog.common.no") };
+			if (JOptionPane.showOptionDialog(struktogramm, I18n.trf("popup.removeCaseConfirm", fallname),
+					I18n.tr("popup.removeCaseTitle"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+					null, entfOpts, entfOpts[1]) == 0) {
 				((Fallauswahl)element).entferneSpalte(fallnummer);
-			}else{
+			} else {
 				mussSpeicherpunktSetzen = false;
 			}
 			break;
