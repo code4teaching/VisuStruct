@@ -31,22 +31,14 @@ public class Verzweigung extends Fallauswahl { //erbt von Fallauswahl
       String zwischenStueck = "";
 
 
-      switch(typ){
-         case CodeErzeuger.typJava:
-            vorher = quellcodeMitKommentarVorspann("if(", "){\n", typ, anzahlEingerueckt, alsKommentar);
-            zwischenStueck = "}else{\n";
-            nachher = "}\n";
-            break;
-
-         case CodeErzeuger.typDelphi:
-            vorher = (alsKommentar
-            		? wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true)
-            		: "")
-            		+ wandleZuAusgabe("if " + co("text") + " then \n" + einruecken("begin\n", anzahlEingerueckt), typ,
-            				anzahlEingerueckt, false);
-            zwischenStueck = "end\n"+einruecken("else\n",anzahlEingerueckt)+einruecken("begin\n",anzahlEingerueckt);
-            nachher = "end;\n";
-            break;
+      if (typ == CodeErzeuger.typPython) {
+         vorher = quellcodeMitKommentarVorspann("if ", ":\n", typ, anzahlEingerueckt, alsKommentar);
+         zwischenStueck = "else:\n";
+         nachher = "";
+      } else {
+         vorher = quellcodeMitKommentarVorspann("if(", "){\n", typ, anzahlEingerueckt, alsKommentar);
+         zwischenStueck = "}else{\n";
+         nachher = "}\n";
       }
 
       textarea.hinzufuegen(wandleZuAusgabe(vorher,typ,anzahlEingerueckt,alsKommentar));
@@ -65,8 +57,9 @@ public class Verzweigung extends Fallauswahl { //erbt von Fallauswahl
       textarea.hinzufuegen(wandleZuAusgabe(zwischenStueck,typ,anzahlEingerueckt,alsKommentar));
       neinSeite.quellcodeAllerUnterelementeGenerieren(typ,anzahlEingerueckt+anzahlEinzuruecken,anzahlEinzuruecken,alsKommentar,textarea);
 
-      textarea.hinzufuegen(wandleZuAusgabe(nachher,typ,anzahlEingerueckt,alsKommentar));
-
+      if (!nachher.isEmpty()) {
+         textarea.hinzufuegen(wandleZuAusgabe(nachher,typ,anzahlEingerueckt,alsKommentar));
+      }
 
    }
    

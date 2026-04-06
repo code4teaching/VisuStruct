@@ -30,14 +30,10 @@ public class Aussprung extends Anweisung {
 	public void quellcodeGenerieren(int typ, int anzahlEingerueckt, int anzahlEinzuruecken, boolean alsKommentar, JTextAreaEasy textarea){
 		String s = "";
 
-		switch(typ){
-		case CodeErzeuger.typJava:
-			s = co("kommentar")+"break;/return; "+co("text")+co("kommentarzu");
-			break;
-
-		case CodeErzeuger.typDelphi:
-			s = co("kommentar")+"break;/exit; "+co("text")+co("kommentarzu");
-			break;
+		if (typ == CodeErzeuger.typPython) {
+			s = co("kommentar") + "break  # / return  " + co("text") + co("kommentarzu");
+		} else {
+			s = co("kommentar") + "break;/return; " + co("text") + co("kommentarzu");
 		}
 
 		textarea.hinzufuegen(wandleZuAusgabe(s, typ,anzahlEingerueckt,alsKommentar)+"\n");

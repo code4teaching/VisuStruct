@@ -22,25 +22,19 @@ public class ForSchleife extends WhileSchleife { //erbt von WhileSchleife
       String nachher = "";
 
 
-      switch(typ){
-         case CodeErzeuger.typJava:
-            vorher = quellcodeMitKommentarVorspann("for(", "){\n", typ, anzahlEingerueckt, alsKommentar);
-            nachher = "}\n";
-            break;
-
-         case CodeErzeuger.typDelphi:
-            vorher = (alsKommentar
-            		? wandleZuAusgabe(co("kommentar") + co("text") + co("kommentarzu") + "\n", typ, anzahlEingerueckt, true)
-            		: "")
-            		+ wandleZuAusgabe("for " + co("text") + " do \n" + einruecken("begin\n", anzahlEingerueckt), typ,
-            				anzahlEingerueckt, false);
-            nachher = "end;\n";
-            break;
+      if (typ == CodeErzeuger.typPython) {
+         vorher = quellcodeMitKommentarVorspann("for ", ":\n", typ, anzahlEingerueckt, alsKommentar);
+         nachher = "";
+      } else {
+         vorher = quellcodeMitKommentarVorspann("for(", "){\n", typ, anzahlEingerueckt, alsKommentar);
+         nachher = "}\n";
       }
 
       textarea.hinzufuegen(wandleZuAusgabe(vorher,typ,anzahlEingerueckt,alsKommentar));
       liste.quellcodeAllerUnterelementeGenerieren(typ,anzahlEingerueckt+anzahlEinzuruecken,anzahlEinzuruecken,alsKommentar,textarea);
-      textarea.hinzufuegen(wandleZuAusgabe(nachher,typ,anzahlEingerueckt,alsKommentar));
+      if (!nachher.isEmpty()) {
+         textarea.hinzufuegen(wandleZuAusgabe(nachher,typ,anzahlEingerueckt,alsKommentar));
+      }
 
    }
    

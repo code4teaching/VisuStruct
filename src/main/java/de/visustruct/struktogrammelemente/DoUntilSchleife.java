@@ -7,7 +7,6 @@ import de.visustruct.control.Struktogramm;
 import de.visustruct.other.JTextAreaEasy;
 import de.visustruct.view.CodeErzeuger;
 
-
 public class DoUntilSchleife extends Schleife {//erbt von Schleife
 
    public DoUntilSchleife(Graphics2D g){
@@ -30,8 +29,6 @@ public class DoUntilSchleife extends Schleife {//erbt von Schleife
          g.drawString(text[i], gibX() + gibXVerschiebungFuerTextInMitte(text[i]), gibY() + yVerschiebungAktuell);
          yVerschiebungAktuell -= texthoehe;
       }
-      
-      zeichneBeideGroessenaenderungskaestchen(yVerschiebungAktuell);
    }
    
    
@@ -56,21 +53,23 @@ public class DoUntilSchleife extends Schleife {//erbt von Schleife
       String nachher = "";
 
 
-      switch(typ){
-         case CodeErzeuger.typJava:
-            vorher = "do{\n";
-            nachher = quellcodeMitKommentarVorspann("}while(", ");\n", typ, anzahlEingerueckt, alsKommentar);
-            break;
-
-         case CodeErzeuger.typDelphi:
-            vorher = "repeat\n";
-            nachher = quellcodeMitKommentarVorspann("until ", ";\n", typ, anzahlEingerueckt, alsKommentar);
-            break;
+      if (typ == CodeErzeuger.typPython) {
+         vorher = "while True:\n";
+         int bodyStart = anzahlEingerueckt + anzahlEinzuruecken;
+         nachher = quellcodeMitKommentarVorspann("if not (", "):\n", typ, bodyStart, alsKommentar)
+               + wandleZuAusgabe("break\n", typ, bodyStart + anzahlEinzuruecken, alsKommentar);
+      } else {
+         vorher = "do{\n";
+         nachher = quellcodeMitKommentarVorspann("}while(", ");\n", typ, anzahlEingerueckt, alsKommentar);
       }
 
-      textarea.hinzufuegen(wandleZuAusgabe(vorher,typ,anzahlEingerueckt,alsKommentar));//"do{\n" bzw. "repeat\n" wird ausgegeben, richtig eingerückt
-      liste.quellcodeAllerUnterelementeGenerieren(typ,anzahlEingerueckt+anzahlEinzuruecken,anzahlEinzuruecken,alsKommentar,textarea);//Quellcode für die Unterelemente wird ausgegeben
-      textarea.hinzufuegen(wandleZuAusgabe(nachher,typ,anzahlEingerueckt,alsKommentar));//Schleifenende wird ausgegeben, Kommentare bei Bedarf hinzugefügt und alles richtig eingerückt
+      textarea.hinzufuegen(wandleZuAusgabe(vorher, typ, anzahlEingerueckt, alsKommentar));
+      liste.quellcodeAllerUnterelementeGenerieren(typ, anzahlEingerueckt + anzahlEinzuruecken, anzahlEinzuruecken, alsKommentar, textarea);
+      if (typ == CodeErzeuger.typPython) {
+         textarea.hinzufuegen(wandleZuAusgabe(nachher, typ, 0, alsKommentar));
+      } else {
+         textarea.hinzufuegen(wandleZuAusgabe(nachher, typ, anzahlEingerueckt, alsKommentar));
+      }
    }
    
    

@@ -25,11 +25,11 @@ public class XMLLeser {
 
 	}
 
-	public void ladeXLM(String pfad, Struktogramm struktogramm){
+	public void ladeXML(String pfad, Struktogramm struktogramm){
 		ladeXML(pfad, null, struktogramm);
 	}
 
-	public void ladeXLM(Document document, Struktogramm struktogramm){
+	public void ladeXML(Document document, Struktogramm struktogramm){
 		ladeXML(null, document, struktogramm);
 	}
 

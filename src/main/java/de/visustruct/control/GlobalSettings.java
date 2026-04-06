@@ -99,6 +99,7 @@ public class GlobalSettings implements Konstanten{
 	
 	private static int codeErzeugerEinrueckungGesamt = 3;
 	private static int codeErzeugerEinrueckungProStufe = 3;
+	/** {@link CodeErzeuger#typJava} oder {@link CodeErzeuger#typPython}. */
 	private static int codeErzeugerProgrammiersprache = CodeErzeuger.typJava;
 	private static boolean codeErzeugerAlsKommentar = true;
 	
@@ -245,8 +246,13 @@ public class GlobalSettings implements Konstanten{
 		}
 
 		s = pr.getProperty("celanguage");
-		if(s != null){
-			codeErzeugerProgrammiersprache = Integer.parseInt(s);
+		if (s != null) {
+			try {
+				int lang = Integer.parseInt(s.trim());
+				codeErzeugerProgrammiersprache = (lang == CodeErzeuger.typPython) ? CodeErzeuger.typPython : CodeErzeuger.typJava;
+			} catch (NumberFormatException ignored) {
+				codeErzeugerProgrammiersprache = CodeErzeuger.typJava;
+			}
 		}
 
 		s = pr.getProperty("cecomments");
@@ -463,17 +469,14 @@ public class GlobalSettings implements Konstanten{
 		return codeErzeugerEinrueckungProStufe;
 	}
 
-
 	public static int getCodeErzeugerProgrammiersprache() {
 		return codeErzeugerProgrammiersprache;
 	}
 
-
-	public static void setCodeErzeugerProgrammiersprache(
-			int codeErzeugerProgrammiersprache) {
-		GlobalSettings.codeErzeugerProgrammiersprache = codeErzeugerProgrammiersprache;
+	public static void setCodeErzeugerProgrammiersprache(int codeErzeugerProgrammiersprache) {
+		GlobalSettings.codeErzeugerProgrammiersprache =
+				(codeErzeugerProgrammiersprache == CodeErzeuger.typPython) ? CodeErzeuger.typPython : CodeErzeuger.typJava;
 	}
-
 
 	public static boolean isCodeErzeugerAlsKommentar() {
 		return codeErzeugerAlsKommentar;

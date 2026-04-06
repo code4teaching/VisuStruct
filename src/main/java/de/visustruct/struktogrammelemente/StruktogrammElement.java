@@ -48,8 +48,8 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		codierung = einruecken(codierung,anzahlEinzuruecken);
 
 		if(alsKommentare){
-			codierung = codierung.replace(co("kommentar"),CodeErzeuger.gibKommentarZeichen(true,typ))
-			.replace(co("kommentarzu"),CodeErzeuger.gibKommentarZeichen(false,typ));
+			codierung = codierung.replace(co("kommentar"),CodeErzeuger.gibKommentarZeichen(true, typ))
+			.replace(co("kommentarzu"),CodeErzeuger.gibKommentarZeichen(false, typ));
 		}else{
 			codierung = codierung.replace(co("kommentar"),"")
 			.replace(co("kommentarzu"),"");
@@ -65,8 +65,8 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 
 
 		return codierung.replace(co("text"),textzeilenAusgeben(anzahlEinzuruecken, x))
-		.replace(co("zwangkommentar"),CodeErzeuger.gibKommentarZeichen(true,typ))
-		.replace(co("zwangkommentarzu"),CodeErzeuger.gibKommentarZeichen(false,typ));
+		.replace(co("zwangkommentar"),CodeErzeuger.gibKommentarZeichen(true, typ))
+		.replace(co("zwangkommentarzu"),CodeErzeuger.gibKommentarZeichen(false, typ));
 	}
 
 	/**
@@ -334,22 +334,6 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 			g.drawString(s, gibX() + gibXVerschiebungFuerTextInMitte(s), gibY() + yVerschiebungAktuell);//Textzeilen untereinander zeichnen
 			yVerschiebungAktuell += texthoehe;
 		}
-		
-		zeichneBeideGroessenaenderungskaestchen(0);
-	}
-	
-	protected void zeichneBeideGroessenaenderungskaestchen(int yVerschiebung){
-		/*if(markiert){    	  
-			final Font fontVorher = g.getFont();
-			g.setFont(new Font("serif", Font.PLAIN, 15));
-			
-			zeichneGroessenaenderungskaestchen("+", gibX() + gibBreite() - 26, gibY() + 2 + yVerschiebung, 10);
-			zeichneGroessenaenderungskaestchen("-", gibX() + gibBreite() - 12, gibY() + 2 + yVerschiebung, 10);
-
-			g.setFont(fontVorher);
-		}*/
-		
-		//TODO Vielleicht später wieder einbauen, das Anzeigen der Kästchen geht mit obigem Code bereits
 	}
 
 
@@ -363,15 +347,6 @@ public abstract class StruktogrammElement { //abstrakte Klasse -> keine Objekte 
 		g.setColor(CanvasStyle.getElementBorder());
 		g.drawRect(gibX(), gibY(), gibBreite(), gibHoehe());
 	}
-
-	//Nicht löschen, wird vielleicht später noch genutzt
-	/*private void zeichneGroessenaenderungskaestchen(final String text, final int x, final int y, final int kantenlaenge){
-		g.setColor(Color.white);
-		g.fillRect(x, y, kantenlaenge, kantenlaenge);
-		g.setColor(Color.black);
-		g.drawRect(x, y, kantenlaenge, kantenlaenge);
-		g.drawString(text, x + 1 + gibXVerschiebungFuerMittig(text, kantenlaenge), y + 1 + kantenlaenge);// + gibYVerschiebungFuerMittig(text, kantenlaenge));
-	}*/
 
 	protected int gibX(){
 		return bereich.x;

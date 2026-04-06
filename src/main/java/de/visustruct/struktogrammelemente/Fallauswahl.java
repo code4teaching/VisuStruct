@@ -10,8 +10,9 @@ import de.visustruct.control.CanvasStyle;
 import de.visustruct.control.GlobalSettings;
 import de.visustruct.control.Struktogramm;
 import de.visustruct.control.XMLLeser;
-import de.visustruct.other.JTextAreaEasy;
+import de.visustruct.i18n.I18n;
 import de.visustruct.view.CodeErzeuger;
+import de.visustruct.other.JTextAreaEasy;
 
 public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammElement
 	//private Struktogramm str; //wird in hier gebraucht, um auf die Einstellung zugreifen zu können, ob die letzten Elemente bei Bedarf gestreckt werden sollen
@@ -33,7 +34,7 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 
 		yVerschiebungFuerTrennLinie = -20; //Trennlinie zwischen Vorletztem und Sonst-Fall geht 20 Pixel in den Kopfteil hinein
 
-		listen.get(listen.size() -1).setzeBeschreibung("Else");
+		listen.get(listen.size() - 1).setzeBeschreibung(I18n.tr("structure.multiway.defaultCaseLabel"));
 
 		obererRandZusatz = 40; //der Kopfteil soll 40 Pixel plus die Höhe des Textes sein
 
@@ -52,50 +53,44 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 		String fallEnde = "";
 
 
-		switch(typ){
-		case CodeErzeuger.typJava:
+		if (typ == CodeErzeuger.typPython) {
+			vorher = quellcodeMitKommentarVorspann("match ", ":\n", typ, anzahlEingerueckt, alsKommentar);
+			nachher = "";
+		} else {
 			vorher = quellcodeMitKommentarVorspann("switch(", "){\n", typ, anzahlEingerueckt, alsKommentar);
 			nachher = "}\n";
-			break;
-
-		case CodeErzeuger.typDelphi:
-			vorher = quellcodeMitKommentarVorspann("case ", " of\n", typ, anzahlEingerueckt, alsKommentar);
-			nachher = "end;\n";
-			break;
 		}
 
-		textarea.hinzufuegen(wandleZuAusgabe(vorher,typ,anzahlEingerueckt,alsKommentar)); //Kopfteil ausgeben, alles passend eingerückt und Kommentare bei Bedarf eingefügt
+		textarea.hinzufuegen(wandleZuAusgabe(vorher, typ, anzahlEingerueckt, alsKommentar));
 
-		//einzelnen Fälle ausgeben
-		for(int i=0; i < listen.size(); i++){//Listen durchgehen
-			switch(typ){
-			case CodeErzeuger.typJava:
-				if(i < listen.size()-1){
-					fall = "case "+co("kommentar")+listen.get(i).gibBeschreibung()+co("kommentarzu")+":\n";//case und dann der Fallname
-				}else{
-					fall = "default: "+co("zwangkommentar")+listen.get(i).gibBeschreibung()+co("zwangkommentarzu")+"\n";//Sonsts-Fall erhält default, Beschriftung ist nicht relevant für fertigen Code, also auf jeden Fall Kommentare setzen
+		for (int i = 0; i < listen.size(); i++) {
+			if (typ == CodeErzeuger.typPython) {
+				if (i < listen.size() - 1) {
+					fall = "case " + co("kommentar") + listen.get(i).gibBeschreibung() + co("kommentarzu") + ":\n";
+				} else {
+					fall = "case _:" + co("zwangkommentar") + listen.get(i).gibBeschreibung() + co("zwangkommentarzu") + "\n";
 				}
-				fallEnde = einruecken("break;\n",anzahlEinzuruecken);
-				break;
-
-			case CodeErzeuger.typDelphi:
-				if(i < listen.size()-1){
-					fall = co("kommentar")+listen.get(i).gibBeschreibung()+co("kommentarzu")+":\n";
-				}else{
-					fall = "else "+co("zwangkommentar")+listen.get(i).gibBeschreibung()+co("zwangkommentarzu")+"\n";
+				fallEnde = "";
+			} else {
+				if (i < listen.size() - 1) {
+					fall = "case " + co("kommentar") + listen.get(i).gibBeschreibung() + co("kommentarzu") + ":\n";
+				} else {
+					fall = "default: " + co("zwangkommentar") + listen.get(i).gibBeschreibung() + co("zwangkommentarzu") + "\n";
 				}
-				fall += einruecken("begin",anzahlEingerueckt+anzahlEinzuruecken)+"\n";
-				fallEnde = "end;\n";
-
-				break;
+				fallEnde = einruecken("break;\n", anzahlEinzuruecken);
 			}
 
-			textarea.hinzufuegen(wandleZuAusgabe(fall,typ,anzahlEingerueckt+anzahlEinzuruecken,alsKommentar));//Anfang für den aktuellen Fall ausgeben
-			listen.get(i).quellcodeAllerUnterelementeGenerieren(typ,anzahlEingerueckt+anzahlEinzuruecken*2,anzahlEinzuruecken,alsKommentar,textarea);//Unterelemente ausgeben
-			textarea.hinzufuegen(wandleZuAusgabe(fallEnde,typ,anzahlEingerueckt+anzahlEinzuruecken,alsKommentar));//Ende für den Fall ausgeben
+			textarea.hinzufuegen(wandleZuAusgabe(fall, typ, anzahlEingerueckt + anzahlEinzuruecken, alsKommentar));
+			listen.get(i).quellcodeAllerUnterelementeGenerieren(typ, anzahlEingerueckt + anzahlEinzuruecken * 2, anzahlEinzuruecken,
+					alsKommentar, textarea);
+			if (!fallEnde.isEmpty()) {
+				textarea.hinzufuegen(wandleZuAusgabe(fallEnde, typ, anzahlEingerueckt + anzahlEinzuruecken, alsKommentar));
+			}
 		}
 
-		textarea.hinzufuegen(wandleZuAusgabe(nachher,typ,anzahlEingerueckt,alsKommentar));//Ende der Fallauswahl ausgeben
+		if (!nachher.isEmpty()) {
+			textarea.hinzufuegen(wandleZuAusgabe(nachher, typ, anzahlEingerueckt, alsKommentar));
+		}
 
 	}
 

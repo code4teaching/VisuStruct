@@ -104,7 +104,6 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private int posInRueckgaengigListe = 0; //aktueller Index, an welcher Stelle man sich in der Rückgängig-Liste befindet; meist ist der Wert der letzte Index der Rückgängig-Liste, außer man hat auf Rückgängig geklickt
 	private int posInRueckgaengigListeWoZuletztGespeichert = -1; //Index, in der Rückgängig-Liste bei dem zuletzt gespeichert wurde; wird benötigt, um das Sternchen (*) im JTabbedPane beim Zurückgehen in der Rückgängig-Liste an der passenden Stelle auszublenden
 	private Font fontStr = GlobalSettings.fontStandard;
-	private Point[] pointMarkierungEckPunkte = null;
 
 	//Konstanten die jedem StruktogrammElement einen int-Wert zuordnen
 	public static final int typAnweisung = 0;
@@ -363,15 +362,6 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 				g.drawRect(rectDragElement.x,rectDragElement.y,rectDragElement.width,rectDragElement.height);
 				g.setStroke(alt);
 			}
-
-
-			if(pointMarkierungEckPunkte != null){
-				//TODO Markierungsfunktion einbauen, Markierungs-Rechteck zeichnen geht (nächsten beiden Zeilen benutzen)
-				//g.setColor(Color.black);
-				//g.drawRect(Math.min(pointMarkierungEckPunkte[0].x, pointMarkierungEckPunkte[1].x), Math.min(pointMarkierungEckPunkte[0].y, pointMarkierungEckPunkte[1].y), Math.abs(Math.min(pointMarkierungEckPunkte[0].x, dimGroesse.width -1) - Math.min(pointMarkierungEckPunkte[1].x, dimGroesse.width -1)), Math.abs(Math.min(pointMarkierungEckPunkte[0].y, dimGroesse.height -1) - Math.min(pointMarkierungEckPunkte[1].y, dimGroesse.height -1)));
-			}
-
-
 
 			//Point scrollweite = scrollpane.getViewport().getViewPosition();
 
@@ -975,7 +965,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	//die Datei, die dem übergebenen Pfad zugeordnet ist, wird geladen
 	public void laden(String pfad){
 		XMLLeser tmp = new XMLLeser();
-		tmp.ladeXLM(pfad,this); //alle in der Datei gespeicherten StruktogrammElemente werden hier erzeugt und in das Struktogramm integriert
+		tmp.ladeXML(pfad,this); //alle in der Datei gespeicherten StruktogrammElemente werden hier erzeugt und in das Struktogramm integriert
 		setzeAktuellerSpeicherpfad(pfad);
 		rueckgaengigListeInitialisieren(); //alle alten Rückgängig-Punkte entfernen
 		rueckgaengigPunktSetzen(false);
@@ -988,7 +978,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	//Struktogramm-Daten werden anhand des übergebenen Document erzeugt (für die Rückgängig-Funktion)
 	private void laden(Document document){//Rückgängig-Punkt muss hier nicht gesetzt werden, weil diese Methode nur mit Document Objekten aus der rueckgaengigListe angewandt wird
 		XMLLeser tmp = new XMLLeser();
-		tmp.ladeXLM(document,this);
+		tmp.ladeXML(document,this);
 		tabbedpane.titelFuerStruktogrammBearbeitetMarkieren(this, posInRueckgaengigListeWoZuletztGespeichert != posInRueckgaengigListe);//als bearbeitet markieren ("*" anhängen) (wenn posInRueckgaengigListeWoZuletztGespeichert != posInRueckgaengigListe) oder als abgespeichert (wenn posInRueckgaengigListeWoZuletztGespeichert == posInRueckgaengigListe)
 
 		zeichenbereichAktualisieren();
@@ -1200,19 +1190,6 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	}
 
 	public void mouseDragged(MouseEvent e){
-		Point p = e.getPoint();	
-
-		if(pointMarkierungEckPunkte != null || liste.gibElementAnPos(p.x, p.y, false) == null){
-			//Maus ist nicht über einem StruktogrammElement, oder einer StruktogrammElementListe
-
-			if(pointMarkierungEckPunkte == null){
-				pointMarkierungEckPunkte = new Point[2];
-				pointMarkierungEckPunkte[0] = pointMarkierungEckPunkte[1] = p;
-			}else{
-				pointMarkierungEckPunkte[1] = p;
-			}
-		}
-
 		mausBewegt(e.getX(),e.getY(),false);
 	}
 
@@ -1236,7 +1213,6 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 		letzteDiagrammMausKoords = new Point(e.getX(), e.getY());
 		if (SwingUtilities.isLeftMouseButton(e)) { // linke Maustaste
 			elementAnPosBefuellen(e.getX(), e.getY()); // EingabeDialog öffnen
-			pointMarkierungEckPunkte = null; // Markierungsrechteck entfernen
 			zeichne();
 		} else if (SwingUtilities.isRightMouseButton(e)) { // rechte Maustaste
 			popupMenueZeigen(e.getX(), e.getY()); // Popup-Menü zeigen
