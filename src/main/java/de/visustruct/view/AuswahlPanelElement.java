@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import de.visustruct.control.GlobalSettings;
 import de.visustruct.i18n.StructureElementI18n;
 
 /** Klickbare Kachel zum Ziehen eines neuen Struktogramm-Elements (FlatLaf-Button-Look). */
@@ -27,7 +28,6 @@ public class AuswahlPanelElement extends JButton {
 		setIcon(null);
 		setVerticalTextPosition(SwingConstants.CENTER);
 		setHorizontalTextPosition(SwingConstants.CENTER);
-		setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		aktualisiereBeschriftung();
 		PaletteButtonStyle.apply(this);
 		// Ohne released-Event (typisch nach DnD) bleibt das Button-Model „pressed“ → grauer Kasten
@@ -40,9 +40,9 @@ public class AuswahlPanelElement extends JButton {
 	}
 
 	public void aktualisiereBeschriftung() {
-		setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		// Immer UI-Sprache (I18n); Standardtexte neuer Blöcke weiter über das Text-Preset (Java usw.).
-		setText(StructureElementI18n.paletteShortLabel(typ));
+		setFont(new Font(Font.SANS_SERIF, Font.BOLD, textFontSizeFuerZeile(GlobalSettings.gibElementBeschriftung(typ))));
+		// Kurztext = Vorgabe des gewählten Text-Presets (z. B. Java: Statement, condition, …); Tooltip = didaktischer Name in der UI-Sprache.
+		setText(GlobalSettings.gibElementBeschriftung(typ));
 		setToolTipText(StructureElementI18n.paletteTooltip(typ));
 		invalidate();
 		revalidate();
@@ -51,5 +51,15 @@ public class AuswahlPanelElement extends JButton {
 
 	public int gibTyp() {
 		return typ;
+	}
+
+	private static int textFontSizeFuerZeile(String s) {
+		if (s == null || s.length() <= 12) {
+			return 12;
+		}
+		if (s.length() <= 22) {
+			return 11;
+		}
+		return 10;
 	}
 }
