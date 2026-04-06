@@ -3,7 +3,7 @@ package de.visustruct.i18n;
 import de.visustruct.control.Struktogramm;
 
 /**
- * I18n-Texte für das Preset „Beschriftung (Struktogramm)“: Standardtexte neuer Blöcke und kurze Paletten-Labels.
+ * I18n für Strukturblöcke: didaktische Namen ({@code structure.element.*}), kompakte Paletten-Labels ({@code structure.palette.*}, z. B. {@code ∞} für die Endlosschleife).
  */
 public final class StructureElementI18n {
 
@@ -61,11 +61,14 @@ public final class StructureElementI18n {
 		return I18n.tr(ELEMENT_KEYS[typ]);
 	}
 
-	/** Linker Teil einer Vorschau-Zeile (Slot 0–9 wie Preset-Zeile). */
+	/**
+	 * Linker Teil einer Vorschau-Zeile im Dialog „Beschriftung (Struktogramm)“ — immer der
+	 * didaktische Name (wie in den Menüs/Einstellungen), nicht das kompakte Paletten-Symbol.
+	 */
 	public static String previewRowLabel(int slotIndex) {
-		if (slotIndex < 0 || slotIndex >= PALETTE_KEYS.length) {
+		if (slotIndex < 0 || slotIndex >= ELEMENT_KEYS.length) {
 			return "";
 		}
-		return I18n.tr(PALETTE_KEYS[slotIndex]);
+		return I18n.tr(ELEMENT_KEYS[slotIndex]);
 	}
 }
