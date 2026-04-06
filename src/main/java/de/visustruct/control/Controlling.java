@@ -517,19 +517,18 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 	public boolean programmBeendenGeklickt(){
 		if(gui.gibTabbedpane().einOderMehrereStruktogrammeNichtGespeichert()){                  
-			Object[] options = {"Yes", "No"};
-			if (0 == JOptionPane.showOptionDialog(gui, "One or more diagrams have not been saved.\nExit without saving?", "Unsaved Changes", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1])){
-
+			Object[] options = { I18n.tr("dialog.exitUnsaved.quit"), I18n.tr("dialog.exitUnsaved.stay") };
+			int r = JOptionPane.showOptionDialog(gui, I18n.tr("dialog.exitUnsaved.message"),
+					I18n.tr("dialog.exitUnsaved.title"), JOptionPane.DEFAULT_OPTION,
+					JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+			if (r == 0) {
 				System.exit(0);
 				return true;
 			}
-
 			return false;
-
-		}else{
-			System.exit(0);
-			return true;
 		}
+		System.exit(0);
+		return true;
 	}
 
 

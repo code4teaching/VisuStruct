@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import de.visustruct.control.Controlling;
 import de.visustruct.control.Struktogramm;
+import de.visustruct.i18n.I18n;
 
 public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    
@@ -185,14 +186,22 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
    
    
    public void aktuellesStruktogrammschliessen(){
-      switch(JOptionPane.showConfirmDialog(controlling.getGUI(), "Save the current diagram before closing?", "Save Before Close?", JOptionPane.YES_NO_CANCEL_OPTION)){
-         case JOptionPane.YES_OPTION:
-            controlling.speichern(false);
-            remove(getSelectedIndex());
-            break;
-         case JOptionPane.NO_OPTION:
-            remove(getSelectedIndex());
-            break;
+      Object[] opts = {
+            I18n.tr("dialog.saveBeforeClose.save"),
+            I18n.tr("dialog.saveBeforeClose.dontSave"),
+            I18n.tr("dialog.saveBeforeClose.cancel"),
+      };
+      int r = JOptionPane.showOptionDialog(controlling.getGUI(),
+            I18n.tr("dialog.saveBeforeClose.message"),
+            I18n.tr("dialog.saveBeforeClose.title"),
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null, opts, opts[2]);
+      if (r == 0) {
+         controlling.speichern(false);
+         remove(getSelectedIndex());
+      } else if (r == 1) {
+         remove(getSelectedIndex());
       }
    }
    
