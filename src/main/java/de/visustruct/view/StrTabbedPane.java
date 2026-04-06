@@ -128,7 +128,7 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
       String titel = getTitleAt(i);
       if (bearbeitet) {
          if (titel.isEmpty()) {
-            titel = "Untitled*";
+            titel = I18n.tr("tab.untitled") + "*";
          } else if (titel.charAt(titel.length() - 1) != '*') {
             titel += "*";
          }
@@ -162,7 +162,7 @@ public class StrTabbedPane extends JTabbedPane implements ChangeListener{
          bc = Color.LIGHT_GRAY;
       }
       scroll.setBorder(BorderFactory.createLineBorder(bc, 1, true));
-      add("Untitled", scroll);
+      add(I18n.tr("tab.untitled"), scroll);
       //stateChangedFreigegeben = false; //changeListener kurz deaktivieren...
       setSelectedIndex(getTabCount() -1); //...weil es sonst in graphicsInitialisieren Probleme gibt
       //stateChangedFreigegeben = true;

@@ -150,6 +150,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 			}
 
 			UiTheme.applyAfterTheme();
+			I18n.applyFileChooserStrings();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -398,6 +399,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		gui.rebuildMenuBar();
 		SwingUtilities.updateComponentTreeUI(gui);
 		gui.validate();
+		I18n.applyFileChooserStrings();
 		// Nach updateComponentTreeUI (FlatLaf), sonst bleiben Paletten-Buttons oft auf der alten Sprache.
 		aktualisierePalettenBeschriftungen();
 		SwingUtilities.invokeLater(this::aktualisierePalettenBeschriftungen);
@@ -430,6 +432,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		applyConfiguredTheme();
 		SwingUtilities.updateComponentTreeUI(gui);
 		gui.validate();
+		I18n.applyFileChooserStrings();
 		aktualisierePalettenBeschriftungen();
 		SwingUtilities.invokeLater(this::aktualisierePalettenBeschriftungen);
 		gui.gibTabbedpane().refreshAllStruktogrammeNachThemeWechsel();
