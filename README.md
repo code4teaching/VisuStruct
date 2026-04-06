@@ -25,6 +25,16 @@ Under **Settings → Languages** the **user interface** can be set to **English*
 git clone https://github.com/code4teaching/VisuStruct.git
 ```
 
+## Änderungen in Version 1.0.7 (Auszug)
+
+- **Quellcode-Generator:** **Delphi/Pascal** entfernt; **Python** ergänzt (**3.10+**, `match`/`case` für Mehrfachauswahl); Dialog **mehrsprachig**; gewählte Zielsprache in **`visustruct.properties`** (`celanguage`: `0` Java, `1` Python).
+- **Mehrfachauswahl (Java):** Standardbeschriftung der letzten Spalte **`default`** statt „Else“ (I18n `structure.multiway.defaultCaseLabel`).
+- **API:** `XMLLeser`-Methoden **`ladeXML`** (früher falsch `ladeXLM`).
+- **Code:** ungenutzte Markierungs-/Kästchen-Reste aus dem Upstream entfernt (`Struktogramm`, `StruktogrammElement`).
+- **Build:** Maven **`de.visustruct:visustruct:1.0.7`**, Fat-JAR **`visustruct-1.0.7.jar`**.
+
+*Ausführliche Liste (Deutsch/Englisch):* [`release-notes/v1.0.7.md`](release-notes/v1.0.7.md).
+
 ## Änderungen in Version 1.0.6 (Auszug)
 
 - **Oberfläche & Thema:** Menüs bereinigt; **hell/dunkel** wechselbar **ohne Neustart**; dunkler Modus lesbarer.
@@ -79,7 +89,7 @@ Diese Version richtet **Marke und technische Identität** an **VisuStruct** aus.
 - **FlatLaf** mit Farben wie auf **[VisuStruct](https://visustruct.de)** (hell: `style.css`, dunkel: Layout-Farben aus `styles.css`), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
 - **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
 - Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
-- Gebaute Datei: **`visustruct-1.0.6.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
+- Gebaute Datei: **`visustruct-1.0.7.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
 
 ## Fertiges Programm herunterladen (ohne selbst zu bauen)
 
@@ -100,7 +110,7 @@ Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft is
 Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
 [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
-**Release auf GitHub aktualisieren:** Unter *Releases* eine **neue Version** anlegen, Tag z. B. **`v1.0.6`** auf den passenden Commit setzen und veröffentlichen. Die Workflow-Datei [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) baut dann die JARs und hängt u. a. **`visustruct.jar`** (fester Download-Link oben) an die Release an.
+**Release auf GitHub aktualisieren:** Unter *Releases* eine **neue Version** anlegen, Tag z. B. **`v1.0.7`** auf den passenden Commit setzen und veröffentlichen. Die Workflow-Datei [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) baut dann die JARs und hängt u. a. **`visustruct.jar`** (fester Download-Link oben) an die Release an.
 
 ## Voraussetzungen
 
@@ -127,13 +137,13 @@ chmod +x mvnw
 Die fertige Datei befindet sich hier:
 
 ```text
-target/visustruct-1.0.6.jar
+target/visustruct-1.0.7.jar
 ```
 
 ## Programm starten
 
 ```bash
-java -jar target/visustruct-1.0.6.jar
+java -jar target/visustruct-1.0.7.jar
 ```
 
 Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.

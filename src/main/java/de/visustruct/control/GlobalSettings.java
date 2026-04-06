@@ -31,7 +31,7 @@ public class GlobalSettings implements Konstanten{
 	/** Anzeigename in Titelleiste, Dock und Infodialog (unabhängig vom ursprünglichen Projektautor). */
 	public static final String APP_DISPLAY_NAME = "VisuStruct";
 
-	public static final int updateNummer = 8;
+	public static final int updateNummer = 9;
 	public static String versionsString = "";
 	public static String guiTitel = "";
 	public static final String[] updateDaten = {"30.05.2011", "31.05.2011", "05.06.2011", "11.09.2011", "18.01.2012", "17.02.2012", "02.05.2012", "16.08.2012", "13.05.2014", "10.07.2014"};
