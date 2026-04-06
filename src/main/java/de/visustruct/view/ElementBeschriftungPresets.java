@@ -21,13 +21,14 @@ public final class ElementBeschriftungPresets {
 	public static final int ANZAHL_PRESETS = 5;
 
 	/**
-	 * Reihenfolge im Dialog „Beschriftung (Struktogramm)“: zuerst {@link #PRESET_ENGLISH_JAVA}, danach die deutschsprachigen Pakete, zuletzt didaktisch/I18n.
+	 * Reihenfolge im Dialog „Beschriftung (Struktogramm)“: Java-Standard, dann formale / schulnahe deutsche Pakete,
+	 * zuletzt {@link #PRESET_DIDACTIC_I18N} (Begriffe in der gewählten Oberflächensprache).
 	 */
 	public static final int[] PRESET_DIALOG_REIHENFOLGE = {
 			PRESET_ENGLISH_JAVA,
-			PRESET_KLASSISCH,
 			PRESET_FORMAL,
 			PRESET_JAVA_NA,
+			PRESET_KLASSISCH,
 			PRESET_DIDACTIC_I18N,
 	};
 
