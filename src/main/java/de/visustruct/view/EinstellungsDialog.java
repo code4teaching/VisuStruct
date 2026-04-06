@@ -54,14 +54,16 @@ public class EinstellungsDialog extends JDialog {
 		radioPanel.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
 		ButtonGroup gruppe = new ButtonGroup();
 		JRadioButton[] radios = new JRadioButton[ElementBeschriftungPresets.ANZAHL_PRESETS];
-		for (int p = 0; p < ElementBeschriftungPresets.ANZAHL_PRESETS; p++) {
-			JRadioButton rb = new JRadioButton(ElementBeschriftungPresets.getPresetAnzeigename(p));
-			rb.setActionCommand(Integer.toString(p));
+		int startDialogPlatz = ElementBeschriftungPresets.dialogPlatzFuerPreset(startIdx);
+		for (int u = 0; u < ElementBeschriftungPresets.PRESET_DIALOG_REIHENFOLGE.length; u++) {
+			int preset = ElementBeschriftungPresets.PRESET_DIALOG_REIHENFOLGE[u];
+			JRadioButton rb = new JRadioButton(ElementBeschriftungPresets.getPresetAnzeigename(preset));
+			rb.setActionCommand(Integer.toString(u));
 			gruppe.add(rb);
 			radioPanel.add(rb);
 			radioPanel.add(Box.createVerticalStrut(2));
-			radios[p] = rb;
-			if (p == startIdx) {
+			radios[u] = rb;
+			if (u == startDialogPlatz) {
 				rb.setSelected(true);
 			}
 		}
@@ -76,9 +78,9 @@ public class EinstellungsDialog extends JDialog {
 
 		Runnable vorschauAktualisieren = () -> {
 			int sel = ElementBeschriftungPresets.PRESET_ENGLISH_JAVA;
-			for (int p = 0; p < radios.length; p++) {
-				if (radios[p].isSelected()) {
-					sel = p;
+			for (int u = 0; u < radios.length; u++) {
+				if (radios[u].isSelected()) {
+					sel = ElementBeschriftungPresets.presetIndexAtDialogPlatz(u);
 					break;
 				}
 			}
@@ -103,9 +105,9 @@ public class EinstellungsDialog extends JDialog {
 		JButton ok = new JButton(I18n.tr("dialog.elementText.ok"));
 		ok.addActionListener(e -> {
 			int sel = ElementBeschriftungPresets.PRESET_ENGLISH_JAVA;
-			for (int p = 0; p < radios.length; p++) {
-				if (radios[p].isSelected()) {
-					sel = p;
+			for (int u = 0; u < radios.length; u++) {
+				if (radios[u].isSelected()) {
+					sel = ElementBeschriftungPresets.presetIndexAtDialogPlatz(u);
 					break;
 				}
 			}

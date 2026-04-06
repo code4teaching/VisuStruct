@@ -14,11 +14,22 @@ public final class ElementBeschriftungPresets {
 	public static final int PRESET_KLASSISCH = 0;
 	public static final int PRESET_FORMAL = 1;
 	public static final int PRESET_JAVA_NA = 2;
-	/** Syntaxnahe Java-Vorgaben ({@code if}, {@code condition}, …) — Programm-Standard; Anzeigename z. B. „Java (Standard)“. */
+	/** Syntaxnahe Java-Vorgaben ({@code if}, {@code condition}, …) — Programm-Standard; UI z. B. „Java (Standard)“ / „Java (Default)“. */
 	public static final int PRESET_ENGLISH_JAVA = 3;
 	/** Didaktische Begriffe gemäß UI-Sprache ({@link StructureElementI18n}). */
 	public static final int PRESET_DIDACTIC_I18N = 4;
 	public static final int ANZAHL_PRESETS = 5;
+
+	/**
+	 * Reihenfolge im Dialog „Beschriftung (Struktogramm)“: zuerst {@link #PRESET_ENGLISH_JAVA}, danach die deutschsprachigen Pakete, zuletzt didaktisch/I18n.
+	 */
+	public static final int[] PRESET_DIALOG_REIHENFOLGE = {
+			PRESET_ENGLISH_JAVA,
+			PRESET_KLASSISCH,
+			PRESET_FORMAL,
+			PRESET_JAVA_NA,
+			PRESET_DIDACTIC_I18N,
+	};
 
 	private static final int N = 10;
 
@@ -37,6 +48,9 @@ public final class ElementBeschriftungPresets {
 		if (PRESETS.length != ANZAHL_PRESETS - 1) {
 			throw new IllegalStateException("Preset-Anzahl");
 		}
+		if (PRESET_DIALOG_REIHENFOLGE.length != ANZAHL_PRESETS) {
+			throw new IllegalStateException("Preset-Dialog-Reihenfolge");
+		}
 		for (String[] row : PRESETS) {
 			if (row.length != N) {
 				throw new IllegalStateException("Preset-L\u00e4nge");
@@ -45,6 +59,24 @@ public final class ElementBeschriftungPresets {
 	}
 
 	private ElementBeschriftungPresets() {
+	}
+
+	/** Gespeichertes Preset → Index der zugehörigen Radio-Option im Dialog. */
+	public static int dialogPlatzFuerPreset(int presetIndex) {
+		for (int u = 0; u < PRESET_DIALOG_REIHENFOLGE.length; u++) {
+			if (PRESET_DIALOG_REIHENFOLGE[u] == presetIndex) {
+				return u;
+			}
+		}
+		return 0;
+	}
+
+	/** Radio-Position im Dialog → interner Preset-Index. */
+	public static int presetIndexAtDialogPlatz(int dialogPlatz) {
+		if (dialogPlatz < 0 || dialogPlatz >= PRESET_DIALOG_REIHENFOLGE.length) {
+			return PRESET_ENGLISH_JAVA;
+		}
+		return PRESET_DIALOG_REIHENFOLGE[dialogPlatz];
 	}
 
 	public static String getPresetAnzeigename(int index) {
