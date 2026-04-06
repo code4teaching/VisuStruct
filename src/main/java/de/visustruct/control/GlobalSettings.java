@@ -164,22 +164,26 @@ public class GlobalSettings implements Konstanten{
 			String s;
 			
 			s = pr.getProperty("version");
-			if(s != null){
-				versionsString = s;
+			if (s != null && !s.isBlank()) {
+				versionsString = s.trim();
 				guiTitel = APP_DISPLAY_NAME + " " + versionsString;
 			} else {
 				guiTitel = APP_DISPLAY_NAME;
 			}
 
 			s = pr.getProperty("revision");
-			if(s != null){
-				buildInfoGitHash = s;
+			if (s != null && !s.isBlank()) {
+				buildInfoGitHash = s.trim();
 			}
-			
+
 			s = pr.getProperty("timestamp");
-			if(s != null){
-				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-				buildInfoBuildTime = sdf.format(new Date(Long.parseLong(s)));
+			if (s != null && !s.isBlank()) {
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+					buildInfoBuildTime = sdf.format(new Date(Long.parseLong(s.trim())));
+				} catch (NumberFormatException ignored) {
+					// optional build.properties from filtered POM — ignore invalid timestamp
+				}
 			}
 
 		} catch (RuntimeException e){
