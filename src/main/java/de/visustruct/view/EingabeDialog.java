@@ -262,7 +262,7 @@ public class EingabeDialog extends JDialog {
 	public void buttonFallname_ActionPerformed(ActionEvent evt) {
 		if(list.gibIndex() >= 0){
 
-			String fallname = JOptionPane.showInputDialog(this, I18n.tr("dialog.caseLabel.newMessage"),
+			String fallname = (String) JOptionPane.showInputDialog(this, I18n.tr("dialog.caseLabel.newMessage"),
 					I18n.tr("dialog.caseLabel.newTitle"), JOptionPane.PLAIN_MESSAGE, null, null,
 					list.gibMarkiertenInhalt());
 
