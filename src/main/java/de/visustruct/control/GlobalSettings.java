@@ -416,6 +416,17 @@ public class GlobalSettings implements Konstanten{
 		return StruktogrammPalette.getDefaultTextForNewElement(typNummer);
 	}
 
+	/**
+	 * Text auf der linken Palette: bei Java-Standard Schlüsselwörter ({@code if}, {@code while}, …),
+	 * sonst wie {@link #gibElementBeschriftung(int)}.
+	 */
+	public static String gibPaletteButtonBeschriftung(int typNummer) {
+		if (elementBeschriftungPresetIndex == ElementBeschriftungPresets.PRESET_ENGLISH_JAVA) {
+			return ElementBeschriftungPresets.javaStandardPaletteButtonLabel(typNummer);
+		}
+		return gibElementBeschriftung(typNummer);
+	}
+
 	public static int getElementBeschriftungPresetIndex() {
 		return elementBeschriftungPresetIndex;
 	}

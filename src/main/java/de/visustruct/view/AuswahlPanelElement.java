@@ -40,9 +40,10 @@ public class AuswahlPanelElement extends JButton {
 	}
 
 	public void aktualisiereBeschriftung() {
-		setFont(new Font(Font.SANS_SERIF, Font.BOLD, textFontSizeFuerZeile(GlobalSettings.gibElementBeschriftung(typ))));
-		// Kurztext = Vorgabe des gewählten Text-Presets (z. B. Java: Statement, condition, …); Tooltip = didaktischer Name in der UI-Sprache.
-		setText(GlobalSettings.gibElementBeschriftung(typ));
+		String kurz = GlobalSettings.gibPaletteButtonBeschriftung(typ);
+		setFont(new Font(Font.SANS_SERIF, Font.BOLD, textFontSizeFuerZeile(kurz)));
+		setText(kurz);
+		// Didaktischer Blockname in der UI-Sprache (z. B. Kopf- vs. fußgesteuerte Schleife trotz gleichem Java-Wort auf zwei Buttons).
 		setToolTipText(StructureElementI18n.paletteTooltip(typ));
 		invalidate();
 		revalidate();

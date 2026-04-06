@@ -14,7 +14,7 @@ public final class ElementBeschriftungPresets {
 	public static final int PRESET_KLASSISCH = 0;
 	public static final int PRESET_FORMAL = 1;
 	public static final int PRESET_JAVA_NA = 2;
-	/** Syntaxnahe Java-Vorgaben ({@code if}, {@code condition}, …) — Programm-Standard; UI z. B. „Java (Standard)“ / „Java (Default)“. */
+	/** Syntaxnahe Java-Vorgaben — Programm-Standard; neue Blöcke mit Platzhaltertext, Palette mit {@link #javaStandardPaletteButtonLabel(int)}. */
 	public static final int PRESET_ENGLISH_JAVA = 3;
 	/** Didaktische Begriffe gemäß UI-Sprache ({@link StructureElementI18n}). */
 	public static final int PRESET_DIDACTIC_I18N = 4;
@@ -44,12 +44,32 @@ public final class ElementBeschriftungPresets {
 					"condition", "condition", "\u221e", "break", "method()", "\u00f8"},
 	};
 
+	/**
+	 * Nur Palette bei {@link #PRESET_ENGLISH_JAVA}: echte Java-Schlüsselwörter / übliche Kurzformen (nicht {@code condition} für alles).
+	 * Reihenfolge = Elementtypen 0–9 wie {@link #PRESETS}.
+	 */
+	private static final String[] JAVA_STANDARD_PALETTE_LABELS = {
+			"Statement",
+			"if",
+			"switch",
+			"for",
+			"while",
+			"do",
+			"while(true)",
+			"break",
+			"method()",
+			"\u00f8",
+	};
+
 	static {
 		if (PRESETS.length != ANZAHL_PRESETS - 1) {
 			throw new IllegalStateException("Preset-Anzahl");
 		}
 		if (PRESET_DIALOG_REIHENFOLGE.length != ANZAHL_PRESETS) {
 			throw new IllegalStateException("Preset-Dialog-Reihenfolge");
+		}
+		if (JAVA_STANDARD_PALETTE_LABELS.length != N) {
+			throw new IllegalStateException("Java-Palette-L\u00e4nge");
 		}
 		for (String[] row : PRESETS) {
 			if (row.length != N) {
@@ -77,6 +97,14 @@ public final class ElementBeschriftungPresets {
 			return PRESET_ENGLISH_JAVA;
 		}
 		return PRESET_DIALOG_REIHENFOLGE[dialogPlatz];
+	}
+
+	/** Paletten-Button bei gewähltem Java-Standard-Preset ({@link #PRESET_ENGLISH_JAVA}). */
+	public static String javaStandardPaletteButtonLabel(int typ) {
+		if (typ < 0 || typ >= JAVA_STANDARD_PALETTE_LABELS.length) {
+			return "";
+		}
+		return JAVA_STANDARD_PALETTE_LABELS[typ];
 	}
 
 	public static String getPresetAnzeigename(int index) {
