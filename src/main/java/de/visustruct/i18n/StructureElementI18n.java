@@ -3,7 +3,7 @@ package de.visustruct.i18n;
 import de.visustruct.control.Struktogramm;
 
 /**
- * I18n für Strukturblöcke: didaktische Namen ({@code structure.element.*}), kompakte Paletten-Labels ({@code structure.palette.*}, z. B. {@code ∞} für die Endlosschleife).
+ * I18n für Strukturblöcke: didaktische Namen ({@code structure.element.*}) und Paletten-Kurzlabels ({@code structure.palette.*}).
  */
 public final class StructureElementI18n {
 
