@@ -4,7 +4,7 @@
 
 **VisuStruct** ist ein **Struktogramm-Editor** für **Nassi-Shneiderman-Diagramme**.
 
-Die **Benutzeroberfläche** kann unter **Einstellungen → Sprachen** auf **Deutsch**, **Englisch** oder **Portugiesisch (Portugal)** gestellt werden; einzelne Texte können je nach Bereich noch fehlen oder gemischt sein.
+Die **Benutzeroberfläche** kann unter **Einstellungen → Sprachen** auf **Deutsch**, **Englisch** oder **Portugiesisch** gestellt werden (technisch `uilanguage`: `en`, `de`, `pt_PT`); wenige Hilfsdialoge können noch teils englische Beschriftungen haben.
 
 *Herkunft:* Das Programm basiert auf dem Open-Source-Projekt [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). Details und Copyright stehen in der [LICENSE](LICENSE).
 
@@ -15,7 +15,7 @@ Die **Benutzeroberfläche** kann unter **Einstellungen → Sprachen** auf **Deut
 
 **VisuStruct** is a **structure-chart editor** for **Nassi–Shneiderman diagrams**.
 
-Under **Settings → Languages** the **user interface** can be set to **English**, **German**, or **European Portuguese (Portugal)**; a few areas may still be incomplete or mixed.
+Under **Settings → Languages** the **user interface** can be set to **English**, **German**, or **Portuguese** (stored as `en`, `de`, or `pt_PT` in `visustruct.properties`); a few auxiliary dialogs may still use English labels.
 
 *Lineage:* Built on the open-source project [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). See [LICENSE](LICENSE) for copyright and terms.
 
@@ -28,9 +28,11 @@ git clone https://github.com/code4teaching/VisuStruct.git
 ## Änderungen in Version 1.0.6 (Auszug)
 
 - **Oberfläche & Thema:** Menüs bereinigt; **hell/dunkel** wechselbar **ohne Neustart**; dunkler Modus lesbarer.
-- **Sprachen:** **Einstellungen → Sprachen** — **Englisch**, **Deutsch**, **Portugiesisch (Portugal)**; Speicherung in **`visustruct.properties`** (`uilanguage`). Ohne Eintrag: Vorgabe aus **JVM-Locale**.
-- **I18n:** Menü, Dialoge, **Kontextmenü Struktogramm**, Palette (u. a. PNG, Info, Papierkorb); **Englisch** wird nicht mehr durch die OS-Locale überschrieben.
-- **Struktogramm-Beschriftung:** weiteres **Text-Preset** (didaktisch), **Vorschau**; Anzeige **„Java (Standard)“**; **Palette** (Kurztexte/Tooltips) folgt der **UI-Sprache** und aktualisiert sich zuverlässig nach Theme/Sprachwechsel.
+- **Sprachen:** **Einstellungen → Sprachen** zeigt **Englisch**, **Deutsch**, **Portugiesisch** (ohne Länderzusätze); Speicherung in **`visustruct.properties`** (`uilanguage`). Ohne Eintrag: Vorgabe aus **JVM-Locale**.
+- **I18n:** Menü, zentrale **Melde- und Sicherheitsdialoge** (u. a. Beenden, Tab schließen, Überschreiben, Speichern, PNG-Export), **JFileChooser**-Beschriftungen, **Kontextmenü**, Palette (u. a. PNG, Info, Papierkorb); **Englisch** wird nicht mehr durch die OS-Locale überschrieben.
+- **Struktogramm-Beschriftung:** Preset **„Java (Standard)“** / engl. **„Java (Default)“** zuerst im Dialog, danach didaktisches Preset passend zur UI-Sprache, dann die deutsch fest codierten Pakete; **Vorschau** mit didaktischen Zeilenüberschriften; **Palette**: beim Java-Preset **Schlüsselwörter** auf den Buttons (`if`, `switch`, `while`, …), Standardtexte in neuen Blöcken unverändert syntaxnah.
+- **Tabs:** neuer Diagramm-Reiter **„Ohne Titel“** (bzw. lokalisiert), nicht mehr fest „Untitled“.
+- **Build / `build.properties`:** Leere `timestamp`/`revision` lösen keinen Fehler mehr beim Start.
 - **Build:** Maven **`de.visustruct:visustruct:1.0.6`**, Fat-JAR **`visustruct-1.0.6.jar`**.
 
 *Ausführliche Liste (Deutsch/Englisch):* [`release-notes/v1.0.6.md`](release-notes/v1.0.6.md).
