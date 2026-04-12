@@ -176,8 +176,12 @@ public class CodeErzeuger extends JDialog {
 		}
 		String escaped = code.replaceAll("(?i)</script>", "<\\/script>");
 		String lang = I18n.currentLocale().toLanguageTag();
+		String consoleHint = escapeForHtmlText(I18n.tr("dialog.codeGen.jsBrowserConsoleHint"));
+		String hintBlock = "<p style=\"font-family:system-ui,Segoe UI,sans-serif;font-size:0.875rem;color:#1f2937;"
+				+ "margin:0.75rem 1rem;max-width:42rem;line-height:1.45;white-space:pre-line;\">" + consoleHint + "</p>\n";
 		String html = "<!DOCTYPE html>\n<html lang=\"" + lang + "\">\n<head>\n<meta charset=\"UTF-8\">\n<title>"
-				+ I18n.tr("dialog.codeGen.jsBrowserPageTitle") + "</title>\n</head>\n<body>\n<script>\n"
+				+ escapeForHtmlText(I18n.tr("dialog.codeGen.jsBrowserPageTitle")) + "</title>\n</head>\n<body>\n"
+				+ hintBlock + "<script>\n"
 				+ escaped + "\n</script>\n</body>\n</html>\n";
 		try {
 			java.nio.file.Path temp = Files.createTempFile("visustruct-js-", ".html");
@@ -198,6 +202,13 @@ public class CodeErzeuger extends JDialog {
 			JOptionPane.showMessageDialog(this, I18n.trf("dialog.codeGen.jsBrowserIoError.message", detail),
 					I18n.tr("dialog.codeGen.jsBrowserIoError.title"), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	private static String escapeForHtmlText(String raw) {
+		if (raw == null) {
+			return "";
+		}
+		return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 	}
 
 	private static JRadioButton getSelectedRadioButton(ButtonGroup bg) {
