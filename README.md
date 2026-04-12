@@ -77,7 +77,7 @@ This release aligns **branding and technical identity** with **VisuStruct**. **`
 
 - **Java 17** target (build and run with JDK 17+).
 - **FlatLaf** light/dark themes; **JDOM2**; no legacy AppleJavaExtensions.
-- **Motif** L&amp;F removed; **Metal** and FlatLaf available.
+- **Motif** look-and-feel removed; **Metal** and FlatLaf available.
 - Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.0.7.jar`**).
 
 ---
