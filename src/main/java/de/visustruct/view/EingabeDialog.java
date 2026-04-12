@@ -11,8 +11,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
+import javax.swing.BoxLayout;
 
 import de.visustruct.i18n.I18n;
 import de.visustruct.other.JListEasy;
@@ -79,7 +81,7 @@ public class EingabeDialog extends JDialog {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 100;
-		c.weighty = 200;
+		c.weighty = 150;
 		c.fill = GridBagConstraints.BOTH;
 		add(new JScrollPane(textarea = new JTextAreaEasy()), c);
 
@@ -112,12 +114,13 @@ public class EingabeDialog extends JDialog {
 			c.gridx = 0;
 			c.gridy = 3;
 			c.weightx = 100;
-			c.weighty = 1;
-			//c.fill = GridBagConstraints.BOTH;
+			// Genug Höhe für mehrere Case-Zeilen (sonst wirkt Bearbeiten "weg").
+			c.weighty = 60;
+			c.fill = GridBagConstraints.BOTH;
 			add(new JScrollPane(list = new JListEasy()), c);
 			
 			c.weighty = 1;
-			//c.fill = GridBagConstraints.HORIZONTAL;
+			c.fill = GridBagConstraints.HORIZONTAL;
 			
 			
 			c.gridwidth = 1;
@@ -125,23 +128,25 @@ public class EingabeDialog extends JDialog {
 			c.gridx = 2;
 			c.gridy = 4;
 			c.weightx = 100;
-			button = new JButton("Rename selected case");
-			button.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					buttonFallname_ActionPerformed(e);
-				}
-			});
-			add(button, c);
+			JPanel caseButtons = new JPanel();
+			caseButtons.setLayout(new BoxLayout(caseButtons, BoxLayout.Y_AXIS));
+			JButton rename = new JButton(I18n.tr("dialog.caseLabel.renameButton"));
+			rename.addActionListener(e -> buttonFallname_ActionPerformed(e));
+			caseButtons.add(rename);
+
+			// Nur bei Mehrfachauswahl (nicht bei Verzweigung): neue Case-Spalte direkt im Dialog anlegen.
+			if (element instanceof Fallauswahl && !(element instanceof Verzweigung)) {
+				JButton insert = new JButton(I18n.tr("popup.insertNewCase"));
+				insert.addActionListener(e -> buttonNeuerFall_ActionPerformed(e));
+				caseButtons.add(insert);
+			}
+			add(caseButtons, c);
 			
 			
 			
 			//Element ist Verzweigung oder Fallauswahl, anzahlListen ist für Schleifen 0, weil diese keine Überschrift brauchen
 			//JListEasy erzeugen, die die Fallnamen, oder bei einer Verzweigung "Ja" und "Nein" enthält, um diese umbenennen zu können
-			String[] inhaltVorher = element.gibFaelle();
-			for(int i=0; i < anzahlListen; i++){
-				list.fuegeHinzu(inhaltVorher[i]);
-			}
+			refreshCaseList();
 
 		}
 		
@@ -276,6 +281,29 @@ public class EingabeDialog extends JDialog {
 		}else{//es ist noch kein Fall in der JListEasy ausgewählt
 			JOptionPane.showMessageDialog(this, I18n.tr("dialog.caseSelectFirst.message"),
 					I18n.tr("dialog.caseSelectFirst.title"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void buttonNeuerFall_ActionPerformed(ActionEvent evt) {
+		if (!(element instanceof Fallauswahl) || (element instanceof Verzweigung)) {
+			return;
+		}
+		((Fallauswahl) element).erstelleNeueSpalte();
+		refreshCaseList();
+		// neu eingefügten Fall markieren (vor dem letzten Eintrag = default)
+		if (list != null && list.gibAnzahl() >= 2) {
+			list.setzeIndex(list.gibAnzahl() - 2);
+		}
+	}
+
+	private void refreshCaseList() {
+		if (list == null) {
+			return;
+		}
+		list.entferneAlle();
+		String[] inhalt = element.gibFaelle();
+		for (String s : inhalt) {
+			list.fuegeHinzu(s);
 		}
 	}
 

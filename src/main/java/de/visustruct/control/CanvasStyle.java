@@ -37,8 +37,10 @@ public final class CanvasStyle {
 		titleText = new Color(0x111827);
 		elementBorder = new Color(0x4B5563);
 		elementText = new Color(0x111827);
-		elementSelectedFill = new Color(0xBFDBFE);
-		dropPreview = new Color(0x93C5FD);
+		// Markierung (hell) soll sich klar von der Drop-Vorschau unterscheiden und Text lesbar lassen.
+		elementSelectedFill = new Color(0xDBEAFE);
+		// Drop-Vorschau: kräftiger + halbtransparent, damit sie über Diagrammflächen nicht "klebt".
+		dropPreview = new Color(0x803B82F6, true);
 		dragFrame = new Color(0x3B82F6);
 		elementFill = Color.WHITE;
 	}
@@ -50,8 +52,10 @@ public final class CanvasStyle {
 		titleText = new Color(0xF4F4F5);
 		elementBorder = new Color(0x71717A);
 		elementText = new Color(0x18181B);
-		elementSelectedFill = new Color(0x1E3A5F);
-		dropPreview = new Color(0x3B5A8C);
+		// In dark bleiben Blöcke hell; Markierung muss sich abheben, aber Text (dunkel) lesbar lassen.
+		elementSelectedFill = new Color(0xA7C7FF);
+		// Drop-Vorschau: stärker + halbtransparent.
+		dropPreview = new Color(0x805B9FFF, true);
 		dragFrame = new Color(0x5B9FFF);
 		elementFill = new Color(0xECECF0);
 	}
