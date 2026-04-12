@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +44,8 @@ public class CodeErzeuger extends JDialog {
 	private JLabel jLabel2 = new JLabel();
 	private JNumberField numberfieldZeichenzahl = new JNumberField();
 	private JButton buttonCodeErzeugen = new JButton();
-	private JButton buttonOpenInBrowser = new JButton();
+	/** Je nach Zielsprache: Browser (JS) oder Zwischenablage (Java/Python). */
+	private JButton buttonCodeSecondary = new JButton();
 	private JButton buttonSchliessen = new JButton();
 	private Struktogramm str;
 
@@ -114,16 +116,15 @@ public class CodeErzeuger extends JDialog {
 			}
 		});
 		cp.add(buttonCodeErzeugen);
-		buttonOpenInBrowser.setBounds(144, 386, 228, 25);
-		buttonOpenInBrowser.setText(I18n.tr("dialog.codeGen.openInBrowser"));
-		buttonOpenInBrowser.setMargin(new Insets(2, 2, 2, 2));
-		buttonOpenInBrowser.addActionListener(new ActionListener() {
+		buttonCodeSecondary.setBounds(144, 386, 228, 25);
+		buttonCodeSecondary.setMargin(new Insets(2, 2, 2, 2));
+		buttonCodeSecondary.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buttonOpenInBrowser_ActionPerformed();
+				buttonCodeSecondary_ActionPerformed();
 			}
 		});
-		cp.add(buttonOpenInBrowser);
+		cp.add(buttonCodeSecondary);
 		buttonSchliessen.setBounds(380, 386, 102, 25);
 		buttonSchliessen.setText(I18n.tr("dialog.codeGen.close"));
 		buttonSchliessen.setMargin(new Insets(2, 2, 2, 2));
@@ -136,7 +137,7 @@ public class CodeErzeuger extends JDialog {
 
 		java.awt.event.ItemListener sprachWahlListener = e -> {
 			if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
-				aktualisiereBrowserButton();
+				aktualisiereCodeSecondaryButton();
 			}
 		};
 		javaButton.addItemListener(sprachWahlListener);
@@ -149,19 +150,39 @@ public class CodeErzeuger extends JDialog {
 
 		this.str = str;
 
-		aktualisiereBrowserButton();
+		aktualisiereCodeSecondaryButton();
 		setResizable(false);
 		setVisible(true);
 	}
 
-	private void aktualisiereBrowserButton() {
-		buttonOpenInBrowser.setEnabled(javaScriptButton.isSelected());
+	private void aktualisiereCodeSecondaryButton() {
+		boolean js = javaScriptButton.isSelected();
+		buttonCodeSecondary.setEnabled(true);
+		buttonCodeSecondary.setFocusable(true);
+		if (js) {
+			buttonCodeSecondary.setText(I18n.tr("dialog.codeGen.openInBrowser"));
+			buttonCodeSecondary.setToolTipText(I18n.tr("dialog.codeGen.openInBrowser.tooltip"));
+		} else {
+			buttonCodeSecondary.setText(I18n.tr("dialog.codeGen.copyCode"));
+			buttonCodeSecondary.setToolTipText(I18n.tr("dialog.codeGen.copyCode.tooltip"));
+		}
 	}
 
-	private void buttonOpenInBrowser_ActionPerformed() {
-		if (!javaScriptButton.isSelected()) {
+	private void buttonCodeSecondary_ActionPerformed() {
+		if (javaScriptButton.isSelected()) {
+			openJsPreviewInBrowser();
 			return;
 		}
+		String code = textarea.gibText();
+		if (code == null) {
+			code = "";
+		}
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(code), null);
+		JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeGen.copyDone.message"),
+				I18n.tr("dialog.codeGen.copyDone.title"), JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private void openJsPreviewInBrowser() {
 		String code = textarea.gibText();
 		if (code == null || code.isBlank()) {
 			JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeGen.jsBrowserEmpty.message"),
@@ -250,6 +271,7 @@ public class CodeErzeuger extends JDialog {
 			GlobalSettings.setCodeErzeugerProgrammiersprache(typ);
 			GlobalSettings.setCodeErzeugerAlsKommentar(alsKommentar);
 			GlobalSettings.saveSettings();
+			aktualisiereCodeSecondaryButton();
 		}else{
 			JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeInvalidInput.message"),
 					I18n.tr("dialog.codeInvalidInput.title"), JOptionPane.ERROR_MESSAGE);
