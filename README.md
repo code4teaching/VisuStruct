@@ -144,26 +144,6 @@ Double-click may work if `.jar` is associated with Java.
 
 ---
 
-## For maintainers only: optional Git sync with legacy upstream
-
-The following is **not** for end users. It is only for developers who maintain VisuStruct and may occasionally want to **review or port** relevant changes from the original codebase (still MIT‑credited).
-
-- **Legacy upstream:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)
-- **Add an `upstream` remote** (once):
-
-  ```bash
-  git remote add upstream https://github.com/kekru/struktogrammeditor.git
-  ```
-
-- **Merge from upstream** (simplified; use with care — branches and history differ):
-
-  ```bash
-  git fetch upstream
-  git merge upstream/master
-  ```
-
----
-
 ## Contributing
 
 Suggestions and **bug reports** are welcome via [**Issues** and **Pull requests**](https://github.com/code4teaching/VisuStruct).
