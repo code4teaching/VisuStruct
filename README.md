@@ -1,125 +1,117 @@
+<p align="center">
+  <a href="https://visustruct.org/" title="VisuStruct">
+    <img src="docs/VisuStruct-icon.png" alt="VisuStruct" width="128" height="128">
+  </a>
+</p>
+
 # VisuStruct
 
-[![Build-Status](https://github.com/code4teaching/VisuStruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/VisuStruct/actions)
+[![Build](https://github.com/code4teaching/VisuStruct/actions/workflows/maven-build.yml/badge.svg?branch=master)](https://github.com/code4teaching/VisuStruct/actions)
 
-**VisuStruct** ist ein **Struktogramm-Editor** für **Nassi-Shneiderman-Diagramme**.
+**VisuStruct** is a **structure-chart editor** for **Nassi–Shneiderman** diagrams (desktop, Java / Swing).
 
-Die **Benutzeroberfläche** kann unter **Einstellungen → Sprachen** auf **Deutsch**, **Englisch** oder **Portugiesisch** gestellt werden (technisch `uilanguage`: `en`, `de`, `pt_PT`); wenige Hilfsdialoge können noch teils englische Beschriftungen haben.
+Under **Settings → Languages** the **user interface** can be set to **English**, **German**, or **European Portuguese (Portugal)** (`uilanguage`: `en`, `de`, `pt_PT` in `visustruct.properties`). A few auxiliary dialogs may still show English-only labels.
 
-*Herkunft:* Das Programm basiert auf dem Open-Source-Projekt [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). Details und Copyright stehen in der [LICENSE](LICENSE).
+*Lineage:* Based on the open-source project [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). Copyright and terms: [LICENSE](LICENSE).
 
-**Website:** [visustruct.de](https://visustruct.de)  
-**Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
-
-### English
-
-**VisuStruct** is a **structure-chart editor** for **Nassi–Shneiderman diagrams**.
-
-Under **Settings → Languages** the **user interface** can be set to **English**, **German**, or **Portuguese** (stored as `en`, `de`, or `pt_PT` in `visustruct.properties`); a few auxiliary dialogs may still use English labels.
-
-*Lineage:* Built on the open-source project [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). See [LICENSE](LICENSE) for copyright and terms.
-
-**Website:** [visustruct.de](https://visustruct.de) — **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
+**Website:** [visustruct.org](https://visustruct.org) · **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
 ```bash
 git clone https://github.com/code4teaching/VisuStruct.git
 ```
 
-## Änderungen in Version 1.0.7 (Auszug)
+---
 
-- **Quellcode-Generator:** **Delphi/Pascal** entfernt; **Python** ergänzt (**3.10+**, `match`/`case` für Mehrfachauswahl); Dialog **mehrsprachig**; gewählte Zielsprache in **`visustruct.properties`** (`celanguage`: `0` Java, `1` Python).
-- **Mehrfachauswahl (Java):** Standardbeschriftung der letzten Spalte **`default`** statt „Else“ (I18n `structure.multiway.defaultCaseLabel`).
-- **API:** `XMLLeser`-Methoden **`ladeXML`** (früher falsch `ladeXLM`).
-- **Code:** ungenutzte Markierungs-/Kästchen-Reste aus dem Upstream entfernt (`Struktogramm`, `StruktogrammElement`).
-- **Build:** Maven **`de.visustruct:visustruct:1.0.7`**, Fat-JAR **`visustruct-1.0.7.jar`**.
+## Changes in 1.0.7 (summary)
 
-*Ausführliche Liste (Deutsch/Englisch):* [`release-notes/v1.0.7.md`](release-notes/v1.0.7.md).
+- **Code generator:** **Delphi/Pascal** removed; **Python** added (**3.10+**, `match` / `case` for multi-way branches); dialog is **localized**; target language stored in **`visustruct.properties`** as **`celanguage`**: `0` = Java, `1` = Python.
+- **Multi-way (Java):** default label for the last column is **`default`** (not “Else”); string from **`structure.multiway.defaultCaseLabel`** (i18n).
+- **API:** `XMLLeser` load methods renamed **`ladeXML`** (fixes the old typo **`ladeXLM`**).
+- **Code:** removed unused selection / size-box leftovers from upstream (`Struktogramm`, `StruktogrammElement`).
+- **Build:** Maven **`de.visustruct:visustruct:1.0.7`** → artifact **`visustruct-1.0.7.jar`**; releases also ship **`visustruct.jar`**.
 
-## Änderungen in Version 1.0.6 (Auszug)
+Full notes: [`release-notes/v1.0.7.md`](release-notes/v1.0.7.md).
 
-- **Oberfläche & Thema:** Menüs bereinigt; **hell/dunkel** wechselbar **ohne Neustart**; dunkler Modus lesbarer.
-- **Sprachen:** **Einstellungen → Sprachen** zeigt **Englisch**, **Deutsch**, **Portugiesisch** (ohne Länderzusätze); Speicherung in **`visustruct.properties`** (`uilanguage`). Ohne Eintrag: Vorgabe aus **JVM-Locale**.
-- **I18n:** Menü, zentrale **Melde- und Sicherheitsdialoge** (u. a. Beenden, Tab schließen, Überschreiben, Speichern, PNG-Export), **JFileChooser**-Beschriftungen, **Kontextmenü**, Palette (u. a. PNG, Info, Papierkorb); **Englisch** wird nicht mehr durch die OS-Locale überschrieben.
-- **Struktogramm-Beschriftung:** Preset **„Java (Standard)“** / engl. **„Java (Default)“** zuerst im Dialog, danach didaktisches Preset passend zur UI-Sprache, dann die deutsch fest codierten Pakete; **Vorschau** mit didaktischen Zeilenüberschriften; **Palette**: beim Java-Preset **Schlüsselwörter** auf den Buttons (`if`, `switch`, `while`, …), Standardtexte in neuen Blöcken unverändert syntaxnah.
-- **Tabs:** neuer Diagramm-Reiter **„Ohne Titel“** (bzw. lokalisiert), nicht mehr fest „Untitled“.
-- **Build / `build.properties`:** Leere `timestamp`/`revision` lösen keinen Fehler mehr beim Start.
-- **Build:** Maven **`de.visustruct:visustruct:1.0.6`**, Fat-JAR **`visustruct-1.0.6.jar`**.
+## Changes in 1.0.6 (summary)
 
-*Ausführliche Liste (Deutsch/Englisch):* [`release-notes/v1.0.6.md`](release-notes/v1.0.6.md).
+- **UI & theme:** cleaner menus; **light / dark** FlatLaf **without restart**; improved dark-mode readability.
+- **Languages:** **Settings → Languages** lists **English**, **German**, **Portuguese**; stored in **`visustruct.properties`** (`uilanguage`). If unset, default follows **JVM locale**.
+- **I18n:** menu, core confirmation dialogs, `JFileChooser` labels, context menu, palette (PNG, about, trash, etc.); **English** is no longer overridden by the OS default locale.
+- **Structure-chart labels:** preset **“Java (default)”** (and localized equivalents); **preview** in the settings dialog; **palette** shows Java keywords on buttons when the Java preset is active.
+- **Tabs:** new diagram tab uses a localized **“Untitled”**-style title instead of a hard-coded English string.
+- **Build / `build.properties`:** empty `timestamp` / `revision` no longer break startup.
+- **Build:** Maven **`de.visustruct:visustruct:1.0.6`**, **`visustruct-1.0.6.jar`**, plus **`visustruct.jar`**.
 
-## Änderungen in Version 1.0.5 (Auszug)
+Full notes: [`release-notes/v1.0.6.md`](release-notes/v1.0.6.md).
 
-- **Zeichenfläche:** Farben an VisuStruct-Hellesthetik angepasst (**`CanvasStyle`**: weicher Hintergrund, graue Kanten, Markierung in Blauton, dezentere Drag-Vorschau)
-- **Speichern / Tabs:** Titel und `*`-Markierung gehören zum **richtigen** Diagramm; Speichern mit **UTF-8** und **Fehlermeldung** bei Schreibfehlern
-- **macOS:** Menü **im Fenster** (wie Windows/Linux), damit **Save** mit FlatLaf zuverlässig funktioniert; **FlatLaf 3.7.1**; Speicherdialog nach Tab-Umbenennung erst nach kurzer Verzögerung
-- **Menüfarben (hell):** **`VisuStructTheme`** ergänzt für lesbare Menüeinträge
+## Changes in 1.0.5 (summary)
 
-## Änderungen in Version 1.0.4 (Release-Notizen)
+- **Canvas:** colors aligned with VisuStruct light style via **`CanvasStyle`** (background, borders, selection, drag preview).
+- **Save / tabs:** tab title and dirty `*` refer to the **correct** diagram; saves use **UTF-8** with an **error dialog** on write failure.
+- **macOS:** menu bar **inside the window** (same as Windows/Linux) so **Save** works reliably with FlatLaf; **FlatLaf 3.7.1**; save dialog after tab rename deferred one UI tick.
+- **Light theme menus:** **`VisuStructTheme`** improves menu-item readability.
 
-Diese Version richtet **Marke und technische Identität** an **VisuStruct** aus. **Projektdateien** (`.visustruct` / XML) sind unverändert lesbar; im XML werden Elementtypen weiterhin numerisch gespeichert.
+## Changes in 1.0.4 (summary)
 
-- **Java-Paket:** Quellcode unter **`de.visustruct`** (`control`, `view`, `other`, `struktogrammelemente`) statt `de.kekru.struktogrammeditor`.
-- **Maven:** Koordinaten **`de.visustruct:visustruct:1.0.4`** (`artifactId` **visustruct**). Wer das Projekt als Abhängigkeit einbindet, muss **groupId**, **artifactId** und ggf. **version** anpassen. Fat-JAR-Name: **`visustruct-1.0.4.jar`** (über `finalName` / `version` in der `pom.xml`). Der Release-Workflow liefert zusätzlich **`visustruct.jar`** mit festem Dateinamen.
-- **Einstellungen (Benutzer):** Standarddatei im Arbeitsverzeichnis **`visustruct.properties`**. Existiert nur noch **`struktogrammeditor.properties`**, werden die Werte beim Start übernommen; beim nächsten Speichern der Einstellungen schreibt die App **`visustruct.properties`** und entfernt die alte Datei, sofern möglich.
-- **macOS (`.app`):** **Bundle-Identifier** und **UTI** für Dokumenttypen sind auf **`de.visustruct.*`** umgestellt. Nach dem Wechsel der App ggf. **„Öffnen mit“** für `.visustruct` erneut zuordnen. **jpackage**-Skripte verwenden **`de.visustruct.control.Main`**.
-- **Herkunft / Lizenz:** Verweise auf das **Upstream-Projekt** [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) bleiben in README und Infodialog (Attribution, MIT).
+This release aligns **branding and technical identity** with **VisuStruct**. **`.visustruct` / XML** project files stay compatible; element types remain numeric in XML.
 
-### English (summary for 1.0.4)
+- **Java packages:** **`de.visustruct.*`** (was `de.kekru.struktogrammeditor`).
+- **Maven:** **`de.visustruct:visustruct:1.0.4`**. Dependents must update **groupId**, **artifactId**, and **version** if needed. Fat JAR: **`visustruct-1.0.4.jar`**; workflow also publishes **`visustruct.jar`**.
+- **Settings:** default file **`visustruct.properties`**; migrates from **`struktogrammeditor.properties`** on the next settings save.
+- **macOS `.app`:** bundle ID and document UTI → **`de.visustruct.*`**; you may need to set **Open With** for `.visustruct` again. **Main:** **`de.visustruct.control.Main`**.
+- **Upstream:** [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) remains credited (MIT) in README and the about dialog.
 
-- Java packages moved to **`de.visustruct.*`**; Maven coordinates **`de.visustruct:visustruct:1.0.4`**. Main class **`de.visustruct.control.Main`**.
-- Settings file is now **`visustruct.properties`**, with one-time migration from **`struktogrammeditor.properties`** on save.
-- macOS bundle ID / document UTI updated to **`de.visustruct`**; you may need to re-assign **Open With** for `.visustruct`.
-- **`.visustruct` / XML project files** remain compatible; upstream **kekru/struktogrammeditor** remains credited in README and the about dialog.
+## Changes in 1.0.3 (summary)
 
-## Änderungen in Version 1.0.3 (Auszug)
+- **Build:** Maven Wrapper **3.3.4** (script-only), Maven **3.9.9**; `maven-compiler-plugin` **3.14.1**, `maven-assembly-plugin` **3.7.1**; compile with **`-Xlint:deprecation`**.
+- **API / Swing:** modern modifiers (`getModifiersEx`, …), generics in `JListEasy` / `FontChooser`; `JNumberField` deprecation cleanups.
 
-- **Build:** **Apache Maven Wrapper** **3.3.4** (*only-script*, ohne eingecheckte `maven-wrapper.jar`), gebündeltes Maven **3.9.9**; `maven-compiler-plugin` **3.14.1**, `maven-assembly-plugin` **3.7.1**; Kompilierung mit **`-Xlint:deprecation`**
-- **Code / APIs:** moderne Swing-Modifier (`getModifiersEx`, `SwingUtilities` für Maustasten, `getMenuShortcutKeyMaskEx`); **Generics** bei `JListEasy`, `FontChooser`; `Double`/`Integer`-Deprecations in `JNumberField` bereinigt
+## Changes in 1.0.2 (summary)
 
-## Änderungen in Version 1.0.2 (Auszug)
+- **Code generator:** faster buffered output; clearer comments when “diagram text as comments” is enabled.
+- **New-element text presets** in the settings dialog (including English/Java-style placeholders).
+- **Branding / files:** VisuStruct and **`.visustruct`** filters and associations.
+- **Logo** and minor UI tweaks.
 
-- **Quellcode-Generator:** schnellere Ausgabe (gepuffertes Schreiben), effizientere String-Verarbeitung; bei Option „Struktogrammtext als Kommentare“ stehen Bedingungen lesbarer (Kommentarzeile, Klartext in den Klammern)
-- **Textvorlagen für neue Elemente:** Einstellungsdialog mit Presets (u. a. englisch/Java-nah mit `condition`, `selector`, …)
-- **Marke / Dateien:** u. a. Anpassungen für **VisuStruct** und **`.visustruct`** (Filter, Assoziationen)
-- **Logo** und weitere kleinere UI-Anpassungen
+## Platform (1.0.1 and earlier)
 
-## Technische Basis (1.0.1 und früher)
+- **Java 17** target (build and run with JDK 17+).
+- **FlatLaf** light/dark themes; **JDOM2**; no legacy AppleJavaExtensions.
+- **Motif** L&amp;F removed; **Metal** and FlatLaf available.
+- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.0.7.jar`**).
 
-- **Java 17** als Zielversion (mit JDK 17 oder höher bauen und ausführen)
-- **FlatLaf** mit Farben wie auf **[VisuStruct](https://visustruct.de)** (hell: `style.css`, dunkel: Layout-Farben aus `styles.css`), unter *Einstellungen → Look and Feel:* „Modern · hell“ / „Modern · dunkel“
-- **JDOM2** statt JDOM 1, keine veraltete Bibliothek „AppleJavaExtensions“ mehr; Einbindung von macOS über die üblichen **Java-Schnittstellen**
-- Der frühere **Motif**-Stil entfällt (in neueren JDKs nicht mehr enthalten); stattdessen **Metal** und FlatLaf
-- Gebaute Datei: **`visustruct-1.0.7.jar`** (eine startfertige Datei **mit** allen Programmbibliotheken)
+---
 
-## Fertiges Programm herunterladen (ohne selbst zu bauen)
+## Download (no build required)
 
-**Für den Unterricht:** Schülerinnen und Schüler brauchen **kein Maven** – nur **Java 17** (oder neuer) zum Starten.
+Students only need a **Java 17+** runtime — **not** Maven.
 
-**Direkter Download der neuesten veröffentlichten Version** (fester Dateiname, immer die aktuelle Release):
+**Latest published build** (stable filename):
 
-**[➜ visustruct.jar herunterladen](https://github.com/code4teaching/VisuStruct/releases/latest/download/visustruct.jar)**
+**[Download visustruct.jar](https://github.com/code4teaching/VisuStruct/releases/latest/download/visustruct.jar)**
 
-Danach z. B. im Ordner, in dem die Datei liegt:
+Run from the folder that contains the JAR:
 
 ```bash
 java -jar visustruct.jar
 ```
 
-Unter **Windows** reicht oft ein Doppelklick, wenn `.jar` mit Java verknüpft ist.
+On **Windows**, double-click often works if `.jar` is associated with Java.
 
-Alle **veröffentlichten Versionen** und Hinweise zum Wechsel stehen unter:  
-[github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
+All releases: [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
-**Release auf GitHub aktualisieren:** Unter *Releases* eine **neue Version** anlegen, Tag z. B. **`v1.0.7`** auf den passenden Commit setzen und veröffentlichen. Die Workflow-Datei [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) baut dann die JARs und hängt u. a. **`visustruct.jar`** (fester Download-Link oben) an die Release an.
+**Maintainers:** To ship a new version, create a GitHub **Release** with a tag such as **`v1.0.7`**. Workflow [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) builds the JARs and attaches **`visustruct.jar`** (stable download URL above).
 
-## Voraussetzungen
+---
 
-- [JDK 17](https://adoptium.net/) oder neuer (zum **Ausführen** der JAR; zum **Selbstbauen** siehe unten)
-- **Nur beim Selbstbauen:** Internet beim ersten Mal, damit **Maven** die Bibliotheken laden kann
+## Prerequisites
 
-## Lauffähige Programmdatei (JAR) selbst erzeugen
+- [JDK 17](https://adoptium.net/) or newer (to **run** the JAR; to **build**, see below)
+- **Building only:** network on first run so Maven can download dependencies
 
-Das Projekt herunterladen oder klonen und im Projektordner ein Terminal öffnen.
+## Build a runnable JAR
+
+Clone or download the project and open a terminal in the project root.
 
 **Windows (PowerShell):**
 
@@ -127,54 +119,60 @@ Das Projekt herunterladen oder klonen und im Projektordner ein Terminal öffnen.
 .\mvnw.cmd clean package
 ```
 
-**Linux oder macOS:**
+**Linux or macOS:**
 
 ```bash
 chmod +x mvnw
 ./mvnw clean package
 ```
 
-Die fertige Datei befindet sich hier:
+Output (version from `pom.xml`):
 
 ```text
 target/visustruct-1.0.7.jar
 ```
 
-## Programm starten
+## Run
 
 ```bash
 java -jar target/visustruct-1.0.7.jar
 ```
 
-Auf vielen Rechnern genügt auch ein **Doppelklick** auf die JAR-Datei, wenn der Dateityp `.jar` mit Java verknüpft ist.
+Double-click may work if `.jar` is associated with Java.
 
-## Upstream (Basis-Projekt) und Git-Synchronisation
+---
 
-- **Basis-Repo auf GitHub:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)  
-- **Git – `upstream` einrichten** (einmalig, falls noch nicht geschehen):
+## Upstream repository and Git
+
+- **Upstream:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)
+- **Add `upstream` remote** (once):
 
   ```bash
   git remote add upstream https://github.com/kekru/struktogrammeditor.git
   ```
 
-  **Änderungen von `upstream` übernehmen** (vereinfacht):
+- **Merge upstream changes** (simplified):
 
   ```bash
   git fetch upstream
   git merge upstream/master
   ```
 
-## Mitmachen
+---
 
-Verbesserungsvorschläge und **Fehlerbeschreibungen** sind willkommen – über [**Issues** und **Pull requests**](https://github.com/code4teaching/VisuStruct) dieses Repositories.
+## Contributing
 
-Für **Commits** und **Programm-Kommentare** kann **Englisch** verwendet werden.  
-Neue **sichtbare UI-Texte** in **`Messages*.properties`** (und ggf. **`structure.*`**) für **en**, **de** und **pt_PT** pflegen; bei neuen Schlüsseln oder unklarer Formulierung gerne vorher im Issue kurz abstimmen.
+Suggestions and **bug reports** are welcome via [**Issues** and **Pull requests**](https://github.com/code4teaching/VisuStruct).
 
-## Lizenz
+**Commits** and **code comments** may use **English**.  
+New **visible UI strings** belong in **`Messages*.properties`** (and **`structure.*`** where applicable) for **en**, **de**, and **pt_PT**; open an issue first if keys or wording are unclear.
 
-**MIT** – siehe [LICENSE](LICENSE). Das **Urheberrecht** am ursprünglichen Programmcode liegt bei Kevin Krummenauer (steht auch in der LICENSE-Datei).
+---
 
-## Historische Webseite zur Basis-Software
+## License
 
-[whiledo.de – Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor) (zum ursprünglichen Editor von Kevin Krummenauer)
+**MIT** — see [LICENSE](LICENSE). Copyright to the original codebase remains with **Kevin Krummenauer** (also stated in LICENSE).
+
+## Original upstream project page
+
+[whiledo.de — Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor) (original editor by Kevin Krummenauer)

@@ -12,13 +12,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: mvnw ausführbar machen
+      - name: Make mvnw executable
         run: chmod +x mvnw
-      - name: JDK 17 einrichten
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: "temurin"
           cache: "maven"
-      - name: Mit Maven bauen
+      - name: Build with Maven
         run: ./mvnw -B clean package --file pom.xml
