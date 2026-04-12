@@ -99,7 +99,7 @@ public class GlobalSettings implements Konstanten{
 	
 	private static int codeErzeugerEinrueckungGesamt = 3;
 	private static int codeErzeugerEinrueckungProStufe = 3;
-	/** {@link CodeErzeuger#typJava} oder {@link CodeErzeuger#typPython}. */
+	/** {@link CodeErzeuger#typJava}, {@link CodeErzeuger#typPython} oder {@link CodeErzeuger#typJavaScript}. */
 	private static int codeErzeugerProgrammiersprache = CodeErzeuger.typJava;
 	private static boolean codeErzeugerAlsKommentar = true;
 	
@@ -249,7 +249,13 @@ public class GlobalSettings implements Konstanten{
 		if (s != null) {
 			try {
 				int lang = Integer.parseInt(s.trim());
-				codeErzeugerProgrammiersprache = (lang == CodeErzeuger.typPython) ? CodeErzeuger.typPython : CodeErzeuger.typJava;
+				if (lang == CodeErzeuger.typPython) {
+					codeErzeugerProgrammiersprache = CodeErzeuger.typPython;
+				} else if (lang == CodeErzeuger.typJavaScript) {
+					codeErzeugerProgrammiersprache = CodeErzeuger.typJavaScript;
+				} else {
+					codeErzeugerProgrammiersprache = CodeErzeuger.typJava;
+				}
 			} catch (NumberFormatException ignored) {
 				codeErzeugerProgrammiersprache = CodeErzeuger.typJava;
 			}
@@ -474,8 +480,13 @@ public class GlobalSettings implements Konstanten{
 	}
 
 	public static void setCodeErzeugerProgrammiersprache(int codeErzeugerProgrammiersprache) {
-		GlobalSettings.codeErzeugerProgrammiersprache =
-				(codeErzeugerProgrammiersprache == CodeErzeuger.typPython) ? CodeErzeuger.typPython : CodeErzeuger.typJava;
+		if (codeErzeugerProgrammiersprache == CodeErzeuger.typPython) {
+			GlobalSettings.codeErzeugerProgrammiersprache = CodeErzeuger.typPython;
+		} else if (codeErzeugerProgrammiersprache == CodeErzeuger.typJavaScript) {
+			GlobalSettings.codeErzeugerProgrammiersprache = CodeErzeuger.typJavaScript;
+		} else {
+			GlobalSettings.codeErzeugerProgrammiersprache = CodeErzeuger.typJava;
+		}
 	}
 
 	public static boolean isCodeErzeugerAlsKommentar() {

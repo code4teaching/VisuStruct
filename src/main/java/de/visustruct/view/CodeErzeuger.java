@@ -1,11 +1,14 @@
 package de.visustruct.view;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -24,7 +27,7 @@ import de.visustruct.control.Struktogramm;
 import de.visustruct.other.JNumberField;
 import de.visustruct.other.JTextAreaEasy;
 
-/** Dialog: Quellcode-Export als Java oder Python. */
+/** Dialog: Quellcode-Export als Java, Python oder JavaScript. */
 public class CodeErzeuger extends JDialog {
 
 	private static final long serialVersionUID = 6073577055724789562L;
@@ -32,6 +35,7 @@ public class CodeErzeuger extends JDialog {
 	private ButtonGroup buttongroup = new ButtonGroup();
 	private JRadioButton javaButton = new JRadioButton();
 	private JRadioButton pythonButton = new JRadioButton();
+	private JRadioButton javaScriptButton = new JRadioButton();
 	private JTextAreaEasy textarea;
 	private JCheckBox checkboxKommentare = new JCheckBox();
 	private JLabel jLabel1 = new JLabel();
@@ -39,18 +43,21 @@ public class CodeErzeuger extends JDialog {
 	private JLabel jLabel2 = new JLabel();
 	private JNumberField numberfieldZeichenzahl = new JNumberField();
 	private JButton buttonCodeErzeugen = new JButton();
+	private JButton buttonOpenInBrowser = new JButton();
 	private JButton buttonSchliessen = new JButton();
 	private Struktogramm str;
 
 	public static final int typJava = 0;
-	/** {@code match}/{@code case} (Python 3.10+), Einrückung wie bei Java. */
+	/** {@code match}/{@code case} für Mehrfachauswahl; Einrückung wie bei Java. */
 	public static final int typPython = 1;
+	/** Klammer-Syntax wie Java; Ausgabe beginnt mit {@code "use strict";}. */
+	public static final int typJavaScript = 2;
 
 	public CodeErzeuger(JFrame owner, String title, boolean modal, Struktogramm str) {
 		super(owner, title, modal);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		int frameWidth = 498;
-		int frameHeight = 418;
+		int frameHeight = 458;
 		setSize(frameWidth, frameHeight);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (d.width - getSize().width) / 2;
@@ -59,39 +66,46 @@ public class CodeErzeuger extends JDialog {
 		Container cp = getContentPane();
 		cp.setLayout(null);
 
-		javaButton.setBounds(16, 220, 200, 17);
+		javaButton.setBounds(16, 220, 260, 17);
 		javaButton.setText(I18n.tr("dialog.codeGen.targetJava"));
 		cp.add(javaButton);
-		pythonButton.setBounds(16, 242, 200, 17);
+		pythonButton.setBounds(16, 242, 260, 17);
 		pythonButton.setText(I18n.tr("dialog.codeGen.targetPython"));
 		cp.add(pythonButton);
+		javaScriptButton.setBounds(16, 264, 260, 17);
+		javaScriptButton.setText(I18n.tr("dialog.codeGen.targetJavaScript"));
+		cp.add(javaScriptButton);
 		buttongroup.add(javaButton);
 		buttongroup.add(pythonButton);
-		if (GlobalSettings.getCodeErzeugerProgrammiersprache() == typPython) {
+		buttongroup.add(javaScriptButton);
+		int savedLang = GlobalSettings.getCodeErzeugerProgrammiersprache();
+		if (savedLang == typPython) {
 			pythonButton.setSelected(true);
+		} else if (savedLang == typJavaScript) {
+			javaScriptButton.setSelected(true);
 		} else {
 			javaButton.setSelected(true);
 		}
 
-		checkboxKommentare.setBounds(16, 268, 400, 17);
+		checkboxKommentare.setBounds(16, 290, 400, 17);
 		checkboxKommentare.setText(I18n.tr("dialog.codeGen.emitComments"));
 		checkboxKommentare.setSelected(GlobalSettings.isCodeErzeugerAlsKommentar());
 		cp.add(checkboxKommentare);
-		jLabel1.setBounds(16, 296, 323, 16);
+		jLabel1.setBounds(16, 318, 323, 16);
 		jLabel1.setText(I18n.tr("dialog.codeGen.indentFirstLine"));
 		jLabel1.setFont(new Font("MS Sans Serif", Font.PLAIN, 13));
 		cp.add(jLabel1);
-		numberfieldEinrueckung.setBounds(344, 296, 49, 24);
+		numberfieldEinrueckung.setBounds(344, 318, 49, 24);
 		numberfieldEinrueckung.setText(""+GlobalSettings.getCodeErzeugerEinrueckungGesamt());
 		cp.add(numberfieldEinrueckung);
-		jLabel2.setBounds(16, 328, 300, 16);
+		jLabel2.setBounds(16, 350, 300, 16);
 		jLabel2.setText(I18n.tr("dialog.codeGen.spacesPerLevel"));
 		jLabel2.setFont(new Font("MS Sans Serif", Font.PLAIN, 13));
 		cp.add(jLabel2);
-		numberfieldZeichenzahl.setBounds(344, 328, 49, 24);
+		numberfieldZeichenzahl.setBounds(344, 350, 49, 24);
 		numberfieldZeichenzahl.setText(""+GlobalSettings.getCodeErzeugerEinrueckungProStufe());
 		cp.add(numberfieldZeichenzahl);
-		buttonCodeErzeugen.setBounds(16, 368, 147, 25);
+		buttonCodeErzeugen.setBounds(16, 386, 120, 25);
 		buttonCodeErzeugen.setText(I18n.tr("dialog.codeGen.generate"));
 		buttonCodeErzeugen.setMargin(new Insets(2, 2, 2, 2));
 		buttonCodeErzeugen.addActionListener(new ActionListener() {
@@ -100,7 +114,17 @@ public class CodeErzeuger extends JDialog {
 			}
 		});
 		cp.add(buttonCodeErzeugen);
-		buttonSchliessen.setBounds(296, 368, 91, 25);
+		buttonOpenInBrowser.setBounds(144, 386, 228, 25);
+		buttonOpenInBrowser.setText(I18n.tr("dialog.codeGen.openInBrowser"));
+		buttonOpenInBrowser.setMargin(new Insets(2, 2, 2, 2));
+		buttonOpenInBrowser.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buttonOpenInBrowser_ActionPerformed();
+			}
+		});
+		cp.add(buttonOpenInBrowser);
+		buttonSchliessen.setBounds(380, 386, 102, 25);
 		buttonSchliessen.setText(I18n.tr("dialog.codeGen.close"));
 		buttonSchliessen.setMargin(new Insets(2, 2, 2, 2));
 		buttonSchliessen.addActionListener(new ActionListener() {
@@ -110,14 +134,70 @@ public class CodeErzeuger extends JDialog {
 		});
 		cp.add(buttonSchliessen);
 
+		java.awt.event.ItemListener sprachWahlListener = e -> {
+			if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+				aktualisiereBrowserButton();
+			}
+		};
+		javaButton.addItemListener(sprachWahlListener);
+		pythonButton.addItemListener(sprachWahlListener);
+		javaScriptButton.addItemListener(sprachWahlListener);
+
 		textarea = new JTextAreaEasy(8,10,480,200);
 		textarea.setzeFont(new Font("Monospaced", Font.PLAIN, 15));
 		textarea.setzeContainer(cp);
 
 		this.str = str;
 
+		aktualisiereBrowserButton();
 		setResizable(false);
 		setVisible(true);
+	}
+
+	private void aktualisiereBrowserButton() {
+		buttonOpenInBrowser.setEnabled(javaScriptButton.isSelected());
+	}
+
+	private void buttonOpenInBrowser_ActionPerformed() {
+		if (!javaScriptButton.isSelected()) {
+			return;
+		}
+		String code = textarea.gibText();
+		if (code == null || code.isBlank()) {
+			JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeGen.jsBrowserEmpty.message"),
+					I18n.tr("dialog.codeGen.jsBrowserEmpty.title"), JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		int choice = JOptionPane.showConfirmDialog(this, I18n.tr("dialog.codeGen.jsBrowserHint.message"),
+				I18n.tr("dialog.codeGen.jsBrowserHint.title"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.INFORMATION_MESSAGE);
+		if (choice != JOptionPane.OK_OPTION) {
+			return;
+		}
+		String escaped = code.replaceAll("(?i)</script>", "<\\/script>");
+		String lang = I18n.currentLocale().toLanguageTag();
+		String html = "<!DOCTYPE html>\n<html lang=\"" + lang + "\">\n<head>\n<meta charset=\"UTF-8\">\n<title>"
+				+ I18n.tr("dialog.codeGen.jsBrowserPageTitle") + "</title>\n</head>\n<body>\n<script>\n"
+				+ escaped + "\n</script>\n</body>\n</html>\n";
+		try {
+			java.nio.file.Path temp = Files.createTempFile("visustruct-js-", ".html");
+			Files.writeString(temp, html, StandardCharsets.UTF_8);
+			java.io.File file = temp.toFile();
+			file.deleteOnExit();
+			if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeGen.jsBrowserNoDesktop.message"),
+						I18n.tr("dialog.codeGen.jsBrowserNoDesktop.title"), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			Desktop.getDesktop().browse(file.toURI());
+		} catch (Exception ex) {
+			String detail = ex.getMessage();
+			if (detail == null || detail.isBlank()) {
+				detail = ex.toString();
+			}
+			JOptionPane.showMessageDialog(this, I18n.trf("dialog.codeGen.jsBrowserIoError.message", detail),
+					I18n.tr("dialog.codeGen.jsBrowserIoError.title"), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private static JRadioButton getSelectedRadioButton(ButtonGroup bg) {
@@ -137,6 +217,8 @@ public class CodeErzeuger extends JDialog {
 			int typ = typJava;
 			if (radioB == pythonButton) {
 				typ = typPython;
+			} else if (radioB == javaScriptButton) {
+				typ = typJavaScript;
 			}
 
 			textarea.leeren();
@@ -145,6 +227,9 @@ public class CodeErzeuger extends JDialog {
 			final int einrueckungProStufe = numberfieldZeichenzahl.getInt();
 			final boolean alsKommentar = checkboxKommentare.isSelected();
 			try {
+				if (typ == typJavaScript) {
+					textarea.hinzufuegen("\"use strict\";\n\n");
+				}
 				str.gibListe().quellcodeAllerUnterelementeGenerieren(typ, einrueckung, einrueckungProStufe, alsKommentar, textarea);
 			} finally {
 				textarea.endQuellcodeBatch();
@@ -164,6 +249,7 @@ public class CodeErzeuger extends JDialog {
 		if (codeTyp == typPython) {
 			return "\"\"\"";
 		}
+		// Java und JavaScript: Blockkommentare wie in Java
 		if (kommentarStart) {
 			return "/*";
 		}
