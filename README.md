@@ -84,6 +84,8 @@ This release aligns **branding and technical identity** with **VisuStruct**. **`
 
 ## Download (no build required)
 
+**Install VisuStruct from this repository** (the JAR below)—not the legacy **[kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)** project, which remains **historical MIT lineage** and attribution only.
+
 Students only need a **Java 17+** runtime — **not** Maven.
 
 **Latest published build** (stable filename):
@@ -142,16 +144,18 @@ Double-click may work if `.jar` is associated with Java.
 
 ---
 
-## Upstream repository and Git
+## For maintainers only: optional Git sync with legacy upstream
 
-- **Upstream:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)
-- **Add `upstream` remote** (once):
+The following is **not** for end users. It is only for developers who maintain VisuStruct and may occasionally want to **review or port** relevant changes from the original codebase (still MIT‑credited).
+
+- **Legacy upstream:** [github.com/kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor)
+- **Add an `upstream` remote** (once):
 
   ```bash
   git remote add upstream https://github.com/kekru/struktogrammeditor.git
   ```
 
-- **Merge upstream changes** (simplified):
+- **Merge from upstream** (simplified; use with care — branches and history differ):
 
   ```bash
   git fetch upstream
@@ -173,6 +177,6 @@ New **visible UI strings** belong in **`Messages*.properties`** (and **`structur
 
 **MIT** — see [LICENSE](LICENSE). Copyright to the original codebase remains with **Kevin Krummenauer** (also stated in LICENSE).
 
-## Original upstream project page
+## Historical upstream website (attribution)
 
-[whiledo.de — Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor) (original editor by Kevin Krummenauer)
+[whiledo.de — Struktogrammeditor](https://whiledo.de/index.php?p=struktogrammeditor) — original editor by Kevin Krummenauer (context and license lineage; **install VisuStruct** from this GitHub project instead).
