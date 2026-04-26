@@ -449,7 +449,8 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 	public void showInfo(){
 		final String projektUrl = "https://github.com/code4teaching/VisuStruct";
-		final String webUrl = "https://www.sebastiao.org/";
+		final String webUrl = "https://www.visustruct.org";
+		final String developerUrl = "https://www.sebastiao.org";
 		final String originalUrl = "https://github.com/kekru/struktogrammeditor";
 		final String lucideUrl = "https://lucide.dev/";
 
@@ -457,8 +458,9 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				+ "<p style=\"margin-top:0;margin-bottom:10px;\"><b>"
 				+ GlobalSettings.APP_DISPLAY_NAME + " " + GlobalSettings.versionsString + "</b></p>"
 				+ "<p style=\"margin-top:0;\">Holger Sebastiao<br/>"
-				+ "Project (GitHub): <a href=\"" + projektUrl + "\">code4teaching/VisuStruct</a><br/>"
-				+ "Web: <a href=\"" + webUrl + "\">www.sebastiao.org</a></p>"
+				+ "Web: <a href=\"" + webUrl + "\">www.visustruct.org</a><br/>"
+				+ "GitHub: <a href=\"" + projektUrl + "\">code4teaching/VisuStruct</a><br/>"
+				+ "Developer: <a href=\"" + developerUrl + "\">www.sebastiao.org</a></p>"
 				+ "<hr style=\"border:0;border-top:1px solid #ccc;\"/>"
 				+ "<p style=\"margin-bottom:6px;\"><b>Acknowledgement</b></p>"
 				+ "<p style=\"margin-top:0;\"><b>VisuStruct</b> builds on the open-source structure chart editor by Kevin Krummenauer (MIT).<br/>"
