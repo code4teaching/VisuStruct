@@ -2,6 +2,7 @@ package de.visustruct.control;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -17,6 +18,10 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JEditorPane;
@@ -255,6 +260,46 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		}
 	}
 
+	public void bildDrucken(){
+		Struktogramm str = gibAktuellesStruktogramm();
+		if (str == null) {
+			return;
+		}
+
+		BufferedImage image = str.generateImage(false);
+		PrinterJob job = PrinterJob.getPrinterJob();
+		job.setJobName(GlobalSettings.APP_DISPLAY_NAME);
+		job.setPrintable((graphics, pageFormat, pageIndex) -> {
+			if (pageIndex > 0) {
+				return Printable.NO_SUCH_PAGE;
+			}
+			Graphics2D g2 = (Graphics2D) graphics.create();
+			try {
+				double scale = Math.min(
+						pageFormat.getImageableWidth() / image.getWidth(),
+						pageFormat.getImageableHeight() / image.getHeight());
+				scale = Math.min(scale, 1.0d);
+				double x = pageFormat.getImageableX() + (pageFormat.getImageableWidth() - image.getWidth() * scale) / 2.0d;
+				double y = pageFormat.getImageableY() + (pageFormat.getImageableHeight() - image.getHeight() * scale) / 2.0d;
+				g2.translate(x, y);
+				g2.scale(scale, scale);
+				g2.drawImage(image, 0, 0, null);
+			} finally {
+				g2.dispose();
+			}
+			return Printable.PAGE_EXISTS;
+		});
+
+		if (!job.printDialog()) {
+			return;
+		}
+		try {
+			job.print();
+		} catch (PrinterException ex) {
+			JOptionPane.showMessageDialog(gui, ex.getMessage(), I18n.tr("menu.file.print"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	public void titelleisteAktualisieren(){
 		String pfad = "";
 
@@ -293,6 +338,10 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 
 		case bildSpeichern:
 			bildSpeichern();
+			break;
+
+		case bildDrucken:
+			bildDrucken();
 			break;
 
 		case bildInZwischenAblage:

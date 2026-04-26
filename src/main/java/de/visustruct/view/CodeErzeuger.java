@@ -278,12 +278,7 @@ public class CodeErzeuger extends JDialog {
 			Files.writeString(temp, html, StandardCharsets.UTF_8);
 			java.io.File file = temp.toFile();
 			file.deleteOnExit();
-			if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-				JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeGen.jsBrowserNoDesktop.message"),
-						I18n.tr("dialog.codeGen.jsBrowserNoDesktop.title"), JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			Desktop.getDesktop().browse(file.toURI());
+			openPreviewFile(file);
 		} catch (Exception ex) {
 			String detail = ex.getMessage();
 			if (detail == null || detail.isBlank()) {
@@ -292,6 +287,42 @@ public class CodeErzeuger extends JDialog {
 			JOptionPane.showMessageDialog(this, I18n.trf("dialog.codeGen.jsBrowserIoError.message", detail),
 					I18n.tr("dialog.codeGen.jsBrowserIoError.title"), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	private void openPreviewFile(File file) throws Exception {
+		Exception letzterFehler = null;
+		if (Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			if (desktop.isSupported(Desktop.Action.OPEN)) {
+				try {
+					desktop.open(file);
+					return;
+				} catch (Exception ex) {
+					letzterFehler = ex;
+				}
+			}
+			if (desktop.isSupported(Desktop.Action.BROWSE)) {
+				try {
+					desktop.browse(file.toURI());
+					return;
+				} catch (Exception ex) {
+					letzterFehler = ex;
+				}
+			}
+		}
+		if (System.getProperty("os.name", "").toLowerCase().contains("mac")) {
+			try {
+				new ProcessBuilder("open", file.getAbsolutePath()).start();
+				return;
+			} catch (Exception ex) {
+				letzterFehler = ex;
+			}
+		}
+		if (letzterFehler != null) {
+			throw letzterFehler;
+		}
+		JOptionPane.showMessageDialog(this, I18n.tr("dialog.codeGen.jsBrowserNoDesktop.message"),
+				I18n.tr("dialog.codeGen.jsBrowserNoDesktop.title"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	private static String escapeForHtmlText(String raw) {

@@ -37,6 +37,8 @@ import javax.swing.UIManager;
 
 import org.jdom2.Document;
 
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+
 import de.visustruct.control.Controlling;
 import de.visustruct.control.Struktogramm;
 import de.visustruct.i18n.I18n;
@@ -54,6 +56,8 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 	private boolean muelleimerIstAuf;
 	private Controlling controlling;
 	private Document kopiertesStrElement;
+	private boolean paletteDragAktiv;
+	private long letzterPaletteDragEndeZeitpunkt;
 
 	public AuswahlPanel(Controlling controlling){
 
@@ -91,7 +95,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		for (int i = 0; i < panelElemente.length; i++) {
 			int typ = StruktogrammPalette.TYPEN_REIHENFOLGE[i];
 			panelElemente[i] = new AuswahlPanelElement(typ);
-			panelElemente[i].addActionListener(e -> controlling.paletteElementEinfuegen(typ));
+			panelElemente[i].addActionListener(e -> paletteElementGeklickt(typ));
 			add(panelElemente[i], c);
 			dragSource.createDefaultDragGestureRecognizer(panelElemente[i], DnDConstants.ACTION_COPY_OR_MOVE, this);
 			c.gridy++;
@@ -101,8 +105,8 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		muelleimer = new JLabel();
 		muelleimerIstAuf = true;
 		muelleimerAuf(!muelleimerIstAuf);
-		muelleimer.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 		muelleimer.setHorizontalAlignment(SwingConstants.CENTER);
+		muelleimer.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
 		muelleimer.setToolTipText(I18n.tr("palette.trashDrop"));
 		add(muelleimer, c);
 
@@ -123,6 +127,8 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		c.gridy++;
 
 		kopiertesStrElement = null;
+		paletteDragAktiv = false;
+		letzterPaletteDragEndeZeitpunkt = 0;
 
 		c.weighty = 1000;
 		c.fill = GridBagConstraints.VERTICAL;
@@ -130,6 +136,13 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 
 		//dropTarget = 
 		new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE,this, true, null);
+	}
+
+	private void paletteElementGeklickt(int typ) {
+		if (paletteDragAktiv || System.currentTimeMillis() - letzterPaletteDragEndeZeitpunkt < 500) {
+			return;
+		}
+		controlling.paletteElementEinfuegen(typ);
 	}
 
 	private static JButton paletteAktionsButton(String text) {
@@ -198,13 +211,20 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 
 	private void muelleimerAuf(boolean oeffnen){
 		if (muelleimerIstAuf != oeffnen){
-			if (oeffnen){
-				muelleimerIstAuf = true;
-			}else{
-				muelleimerIstAuf = false;
-			}
-			muelleimer.setIcon(new ModernTrashIcon(oeffnen));
+			muelleimerIstAuf = oeffnen;
+			muelleimer.setIcon(erzeugeMuelleimerIcon(oeffnen));
 		}
+	}
+
+	private static FlatSVGIcon erzeugeMuelleimerIcon(boolean aktiv) {
+		FlatSVGIcon icon = new FlatSVGIcon("icons/lucide/trash-2.svg", 32, 32);
+		if (aktiv) {
+			java.awt.Color accent = UIManager.getColor("Component.accentColor");
+			if (accent != null) {
+				icon.setColorFilter(new FlatSVGIcon.ColorFilter(c -> accent));
+			}
+		}
+		return icon;
 	}
 
 
@@ -228,6 +248,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 
 			Transferable t = new StringSelection("n"+typ);
 
+			paletteDragAktiv = true;
 			dragSource.startDrag(evt, DragSource.DefaultCopyDrop, t, this);
 		}
 	}
@@ -249,6 +270,8 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 	}
 
 	public void dragDropEnd(DragSourceDropEvent evt){
+		paletteDragAktiv = false;
+		letzterPaletteDragEndeZeitpunkt = System.currentTimeMillis();
 		PaletteButtonStyle.clearPressedArmedState(evt.getDragSourceContext().getComponent());
 	}
 

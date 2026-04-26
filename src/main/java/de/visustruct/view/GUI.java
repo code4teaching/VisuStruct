@@ -129,6 +129,7 @@ public class GUI extends JFrame implements Konstanten{
 			menu.add(createMenuItem(I18n.tr("menu.file.saveAs"), XActionCommands.speicherUnter, KeyEvent.VK_A));
 			menu.add(new JSeparator());
 			menu.add(createMenuItem(I18n.tr("menu.file.saveImage"), XActionCommands.bildSpeichern, KeyEvent.VK_I));
+			menu.add(createMenuItem(I18n.tr("menu.file.print"), XActionCommands.bildDrucken, KeyEvent.VK_P, KeyEvent.VK_P));
 			menu.add(createMenuItem(I18n.tr("menu.file.copyImage"), XActionCommands.bildInZwischenAblage, KeyEvent.VK_B, KeyEvent.VK_K));
 			menu.add(new JSeparator());
 			menu.add(createMenuItem(I18n.tr("menu.file.generateCode"), XActionCommands.quellcodeErzeugen, KeyEvent.VK_G));
