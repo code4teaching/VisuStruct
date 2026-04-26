@@ -35,6 +35,10 @@ public class StruktogrammElementListe extends ArrayList<StruktogrammElement> {//
 		return beschreibung;
 	}
 
+	public Rectangle gibRectangle(){
+		return bereich;
+	}
+
 
 	public int gibAnzahlUnterelemente(){
 		return size();

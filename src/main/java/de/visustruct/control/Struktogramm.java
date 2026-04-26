@@ -83,6 +83,9 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	private boolean popupmenuSichtbar = false;
 	/** Zuletzt bekannte Mausposition auf der Zeichenfläche (für Einfügen, wenn der Zeiger schon in Menüleiste etc. ist). */
 	private Point letzteDiagrammMausKoords;
+	/** Festes Ziel nach einem Klick in den Canvas; bleibt erhalten, während die Maus zur Palette wandert. */
+	private Point ausgewaehlteEinfuegeKoords;
+	private Rectangle ausgewaehlteEinfuegeMarkierung;
 	//private JScrollPane scrollpane; //in diesem JScrollPane liegt das Struktogramm, scrollpane liegt wiederrum in einem JTabbedPane (siehe GUI)
 	private StrTabbedPane tabbedpane; //für eine kennt-Beziehung mit dem JTabbedPane
 	private Dimension dimGroesse; //Ausmaße des Struktogramms
@@ -353,6 +356,12 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 				g.fillRect(rectVorschau.x,rectVorschau.y,rectVorschau.width,rectVorschau.height);
 			}
 
+			if (ausgewaehlteEinfuegeMarkierung != null){
+				g.setColor(CanvasStyle.getDropPreview());
+				g.fillRect(ausgewaehlteEinfuegeMarkierung.x, ausgewaehlteEinfuegeMarkierung.y,
+						ausgewaehlteEinfuegeMarkierung.width, ausgewaehlteEinfuegeMarkierung.height);
+			}
+
 
 			if (dragZwischenlagerElement != null){//wenn gerade ein Element aus dem Struktogramm gezogen wird...
 				Rectangle rectDragElement = dragZwischenlagerElement.gibRectangle();
@@ -609,8 +618,30 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	 * Wird in KeyReleased in Controlling genutzt
 	 */
 	public void neuesElementAnAktuellerStelleEinfuegen(int typ){
-		Point p = getMousePosition();
-		gezogenesElementEinfuegen(p.x, p.y, typ);
+		Point p = ausgewaehlteEinfuegeKoords;
+		if (p == null) {
+			p = getMousePosition();
+		}
+		if (p == null) {
+			p = letzteDiagrammMausKoords;
+		}
+		if (p != null && liste.gibElementAnPos(p.x, p.y, true) != null) {
+			gezogenesElementEinfuegen(p.x, p.y, typ);
+		} else {
+			neuesElementAmEndeEinfuegen(typ);
+		}
+	}
+
+	private void neuesElementAmEndeEinfuegen(int typ){
+		StruktogrammElement neues = neuesStruktogrammElement(typ);
+
+		if (neues != null){
+			liste.hinzufuegen(neues);
+			einfuegeMarkierungLoeschen();
+			zeichenbereichAktualisieren();
+			zeichne();
+			rueckgaengigPunktSetzen();
+		}
 	}
 
 	/**
@@ -678,7 +709,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 					listeZumEinfuegen.hinzufuegen(listeNeue,tmp,oberhalbEinfuegen);
 				}
 
-				rectVorschau = null; //die rote Vorschau wird beendet
+				einfuegeMarkierungLoeschen(); //die rote Vorschau wird beendet
 
 				zeichenbereichAktualisieren(); //da etwas in der Struktur des Struktogramms verändert wurde, muss der Zeichenbereich aktualisiert werden...
 				zeichne();
@@ -1212,11 +1243,33 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 	public void mouseClicked(MouseEvent e){
 		letzteDiagrammMausKoords = new Point(e.getX(), e.getY());
 		if (SwingUtilities.isLeftMouseButton(e)) { // linke Maustaste
+			einfuegeZielSetzen(e.getX(), e.getY());
+			vorschauMarkierungAnzeigen(e.getX(), e.getY(), false);
 			elementAnPosBefuellen(e.getX(), e.getY()); // EingabeDialog öffnen
 			zeichne();
 		} else if (SwingUtilities.isRightMouseButton(e)) { // rechte Maustaste
 			popupMenueZeigen(e.getX(), e.getY()); // Popup-Menü zeigen
 		}
+	}
+
+	private void einfuegeZielSetzen(int x, int y){
+		ausgewaehlteEinfuegeKoords = new Point(x, y);
+		StruktogrammElementListe zielListe = (StruktogrammElementListe)liste.gibElementAnPos(x, y, true);
+		if (zielListe != null) {
+			ausgewaehlteEinfuegeMarkierung = new Rectangle(zielListe.gibRectangle());
+			return;
+		}
+
+		StruktogrammElement zielElement = (StruktogrammElement)liste.gibElementAnPos(x, y, false);
+		ausgewaehlteEinfuegeMarkierung = zielElement != null
+				? zielElement.gibVorschauRect(ausgewaehlteEinfuegeKoords)
+				: null;
+	}
+
+	private void einfuegeMarkierungLoeschen(){
+		rectVorschau = null;
+		ausgewaehlteEinfuegeKoords = null;
+		ausgewaehlteEinfuegeMarkierung = null;
 	}
 
 

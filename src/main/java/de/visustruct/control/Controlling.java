@@ -180,6 +180,14 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		return gui.gibTabbedpane().gibAktuellesStruktogramm();
 	}
 
+	public void paletteElementEinfuegen(int typ){
+		Struktogramm str = gibAktuellesStruktogramm();
+		if (str != null){
+			str.neuesElementAnAktuellerStelleEinfuegen(typ);
+			gui.gibTabbedpane().requestFocusInWindow();
+		}
+	}
+
 
 
 	public Struktogramm neuesStruktogramm(){
@@ -443,6 +451,7 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 		final String projektUrl = "https://github.com/code4teaching/VisuStruct";
 		final String webUrl = "https://www.sebastiao.org/";
 		final String originalUrl = "https://github.com/kekru/struktogrammeditor";
+		final String lucideUrl = "https://lucide.dev/";
 
 		String html = "<html><body style=\"font-family:sans-serif;font-size:11pt;\">"
 				+ "<p style=\"margin-top:0;margin-bottom:10px;\"><b>"
@@ -454,6 +463,9 @@ public class Controlling implements Konstanten, ActionListener, WindowListener, 
 				+ "<p style=\"margin-bottom:6px;\"><b>Acknowledgement</b></p>"
 				+ "<p style=\"margin-top:0;\"><b>VisuStruct</b> builds on the open-source structure chart editor by Kevin Krummenauer (MIT).<br/>"
 				+ "Prior source: <a href=\"" + originalUrl + "\">kekru/struktogrammeditor</a> on GitHub.</p>"
+				+ "<p style=\"margin-top:0;\">Palette icons: <a href=\"" + lucideUrl + "\">Lucide Icons</a> "
+				+ "(ISC License; some icons derived from Feather/MIT).<br/>"
+				+ "License text is included in <code>licenses/LUCIDE.txt</code>.</p>"
 				+ "</body></html>";
 
 		JEditorPane pane = new JEditorPane("text/html", html);

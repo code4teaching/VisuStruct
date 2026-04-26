@@ -1,12 +1,15 @@
 package de.visustruct.view;
 
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import de.visustruct.control.GlobalSettings;
 import de.visustruct.i18n.StructureElementI18n;
@@ -25,9 +28,12 @@ public class AuswahlPanelElement extends JButton {
 		setRequestFocusEnabled(false);
 		setRolloverEnabled(true);
 		setDefaultCapable(false);
-		setIcon(null);
+		setIcon(erzeugeIcon(typ));
 		setVerticalTextPosition(SwingConstants.CENTER);
-		setHorizontalTextPosition(SwingConstants.CENTER);
+		setHorizontalTextPosition(SwingConstants.RIGHT);
+		setHorizontalAlignment(SwingConstants.LEFT);
+		setIconTextGap(10);
+		setMargin(new Insets(4, 10, 4, 10));
 		aktualisiereBeschriftung();
 		PaletteButtonStyle.apply(this);
 		// Ohne released-Event (typisch nach DnD) bleibt das Button-Model „pressed“ → grauer Kasten
@@ -62,5 +68,38 @@ public class AuswahlPanelElement extends JButton {
 			return 11;
 		}
 		return 10;
+	}
+
+	private static FlatSVGIcon erzeugeIcon(int typ) {
+		String name = iconNameFuerTyp(typ);
+		if (name.isEmpty()) {
+			return null;
+		}
+		return new FlatSVGIcon("icons/lucide/" + name + ".svg", 18, 18);
+	}
+
+	private static String iconNameFuerTyp(int typ) {
+		switch (typ) {
+		case 0:
+			return "square";
+		case 1:
+			return "split";
+		case 2:
+			return "list-tree";
+		case 3:
+			return "repeat";
+		case 4:
+			return "refresh-cw";
+		case 5:
+			return "rotate-ccw";
+		case 6:
+			return "infinity";
+		case 7:
+			return "corner-down-left";
+		case 8:
+			return "log-in";
+		default:
+			return "";
+		}
 	}
 }

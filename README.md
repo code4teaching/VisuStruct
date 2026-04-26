@@ -22,6 +22,14 @@ git clone https://github.com/code4teaching/VisuStruct.git
 
 ---
 
+## Changes in 1.0.9 (summary)
+
+- **Palette:** Lucide SVG icons on the element buttons, including `split` for Branch.
+- **For loop:** multi-line start/condition/increment headers are shown and exported as `start; condition; increment`.
+- **Java export:** `output:` statements become `System.out.println(...)`.
+
+Full notes: [`release-notes/v1.0.9.md`](release-notes/v1.0.9.md).
+
 ## Changes in 1.0.8 (summary)
 
 - **Code generator:** **JavaScript** target (brace syntax like Java, `"use strict";` prefix); **`celanguage`** `2` = JavaScript in **`visustruct.properties`** (with `0` = Java, `1` = Python).
@@ -85,7 +93,7 @@ This release aligns **branding and technical identity** with **VisuStruct**. **`
 - **Java 17** target (build and run with JDK 17+).
 - **FlatLaf** light/dark themes; **JDOM2**; no legacy AppleJavaExtensions.
 - **Motif** look-and-feel removed; **Metal** and FlatLaf available.
-- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.0.8.jar`**).
+- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.0.9.jar`**).
 
 ---
 
@@ -109,7 +117,7 @@ On **Windows**, double-click often works if `.jar` is associated with Java. If a
 
 All releases: [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
-**Maintainers:** To ship a new version, create a GitHub **Release** with a tag such as **`v1.0.8`**. Workflow [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) builds the JARs and attaches **`visustruct.jar`** (stable download URL above).
+**Maintainers:** To ship a new version, create a GitHub **Release** with a tag such as **`v1.0.9`**. Workflow [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) builds the JARs and attaches **`visustruct.jar`** (stable download URL above).
 
 ---
 
@@ -160,13 +168,13 @@ chmod +x mvnw
 Output (version from `pom.xml`):
 
 ```text
-target/visustruct-1.0.8.jar
+target/visustruct-1.0.9.jar
 ```
 
 ## Run
 
 ```bash
-java -jar target/visustruct-1.0.8.jar
+java -jar target/visustruct-1.0.9.jar
 ```
 
 Double-click may work if `.jar` is associated with Java.
@@ -185,6 +193,8 @@ New **visible UI strings** belong in **`Messages*.properties`** (and **`structur
 ## License
 
 **MIT** — see [LICENSE](LICENSE). Copyright to the original codebase remains with **Kevin Krummenauer** (also stated in LICENSE).
+
+Palette icons are from [Lucide](https://lucide.dev/) (ISC; some icons derived from Feather/MIT). The bundled license text is in `src/main/resources/licenses/LUCIDE.txt`.
 
 ## Historical upstream website (attribution)
 

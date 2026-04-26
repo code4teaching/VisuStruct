@@ -91,6 +91,7 @@ public class AuswahlPanel extends JPanel implements DropTargetListener, DragGest
 		for (int i = 0; i < panelElemente.length; i++) {
 			int typ = StruktogrammPalette.TYPEN_REIHENFOLGE[i];
 			panelElemente[i] = new AuswahlPanelElement(typ);
+			panelElemente[i].addActionListener(e -> controlling.paletteElementEinfuegen(typ));
 			add(panelElemente[i], c);
 			dragSource.createDefaultDragGestureRecognizer(panelElemente[i], DnDConstants.ACTION_COPY_OR_MOVE, this);
 			c.gridy++;
