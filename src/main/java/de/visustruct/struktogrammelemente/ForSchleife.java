@@ -64,10 +64,18 @@ public class ForSchleife extends WhileSchleife { //erbt von WhileSchleife
 
 
       if (typ == CodeErzeuger.typPython) {
-         vorher = quellcodeMitKommentarVorspann("for ", ":\n", typ, anzahlEingerueckt, alsKommentar);
+         String pythonFor = CodeGenRules.pythonForLineFromJavaLikeLoopFields(text);
+         if (pythonFor != null) {
+            vorher = quellcodeMitKommentarVorspann("", "\n", pythonFor, typ, anzahlEingerueckt, alsKommentar);
+         } else {
+            vorher = quellcodeMitKommentarVorspann("for ", ":\n", typ, anzahlEingerueckt, alsKommentar);
+         }
          nachher = "";
+      } else if (typ == CodeErzeuger.typJavaScript && hatMehrteiligenKopf()) {
+         vorher = quellcodeMitKommentarVorspann("for(", "){\n", CodeGenRules.javaScriptForLoopHeader(text), typ, anzahlEingerueckt, alsKommentar);
+         nachher = "}\n";
       } else if (hatMehrteiligenKopf()) {
-         vorher = quellcodeMitKommentarVorspann("for(", "){\n", gibKopfText(), typ, anzahlEingerueckt, alsKommentar);
+         vorher = quellcodeMitKommentarVorspann("for(", "){\n", CodeGenRules.cStyleForLoopHeader(text), typ, anzahlEingerueckt, alsKommentar);
          nachher = "}\n";
       } else {
          vorher = quellcodeMitKommentarVorspann("for(", "){\n", typ, anzahlEingerueckt, alsKommentar);

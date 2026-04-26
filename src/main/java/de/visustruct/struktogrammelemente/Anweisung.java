@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 import de.visustruct.control.GlobalSettings;
 import de.visustruct.control.Struktogramm;
 import de.visustruct.other.JTextAreaEasy;
-import de.visustruct.view.CodeErzeuger;
 
 
 public class Anweisung extends StruktogrammElement {
@@ -37,31 +36,14 @@ public class Anweisung extends StruktogrammElement {
    }
 
    private String generiereAnweisungscode(int typ, int anzahlEingerueckt){
-      if (typ != CodeErzeuger.typJava) {
-         return wandleZuAusgabe(co("text"), typ, anzahlEingerueckt, false);
-      }
-
       StringBuilder code = new StringBuilder();
       for (int i = 0; i < text.length; i++) {
          if (i > 0) {
             code.append('\n');
          }
-         code.append(einruecken(generiereJavaAnweisungszeile(text[i]), anzahlEingerueckt));
+         code.append(CodeGenRules.generateInstructionLine(text[i], typ, anzahlEingerueckt));
       }
       return code.toString();
-   }
-
-   private String generiereJavaAnweisungszeile(String eingabe){
-      String zeile = eingabe != null ? eingabe.trim() : "";
-      if (zeile.regionMatches(true, 0, "output:", 0, "output:".length())) {
-         String ausdruck = zeile.substring("output:".length()).trim();
-         if (ausdruck.endsWith(";")) {
-            ausdruck = ausdruck.substring(0, ausdruck.length() - 1).trim();
-         }
-         return "System.out.println(" + ausdruck + ");";
-      }
-
-      return eingabe != null ? eingabe : "";
    }
    
    

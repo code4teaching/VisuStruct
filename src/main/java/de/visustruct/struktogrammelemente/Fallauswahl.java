@@ -66,16 +66,16 @@ public class Fallauswahl extends StruktogrammElement { //erbt von StruktogrammEl
 		for (int i = 0; i < listen.size(); i++) {
 			if (typ == CodeErzeuger.typPython) {
 				if (i < listen.size() - 1) {
-					fall = "case " + co("kommentar") + listen.get(i).gibBeschreibung() + co("kommentarzu") + ":\n";
+					fall = "case " + CodeGenRules.caseLabelToken(listen.get(i).gibBeschreibung(), typ) + ":\n";
 				} else {
-					fall = "case _:" + co("zwangkommentar") + listen.get(i).gibBeschreibung() + co("zwangkommentarzu") + "\n";
+					fall = "case _:" + CodeGenRules.forcedCaseComment(listen.get(i).gibBeschreibung(), typ) + "\n";
 				}
 				fallEnde = "";
 			} else {
 				if (i < listen.size() - 1) {
-					fall = "case " + co("kommentar") + listen.get(i).gibBeschreibung() + co("kommentarzu") + ":\n";
+					fall = "case " + CodeGenRules.caseLabelToken(listen.get(i).gibBeschreibung(), typ) + ":\n";
 				} else {
-					fall = "default: " + co("zwangkommentar") + listen.get(i).gibBeschreibung() + co("zwangkommentarzu") + "\n";
+					fall = "default: " + CodeGenRules.forcedCaseComment(listen.get(i).gibBeschreibung(), typ) + "\n";
 				}
 				fallEnde = einruecken("break;\n", anzahlEinzuruecken);
 			}

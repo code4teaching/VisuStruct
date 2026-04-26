@@ -522,7 +522,20 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	//das StruktogrammElement an der Psosition (x/y) wurde mit der linken Maustaste angeklickt -> der EingabeDialog soll erscheinen
 	private void elementAnPosBefuellen(int x, int y){
-		elementBefuellen((StruktogrammElement)liste.gibElementAnPos(x,y,false));//elementBefuellen erhält das StruktogrammElement, welches sich an der Psosition (x/y) befindet
+		StruktogrammElement element = (StruktogrammElement)liste.gibElementAnPos(x,y,false);
+		tabbedpane.gibGUI().gibElementEditorPanel().setSelectedElement(this, element);
+	}
+
+	public void elementTextAusEditorSetzen(StruktogrammElement element, String[] text){
+		if (element == null || element instanceof LeerElement || text == null) {
+			return;
+		}
+
+		element.setzeText(text);
+		rueckgaengigPunktSetzen();
+		zeichenbereichAktualisieren();
+		tabbedpane.gibGUI().gibElementEditorPanel().setSelectedElement(this, element);
+		zeichne();
 	}
 
 
@@ -639,6 +652,7 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 			liste.hinzufuegen(neues);
 			einfuegeMarkierungLoeschen();
 			zeichenbereichAktualisieren();
+			elementAuswaehlen(neues);
 			zeichne();
 			rueckgaengigPunktSetzen();
 		}
@@ -712,6 +726,9 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 				einfuegeMarkierungLoeschen(); //die rote Vorschau wird beendet
 
 				zeichenbereichAktualisieren(); //da etwas in der Struktur des Struktogramms verändert wurde, muss der Zeichenbereich aktualisiert werden...
+				if (neues != null) {
+					elementAuswaehlen(neues);
+				}
 				zeichne();
 				rueckgaengigPunktSetzen(); //... und ein Rückgängig-Punkt gesetzt werden
 			}
@@ -1254,22 +1271,35 @@ public class Struktogramm extends JPanel implements MouseListener, MouseMotionLi
 
 	private void einfuegeZielSetzen(int x, int y){
 		ausgewaehlteEinfuegeKoords = new Point(x, y);
+		StruktogrammElement zielElement = (StruktogrammElement)liste.gibElementAnPos(x, y, false);
+		if (zielElement != null) {
+			ausgewaehlteEinfuegeMarkierung = zielElement.gibVorschauRect(ausgewaehlteEinfuegeKoords);
+			return;
+		}
+
 		StruktogrammElementListe zielListe = (StruktogrammElementListe)liste.gibElementAnPos(x, y, true);
 		if (zielListe != null) {
 			ausgewaehlteEinfuegeMarkierung = new Rectangle(zielListe.gibRectangle());
 			return;
 		}
-
-		StruktogrammElement zielElement = (StruktogrammElement)liste.gibElementAnPos(x, y, false);
-		ausgewaehlteEinfuegeMarkierung = zielElement != null
-				? zielElement.gibVorschauRect(ausgewaehlteEinfuegeKoords)
-				: null;
+		ausgewaehlteEinfuegeMarkierung = null;
 	}
 
 	private void einfuegeMarkierungLoeschen(){
 		rectVorschau = null;
 		ausgewaehlteEinfuegeKoords = null;
 		ausgewaehlteEinfuegeMarkierung = null;
+	}
+
+	private void elementAuswaehlen(StruktogrammElement element){
+		if (markiertesElement != null && markiertesElement != element){
+			markiertesElement.setzeMarkiert(false);
+		}
+		markiertesElement = element;
+		if (markiertesElement != null){
+			markiertesElement.setzeMarkiert(true);
+		}
+		tabbedpane.gibGUI().gibElementEditorPanel().setSelectedElement(this, element);
 	}
 
 

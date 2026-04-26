@@ -21,17 +21,17 @@ public final class StruktogrammPalette {
 		case 0:
 			return "Statement";
 		case 1:
-			return "If";
+			return "Branch";
 		case 2:
 			return "Switch";
 		case 3:
-			return "For";
+			return "For loop";
 		case 4:
-			return "While";
+			return "While loop";
 		case 5:
-			return "Do-While";
+			return "Do-while loop";
 		case 6:
-			return "Infinite Loop";
+			return "Endless loop";
 		case 7:
 			return "Break";
 		case 8:

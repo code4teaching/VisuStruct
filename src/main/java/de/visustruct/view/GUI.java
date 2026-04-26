@@ -32,6 +32,7 @@ public class GUI extends JFrame implements Konstanten{
 	private static final long serialVersionUID = -3526840402506170333L;
 	private AuswahlPanel auswahlPanel; //Panel an der linken Seite, wo die Labels zu finden sind, von denen man neue StruktogrammElemente in das Struktogramm ziehen kann
 	private StrTabbedPane tabbedpane; //TabbedPane, in dem die Struktogramme sind  
+	private ElementEditorPanel elementEditorPanel;
 	private Controlling controlling;
 	private final JMenuBar menubar;
 
@@ -60,6 +61,7 @@ public class GUI extends JFrame implements Konstanten{
 		//setJMenuBar(new MenueLeiste(this));
 
 		tabbedpane = new StrTabbedPane(controlling);
+		elementEditorPanel = new ElementEditorPanel();
 		//tabbedpane.setBounds(xPosTabbedPane, 0, 671, 401);
 		//cp.add(tabbedpane);
 
@@ -71,7 +73,14 @@ public class GUI extends JFrame implements Konstanten{
 		paletteScroll.setBorder(BorderFactory.createEmptyBorder());
 		java.awt.Color vp = UIManager.getColor(VisuStructTheme.KEY_PALETTE_BACKGROUND);
 		paletteScroll.getViewport().setBackground(vp != null ? vp : UIManager.getColor("Panel.background"));
-		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paletteScroll, tabbedpane);
+		JSplitPane editorSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedpane, elementEditorPanel);
+		editorSplit.setResizeWeight(1.0);
+		editorSplit.setDividerLocation(460);
+		editorSplit.setDividerSize(5);
+		editorSplit.setContinuousLayout(true);
+		editorSplit.setBorder(BorderFactory.createEmptyBorder());
+
+		JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, paletteScroll, editorSplit);
 		splitpane.setOneTouchExpandable(true);
 		splitpane.setDividerLocation(288);
 		splitpane.setDividerSize(5);
@@ -286,6 +295,10 @@ public class GUI extends JFrame implements Konstanten{
 
 	public StrTabbedPane gibTabbedpane(){
 		return tabbedpane;
+	}
+
+	public ElementEditorPanel gibElementEditorPanel(){
+		return elementEditorPanel;
 	}
 
 

@@ -22,6 +22,10 @@ git clone https://github.com/code4teaching/VisuStruct.git
 
 ---
 
+## Changes in 1.1 (summary)
+
+- **Element editor:** first step toward the Swift-style bottom editor panel.
+
 ## Changes in 1.0.9 (summary)
 
 - **Palette:** Lucide SVG icons on the element buttons, including `split` for Branch.
@@ -93,7 +97,7 @@ This release aligns **branding and technical identity** with **VisuStruct**. **`
 - **Java 17** target (build and run with JDK 17+).
 - **FlatLaf** light/dark themes; **JDOM2**; no legacy AppleJavaExtensions.
 - **Motif** look-and-feel removed; **Metal** and FlatLaf available.
-- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.0.9.jar`**).
+- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.1.jar`**).
 
 ---
 
@@ -117,7 +121,7 @@ On **Windows**, double-click often works if `.jar` is associated with Java. If a
 
 All releases: [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
-**Maintainers:** To ship a new version, create a GitHub **Release** with a tag such as **`v1.0.9`**. Workflow [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) builds the JARs and attaches **`visustruct.jar`** (stable download URL above).
+**Maintainers:** To ship a new version, create a GitHub **Release** with a tag such as **`v1.1`**. Workflow [`.github/workflows/release-assets.yml`](.github/workflows/release-assets.yml) builds the JARs and attaches **`visustruct.jar`** (stable download URL above).
 
 ---
 
@@ -168,13 +172,13 @@ chmod +x mvnw
 Output (version from `pom.xml`):
 
 ```text
-target/visustruct-1.0.9.jar
+target/visustruct-1.1.jar
 ```
 
 ## Run
 
 ```bash
-java -jar target/visustruct-1.0.9.jar
+java -jar target/visustruct-1.1.jar
 ```
 
 Double-click may work if `.jar` is associated with Java.
