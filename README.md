@@ -105,7 +105,7 @@ Run from the folder that contains the JAR:
 java -jar visustruct.jar
 ```
 
-On **Windows**, double-click often works if `.jar` is associated with Java.
+On **Windows**, double-click often works if `.jar` is associated with Java. If an **old JRE** (e.g. 8) is the default, you will get **`Error: A JNI error has occurred`** — install **[JDK 17+](https://adoptium.net/)** and ensure `java -version` reports **17** or newer (see **Troubleshooting** below).
 
 All releases: [github.com/code4teaching/VisuStruct/releases](https://github.com/code4teaching/VisuStruct/releases)
 
@@ -117,6 +117,28 @@ All releases: [github.com/code4teaching/VisuStruct/releases](https://github.com/
 
 - [JDK 17](https://adoptium.net/) or newer (to **run** the JAR; to **build**, see below)
 - **Building only:** network on first run so Maven can download dependencies
+
+## Troubleshooting
+
+### `Error: A JNI error has occurred, please check your installation and try again`
+
+This almost always means the **JVM is too old** for the JAR. VisuStruct is built for **Java 17**; an older runtime (e.g. **Java 8**) cannot load the classes and may show this message before a more specific error.
+
+**Fix:** Install a **JDK or JRE 17+** (e.g. [Eclipse Temurin](https://adoptium.net/)). Then check in a terminal:
+
+```text
+java -version
+```
+
+You should see something like `openjdk version "17"` or `"21"`. If Windows still uses an old `java.exe`, adjust **PATH** or call the full path to the new runtime, e.g.:
+
+```powershell
+"C:\Program Files\Eclipse Adoptium\jdk-17...\bin\java.exe" -jar visustruct.jar
+```
+
+### `UnsupportedClassVersionError`
+
+Same cause: upgrade to **Java 17+** as above.
 
 ## Build a runnable JAR
 
