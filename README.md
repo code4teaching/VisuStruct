@@ -10,7 +10,7 @@
 
 **VisuStruct** is a **structure-chart editor** for **Nassi–Shneiderman** diagrams (desktop, Kotlin / Swing).
 
-Under **Settings → Languages** the **user interface** can be set to any of **21 languages** aligned with **VisuStruct-swift** (English, German, Spanish, French, Italian, Polish, Turkish, Korean, Japanese, Greek, Ukrainian, Arabic, Russian, Hebrew, Dutch, Swedish, Danish, Norwegian Bokmål, Chinese Simplified/Traditional, European Portuguese). Stored as `uilanguage` in `visustruct.properties` (e.g. `zh_Hans`, `pt_PT`). UI strings are synced from the Swift app where keys overlap: `python3 tools/sync_java_messages_from_swift.py` (map: `VisuStruct-swift/tools/java_swift_i18n_map.json`). Desktop-only labels may still fall back to English.
+Under **Settings → Languages** the **user interface** can be set to any of **21 languages** aligned with **VisuStruct-swift** (English, German, Spanish, French, Italian, Polish, Turkish, Korean, Japanese, Greek, Ukrainian, Arabic, Russian, Hebrew, Dutch, Swedish, Danish, Norwegian Bokmål, Chinese Simplified/Traditional, European Portuguese). Stored as `uilanguage` in `visustruct.properties` (e.g. `zh_Hans`, `pt_PT`). UI strings are synced from the Swift app where keys overlap: `python3 tools/sync_java_messages_from_swift.py` (map: `tools/java_swift_i18n_map.json`, or `VisuStruct-swift/tools/java_swift_i18n_map.json` if that sibling clone exists). Desktop-only labels may still fall back to English.
 
 *Lineage:* Based on the open-source project [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). Copyright and terms: [LICENSE](LICENSE).
 
@@ -21,6 +21,13 @@ git clone https://github.com/code4teaching/VisuStruct.git
 ```
 
 ---
+
+## Changes in 1.2.4 (summary)
+
+- **Fixes:** code generator **Generate** button (invalid number-field regex); element editor **Apply text** (`split` limit); over-escaped editor hints; palette generate applies pending editor text.
+- **UI:** resizable code-generator dialog; output hint with `"Result: " + result` / `"Ergebnis: " + ergebnis`.
+
+Full notes: [`release-notes/v1.2.4.md`](release-notes/v1.2.4.md).
 
 ## Changes in 1.2.3 (summary)
 
@@ -156,7 +163,7 @@ This release aligns **branding and technical identity** with **VisuStruct**. **`
 - **Java 17** target (build and run with JDK 17+).
 - **FlatLaf** light/dark themes; **JDOM2**; no legacy AppleJavaExtensions.
 - **Motif** look-and-feel removed; **Metal** and FlatLaf available.
-- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.2.3.jar`**).
+- Current fat JAR name follows **`pom.xml`** **`version`** (e.g. **`visustruct-1.2.4.jar`**).
 
 ---
 
@@ -231,13 +238,13 @@ chmod +x mvnw
 Output (version from `pom.xml`):
 
 ```text
-target/visustruct-1.2.3.jar
+target/visustruct-1.2.4.jar
 ```
 
 ## Run
 
 ```bash
-java -jar target/visustruct-1.2.3.jar
+java -jar target/visustruct-1.2.4.jar
 ```
 
 Double-click may work if `.jar` is associated with Java.

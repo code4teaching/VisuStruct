@@ -373,7 +373,7 @@ object CodeGenRules {
     @JvmStatic
     fun javaScriptForLoopHeader(lines: Array<String>?): String {
         val header = cStyleForLoopHeader(lines)
-        val parts = ";".toRegex().split(header, -1).toMutableList()
+        val parts = header.split(";").toMutableList()
         if (parts.isNotEmpty()) {
             val init = javaScriptForInitializerFromJavaTypedDeclaration(parts[0])
             if (init != null) {

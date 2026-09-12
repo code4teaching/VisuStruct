@@ -21,23 +21,7 @@ class JNumberField @JvmOverloads constructor() : JTextField() {
 
     fun getLong(): Long = getDouble().toLong()
 
-    fun isNumeric(): Boolean {
-        val digits = "(\\p{Digit}+)"
-        val hexDigits = "(\\p{XDigit}+)"
-        val exp = "[eE][+-]?$digits"
-        val fpRegex = (
-            "[\\x00-\\x20]*" +
-                "[+-]?(" +
-                "NaN|" +
-                "Infinity|" +
-                "(($digits(\\.)?($digits?)(($exp)?))|" +
-                "(\\.($digits)($exp)?)|" +
-                "((0[xX]$hexDigits(\\.)?)|(0[xX]$hexDigits?(\\.)$hexDigits))[pP][+-]?$digits)" +
-                "[fFdD]?))" +
-                "[\\x00-\\x20]*"
-            )
-        return fpRegex.toRegex().matches(text)
-    }
+    fun isNumeric(): Boolean = text.trim().toDoubleOrNull() != null
 
     fun setDouble(d: Double) {
         text = d.toString()

@@ -6,9 +6,13 @@ import de.visustruct.i18n.I18n
 import de.visustruct.other.JNumberField
 import de.visustruct.other.JTextAreaEasy
 import de.visustruct.struktogrammelemente.CodeGenRules
-import java.awt.Container
+import java.awt.BorderLayout
 import java.awt.Desktop
+import java.awt.Dimension
+import java.awt.FlowLayout
 import java.awt.Font
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
 import java.awt.Insets
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -16,6 +20,7 @@ import java.awt.event.ActionEvent
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import javax.swing.BorderFactory
 import javax.swing.ButtonGroup
 import javax.swing.JButton
 import javax.swing.JCheckBox
@@ -23,7 +28,9 @@ import javax.swing.JDialog
 import javax.swing.JFrame
 import javax.swing.JLabel
 import javax.swing.JOptionPane
+import javax.swing.JPanel
 import javax.swing.JRadioButton
+import javax.swing.JScrollPane
 import javax.swing.WindowConstants
 
 /** Dialog: Quellcode-Export als Java, Python oder JavaScript. */
@@ -35,8 +42,8 @@ class CodeErzeuger(owner: JFrame?, title: String?, modal: Boolean, private val s
     private val pythonButton = JRadioButton()
     private val javaScriptButton = JRadioButton()
     private val javaOutputGroup = ButtonGroup()
-    private val javaSnippetButton = JRadioButton("Snippet")
-    private val javaClassButton = JRadioButton("Class")
+    private val javaSnippetButton = JRadioButton()
+    private val javaClassButton = JRadioButton()
     private lateinit var textarea: JTextAreaEasy
     private val checkboxKommentare = JCheckBox()
     private val jLabel1 = JLabel()
@@ -84,87 +91,48 @@ class CodeErzeuger(owner: JFrame?, title: String?, modal: Boolean, private val s
 
     init {
         defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
-        val frameWidth = 498
-        val frameHeight = 458
-        setSize(frameWidth, frameHeight)
-        val d = Toolkit.getDefaultToolkit().screenSize
-        val x = (d.width - size.width) / 2
-        val y = (d.height - size.height) / 2
-        setLocation(x, y)
-        val cp: Container = contentPane
-        cp.layout = null
+        isResizable = true
+        layout = BorderLayout()
 
-        javaButton.apply {
-            setBounds(16, 210, 260, 17)
-            text = I18n.tr("dialog.codeGen.targetJava")
-        }
-        cp.add(javaButton)
-        pythonButton.apply {
-            setBounds(16, 232, 260, 17)
-            text = I18n.tr("dialog.codeGen.targetPython")
-        }
-        cp.add(pythonButton)
-        javaScriptButton.apply {
-            setBounds(16, 254, 260, 17)
-            text = I18n.tr("dialog.codeGen.targetJavaScript")
-        }
-        cp.add(javaScriptButton)
+        javaButton.text = I18n.tr("dialog.codeGen.targetJava")
+        pythonButton.text = I18n.tr("dialog.codeGen.targetPython")
+        javaScriptButton.text = I18n.tr("dialog.codeGen.targetJavaScript")
         buttongroup.add(javaButton)
         buttongroup.add(pythonButton)
         buttongroup.add(javaScriptButton)
-        val savedLang = GlobalSettings.getCodeErzeugerProgrammiersprache()
-        when (savedLang) {
+        when (GlobalSettings.getCodeErzeugerProgrammiersprache()) {
             typPython -> pythonButton.isSelected = true
             typJavaScript -> javaScriptButton.isSelected = true
             else -> javaButton.isSelected = true
         }
 
-        javaSnippetButton.setBounds(286, 210, 88, 17)
-        javaClassButton.setBounds(378, 210, 88, 17)
+        javaSnippetButton.text = I18n.tr("dialog.codeGen.javaSnippet")
+        javaClassButton.text = I18n.tr("dialog.codeGen.javaClass")
         javaOutputGroup.add(javaSnippetButton)
         javaOutputGroup.add(javaClassButton)
         javaSnippetButton.isSelected = true
-        cp.add(javaSnippetButton)
-        cp.add(javaClassButton)
 
-        checkboxKommentare.setBounds(16, 286, 400, 17)
         checkboxKommentare.text = I18n.tr("dialog.codeGen.emitComments")
         checkboxKommentare.isSelected = GlobalSettings.isCodeErzeugerAlsKommentar()
-        cp.add(checkboxKommentare)
-        jLabel1.setBounds(16, 314, 323, 16)
         jLabel1.text = I18n.tr("dialog.codeGen.indentFirstLine")
-        jLabel1.font = Font("MS Sans Serif", Font.PLAIN, 13)
-        cp.add(jLabel1)
-        numberfieldEinrueckung.setBounds(344, 314, 49, 24)
+        numberfieldEinrueckung.columns = 4
         numberfieldEinrueckung.text = "${GlobalSettings.getCodeErzeugerEinrueckungGesamt()}"
-        cp.add(numberfieldEinrueckung)
-        jLabel2.setBounds(16, 346, 300, 16)
         jLabel2.text = I18n.tr("dialog.codeGen.spacesPerLevel")
-        jLabel2.font = Font("MS Sans Serif", Font.PLAIN, 13)
-        cp.add(jLabel2)
-        numberfieldZeichenzahl.setBounds(344, 346, 49, 24)
+        numberfieldZeichenzahl.columns = 4
         numberfieldZeichenzahl.text = "${GlobalSettings.getCodeErzeugerEinrueckungProStufe()}"
-        cp.add(numberfieldZeichenzahl)
-        buttonCodeErzeugen.setBounds(16, 386, 120, 25)
+
         buttonCodeErzeugen.text = I18n.tr("dialog.codeGen.generate")
-        buttonCodeErzeugen.margin = Insets(2, 2, 2, 2)
+        buttonCodeErzeugen.margin = Insets(4, 10, 4, 10)
         buttonCodeErzeugen.addActionListener { evt -> buttonCodeErzeugen_ActionPerformed(evt) }
-        cp.add(buttonCodeErzeugen)
-        buttonCodeSecondary.setBounds(144, 386, 228, 25)
-        buttonCodeSecondary.margin = Insets(2, 2, 2, 2)
+        buttonCodeSecondary.margin = Insets(4, 10, 4, 10)
         buttonCodeSecondary.addActionListener { buttonCodeSecondary_ActionPerformed() }
-        cp.add(buttonCodeSecondary)
-        buttonCodeCopyJs.setBounds(288, 386, 84, 25)
-        buttonCodeCopyJs.margin = Insets(2, 2, 2, 2)
         buttonCodeCopyJs.text = I18n.tr("dialog.codeGen.copyCode")
         buttonCodeCopyJs.toolTipText = I18n.tr("dialog.codeGen.copyCode.tooltip")
+        buttonCodeCopyJs.margin = Insets(4, 10, 4, 10)
         buttonCodeCopyJs.addActionListener { copyCodeToClipboard() }
-        cp.add(buttonCodeCopyJs)
-        buttonSchliessen.setBounds(380, 386, 102, 25)
         buttonSchliessen.text = I18n.tr("dialog.codeGen.close")
-        buttonSchliessen.margin = Insets(2, 2, 2, 2)
+        buttonSchliessen.margin = Insets(4, 10, 4, 10)
         buttonSchliessen.addActionListener { evt -> buttonSchliessen_ActionPerformed(evt) }
-        cp.add(buttonSchliessen)
 
         val sprachWahlListener = java.awt.event.ItemListener { e ->
             if (e.stateChange == java.awt.event.ItemEvent.SELECTED) {
@@ -175,13 +143,77 @@ class CodeErzeuger(owner: JFrame?, title: String?, modal: Boolean, private val s
         pythonButton.addItemListener(sprachWahlListener)
         javaScriptButton.addItemListener(sprachWahlListener)
 
-        textarea = JTextAreaEasy(8, 10, 480, 200)
-        textarea.setzeFont(Font("Monospaced", Font.PLAIN, 15))
-        textarea.setzeContainer(cp)
+        textarea = JTextAreaEasy()
+        textarea.rows = 12
+        textarea.columns = 56
+        textarea.setzeFont(Font(Font.MONOSPACED, Font.PLAIN, 15))
+        val editor = JPanel(BorderLayout())
+        editor.border = BorderFactory.createEmptyBorder(12, 12, 8, 12)
+        editor.add(JScrollPane(textarea), BorderLayout.CENTER)
+        add(editor, BorderLayout.CENTER)
+        add(baueOptionsPanel(), BorderLayout.SOUTH)
 
         aktualisiereCodeSecondaryButton()
-        isResizable = false
+        pack()
+        minimumSize = Dimension(maxOf(420, width / 2), maxOf(320, height / 2))
+        setLocationRelativeTo(owner)
         isVisible = true
+    }
+
+    private fun baueOptionsPanel(): JPanel {
+        val options = JPanel(GridBagLayout())
+        options.border = BorderFactory.createEmptyBorder(0, 12, 12, 12)
+        val c = GridBagConstraints()
+        c.gridx = 0
+        c.weightx = 1.0
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.anchor = GridBagConstraints.WEST
+        c.insets = Insets(0, 0, 6, 0)
+
+        val languageRow = JPanel(FlowLayout(FlowLayout.LEADING, 12, 0))
+        languageRow.add(javaButton)
+        languageRow.add(pythonButton)
+        languageRow.add(javaScriptButton)
+        languageRow.add(javaSnippetButton)
+        languageRow.add(javaClassButton)
+        c.gridy = 0
+        options.add(languageRow, c)
+
+        c.gridy = 1
+        options.add(checkboxKommentare, c)
+
+        c.gridy = 2
+        options.add(baueZahlenzeile(jLabel1, numberfieldEinrueckung), c)
+        c.gridy = 3
+        options.add(baueZahlenzeile(jLabel2, numberfieldZeichenzahl), c)
+
+        val buttons = JPanel(FlowLayout(FlowLayout.LEADING, 8, 4))
+        buttons.add(buttonCodeErzeugen)
+        buttons.add(buttonCodeSecondary)
+        buttons.add(buttonCodeCopyJs)
+        buttons.add(buttonSchliessen)
+        c.gridy = 4
+        c.insets = Insets(4, 0, 0, 0)
+        options.add(buttons, c)
+        return options
+    }
+
+    private fun baueZahlenzeile(label: JLabel, field: JNumberField): JPanel {
+        val row = JPanel(GridBagLayout())
+        val lc = GridBagConstraints()
+        lc.gridx = 0
+        lc.gridy = 0
+        lc.weightx = 1.0
+        lc.fill = GridBagConstraints.HORIZONTAL
+        lc.anchor = GridBagConstraints.WEST
+        lc.insets = Insets(0, 0, 0, 8)
+        row.add(label, lc)
+        lc.gridx = 1
+        lc.weightx = 0.0
+        lc.fill = GridBagConstraints.NONE
+        lc.insets = Insets(0, 0, 0, 0)
+        row.add(field, lc)
+        return row
     }
 
     private fun aktualisiereCodeSecondaryButton() {
@@ -194,16 +226,16 @@ class CodeErzeuger(owner: JFrame?, title: String?, modal: Boolean, private val s
         buttonCodeSecondary.isEnabled = true
         buttonCodeSecondary.isFocusable = true
         if (js) {
-            buttonCodeSecondary.setBounds(144, 386, 136, 25)
             buttonCodeSecondary.text = I18n.tr("dialog.codeGen.openInBrowser")
             buttonCodeSecondary.toolTipText = I18n.tr("dialog.codeGen.openInBrowser.tooltip")
             buttonCodeCopyJs.isVisible = true
         } else {
-            buttonCodeSecondary.setBounds(144, 386, 228, 25)
             buttonCodeSecondary.text = I18n.tr("dialog.codeGen.copyCode")
             buttonCodeSecondary.toolTipText = I18n.tr("dialog.codeGen.copyCode.tooltip")
             buttonCodeCopyJs.isVisible = false
         }
+        contentPane.revalidate()
+        contentPane.repaint()
     }
 
     private fun buttonCodeSecondary_ActionPerformed() {
@@ -437,7 +469,7 @@ class CodeErzeuger(owner: JFrame?, title: String?, modal: Boolean, private val s
     private fun scannerDeklarationenBereinigen(code: String): String {
         val marker = "Scanner scanner = new Scanner(System.in);"
         val importKommentar = "// import java.util.Scanner;"
-        val zeilen = code.split("\\R".toRegex(), -1)
+        val zeilen = code.split("\\R".toRegex())
         val b = StringBuilder()
         for (zeile in zeilen) {
             if (zeile.trim() == importKommentar) continue
@@ -463,7 +495,7 @@ class CodeErzeuger(owner: JFrame?, title: String?, modal: Boolean, private val s
                 b.append('\n')
             }
         }
-        for (zeile in body.split("\\R".toRegex(), -1)) {
+        for (zeile in body.split("\\R".toRegex())) {
             if (zeile.isNotEmpty()) {
                 b.append(indent2).append(zeile)
             }

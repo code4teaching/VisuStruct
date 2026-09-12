@@ -132,15 +132,7 @@ class AuswahlPanel(private val controlling: Controlling) :
                 wendePaletteAktionsIconAn(this, "code")
                 toolTipText = I18n.tr("menu.file.generateCode")
                 accessibleContext.accessibleName = I18n.tr("palette.generateCode")
-                addActionListener {
-                    val str = controlling.gibAktuellesStruktogramm() ?: return@addActionListener
-                    CodeErzeuger(
-                        controlling.getGUI(),
-                        I18n.tr("menu.file.generateCode"),
-                        true,
-                        str,
-                    )
-                }
+                addActionListener { controlling.openCodeGenerator() }
             }
         add(paletteCodeGenButton, c)
 

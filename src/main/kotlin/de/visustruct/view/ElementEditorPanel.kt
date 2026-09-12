@@ -235,7 +235,7 @@ class ElementEditorPanel : JPanel(BorderLayout(8, 8)) {
         if (element is Anweisung) {
             text = textMitStatementMode(text, statementMode)
         }
-        struktogramm!!.elementTextAusEditorSetzen(element, text.split("\\R".toRegex(), -1).toTypedArray())
+        struktogramm!!.elementTextAusEditorSetzen(element, text.split("\\R".toRegex()).toTypedArray())
     }
 
     /** Wie der Button „Text übernehmen“: Editorinhalt ins markierte Element schreiben (z. B. vor Simulation). */
@@ -305,7 +305,7 @@ class ElementEditorPanel : JPanel(BorderLayout(8, 8)) {
         }
         val einzeilig = text[0]?.trim() ?: ""
         if (PLACEHOLDER_TEXTE.contains(einzeilig)) return teile
-        val gesplittet = einzeilig.split("\\s*;\\s*".toRegex(), -1)
+        val gesplittet = einzeilig.split("\\s*;\\s*".toRegex())
         for (i in 0 until min(3, gesplittet.size)) {
             teile[i] = gesplittet[i]
         }

@@ -56,6 +56,40 @@ def parse_strings(path: Path) -> dict[str, str]:
     return out
 
 
+def unescape_property_value(value: str) -> str:
+    """Decode Java .properties escapes so a later rewrite does not double them."""
+    out: list[str] = []
+    i = 0
+    n = len(value)
+    while i < n:
+        ch = value[i]
+        if ch != "\\" or i + 1 >= n:
+            out.append(ch)
+            i += 1
+            continue
+        nxt = value[i + 1]
+        if nxt == "n":
+            out.append("\n")
+            i += 2
+        elif nxt == "t":
+            out.append("\t")
+            i += 2
+        elif nxt == "r":
+            out.append("\r")
+            i += 2
+        elif nxt == "u" and i + 5 < n:
+            try:
+                out.append(chr(int(value[i + 2 : i + 6], 16)))
+                i += 6
+            except ValueError:
+                out.append(nxt)
+                i += 2
+        else:
+            out.append(nxt)
+            i += 2
+    return "".join(out)
+
+
 def parse_properties(path: Path) -> dict[str, str]:
     out: dict[str, str] = {}
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -63,7 +97,7 @@ def parse_properties(path: Path) -> dict[str, str]:
         if not s or s.startswith("#") or "=" not in s:
             continue
         k, v = s.split("=", 1)
-        out[k] = v.replace("\\n", "\n").replace("\\t", "\t")
+        out[k] = unescape_property_value(v)
     return out
 
 

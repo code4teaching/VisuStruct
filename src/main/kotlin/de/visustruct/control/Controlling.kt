@@ -349,10 +349,7 @@ class Controlling(params: Array<String>?) : Konstanten, ActionListener, WindowLi
             XActionCommands.bildInZwischenAblage ->
                 copyImagetoClipBoard(gibAktuellesStruktogramm()!!.generateImage(false))
 
-            XActionCommands.quellcodeErzeugen -> {
-                flushPendingDiagramEdits()
-                CodeErzeuger(gui, I18n.tr("menu.file.generateCode"), true, gibAktuellesStruktogramm()!!)
-            }
+            XActionCommands.quellcodeErzeugen -> openCodeGenerator()
 
             XActionCommands.struktogrammSchliessen -> gui.gibTabbedpane().aktuellesStruktogrammschliessen()
             XActionCommands.programmBeenden -> programmBeendenGeklickt()
@@ -517,6 +514,14 @@ class Controlling(params: Array<String>?) : Konstanten, ActionListener, WindowLi
     /** Gleiche Aktion wie Bearbeiten → Simulation… / Diagramm bearbeiten… (Paletten-Button). */
     fun toggleSimulationFromUi() {
         onSimulationToggle()
+    }
+
+    /** Menü „Quellcode erzeugen“ und Paletten-Button: Editortext übernehmen, dann Dialog. */
+    fun openCodeGenerator() {
+        if (gui.gibTabbedpane().tabCount <= 0) return
+        flushPendingDiagramEdits()
+        val str = gibAktuellesStruktogramm() ?: return
+        CodeErzeuger(gui, I18n.tr("menu.file.generateCode"), true, str)
     }
 
     private fun onSimulationToggle() {
