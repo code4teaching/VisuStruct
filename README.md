@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://visustruct.org/" title="VisuStruct">
+  <a href="https://visucode.de/" title="VisuStruct">
     <img src="docs/VisuStruct-icon.png" alt="VisuStruct" width="128" height="128">
   </a>
 </p>
@@ -14,7 +14,7 @@ Under **Settings → Languages** the **user interface** can be set to any of **2
 
 *Lineage:* Based on the open-source project [kekru/struktogrammeditor](https://github.com/kekru/struktogrammeditor) (Kevin Krummenauer, MIT). Copyright and terms: [LICENSE](LICENSE).
 
-**Website:** [visustruct.org](https://visustruct.org) · **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
+**Website:** [visucode.de](https://visucode.de) · **Repository:** [github.com/code4teaching/VisuStruct](https://github.com/code4teaching/VisuStruct)
 
 ```bash
 git clone https://github.com/code4teaching/VisuStruct.git
